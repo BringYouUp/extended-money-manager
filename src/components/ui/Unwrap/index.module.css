@@ -1,0 +1,24 @@
+.unwrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows var(--transition-default),
+    margin-top var(--transition-default);
+  margin-top: calc(-1 * var(--unwrap-negative-offset));
+}
+
+.unwrap > * {
+  opacity: 0;
+  transition: opacity var(--transition-default);
+  min-height: 0;
+}
+
+.visible {
+  display: grid;
+  grid-template-rows: 1fr;
+  margin-top: 0;
+}
+
+.visible > * {
+  opacity: 1;
+}

@@ -1,0 +1,10 @@
+.label {
+  font-size: 70%;
+  color: var(--text-color-60);
+  user-select: none;
+  text-transform: uppercase;
+}
+
+.label[for] {
+  cursor: pointer;
+}

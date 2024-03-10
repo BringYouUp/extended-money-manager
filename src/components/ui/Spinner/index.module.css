@@ -1,0 +1,22 @@
+.spinner {
+  --default-spinner-size: 24px;
+  --spinner-size: var(--spinner-size, var(--default-spinner-size));
+  --spinner-stroke-width: calc(var(--spinner-size) / 12);
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border-radius: 50%;
+  display: inline-block;
+  border-top: var(--spinner-stroke-width) solid var(--spinner-color);
+  border-right: var(--spinner-stroke-width) solid transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

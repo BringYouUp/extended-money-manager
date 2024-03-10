@@ -1,0 +1,45 @@
+.text {
+  font-size: var(--text-size, inherit);
+}
+
+h1.text {
+  --text-size: 24px;
+}
+h2.text {
+  --text-size: 20px;
+}
+h3.text {
+  --text-size: 16px;
+}
+h4.text {
+}
+h5.text {
+}
+
+.block {
+  display: block;
+}
+
+.center {
+  text-align: center;
+}
+
+.color {
+  color: var(--text-color, inherit);
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.weight {
+  font-weight: var(--text-weight);
+}
+
+.size {
+  font-size: var(--text-size);
+}
+
+.clickable {
+  cursor: pointer;
+}
