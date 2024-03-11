@@ -1,6 +1,6 @@
+import { PATHS } from "@consts"
 import { useCallback } from "react"
 import { useNavigate } from "react-router-dom"
-import { PATHS } from "../consts"
 
 const useAuthNavigating = () => {
   const navigate = useNavigate()

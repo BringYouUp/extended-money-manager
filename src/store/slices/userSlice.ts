@@ -1,5 +1,5 @@
+import { StoreUserError, StoreUserUser } from '@models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { StoreUserError, StoreUserUser } from '../../models'
 
 const initialState = {
   user: {

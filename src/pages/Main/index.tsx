@@ -1,11 +1,11 @@
-import { Flex, Spinner } from "../../components";
+import { userLogOut } from "@async-actions";
+import { Flex, Spinner } from "@components";
 import {
   useAppDispatch,
+  useAppSelector,
   useAuthListening,
   useAuthNavigating,
-  useAppSelector,
-} from "../../hooks";
-import { userLogOut } from "../../store/asyncActions";
+} from "@hooks";
 
 export const Component: React.FC = () => {
   const isAuthLoading = useAuthListening();

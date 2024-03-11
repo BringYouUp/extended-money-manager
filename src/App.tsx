@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { PATHS } from "./consts/paths.js";
-import { Root } from "./containers";
-import * as PAGES from "./pages";
-import { Flex, Offset, Text } from "./components/index.js";
+import { Flex, Offset, Text } from "@components";
+import { LoginPage, Main, SignUp } from "@pages";
+import { Root } from "@containers";
+import { PATHS } from "@consts";
 
 const router = createBrowserRouter([
   {
@@ -12,15 +12,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: PATHS.LOGIN,
-        element: <PAGES.LoginPage />,
+        element: <LoginPage />,
       },
       {
         path: PATHS.SIGN_UP,
-        element: <PAGES.SignUp />,
+        element: <SignUp />,
       },
       {
         path: PATHS.ROOT,
-        element: <PAGES.Main />,
+        element: <Main />,
       },
     ],
   },

@@ -1,12 +1,7 @@
-import { Container, Flex, Offset, Spinner, Text } from "../../components";
-import { SignUpForm } from "../../containers";
-import {
-  useAppSelector,
-  useAuthListening,
-  useAuthNavigating,
-} from "../../hooks";
-
+import { useAppSelector, useAuthListening, useAuthNavigating } from "@hooks";
 import styles from "./index.module.css";
+import { SignUpForm } from "@containers";
+import { Container, Flex, Offset, Spinner, Text } from "@components";
 
 export const Component: React.FC = () => {
   const isAuthLoading = useAuthListening();

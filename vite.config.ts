@@ -22,5 +22,21 @@ export default defineConfig({
   ],
   define: {
     __LAST_BUILD_AT__: JSON.stringify(formattedDate)
+  },
+  resolve: {
+    alias: {
+      '@assets': path.resolve(__dirname, './src/assets'),
+      '@async-actions': path.resolve(__dirname, './src/store/asyncActions'),
+      '@consts': path.resolve(__dirname, './src/consts'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@containers': path.resolve(__dirname, './src/containers'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@models': path.resolve(__dirname, './src/models'),
+      '@pages': path.resolve(__dirname, './src/pages'),
+      '@store': path.resolve(__dirname, './src/store'),
+      '@slices': path.resolve(__dirname, './src/store/slices'),
+      '@style': path.resolve(__dirname, './src/style'),
+      '@utils': path.resolve(__dirname, './src/utils'),
+    }
   }
 })

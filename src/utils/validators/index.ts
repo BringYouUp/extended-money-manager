@@ -1,4 +1,4 @@
-import { UseFormFields, UseFormValidator } from "../../models"
+import { UseFormFields, UseFormValidator } from "@models"
 
 export const required: UseFormValidator = (value: string = "") => {
   if (!value) {

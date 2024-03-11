@@ -1,9 +1,9 @@
+import { USER_SLICES } from '@slices';
 import { auth, googleProvider, githubProvider } from '../../../config/firebase'
 
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
-import { USER_SLICES } from '../slices/slices';
-import { AppDispatch } from '..';
-import { getStoreUserErrorFormat, getStoreUserFormat } from '../../utils';
+import { getStoreUserErrorFormat, getStoreUserFormat } from '@utils';
+import { AppDispatch } from '@store';
 
 export const userSignUpWithEmailAndPassword = (email: string, password: string) => (dispatch: AppDispatch) => {
   return new Promise((resolve, reject) => {

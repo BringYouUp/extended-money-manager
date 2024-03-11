@@ -1,6 +1,7 @@
 import { User } from "firebase/auth";
-import { StoreUserError, StoreUserUser } from "../../models";
+
 import { FirebaseError } from "firebase/app";
+import { StoreUserError, StoreUserUser } from "@models";
 
 export const getStoreUserFormat = (user: User): StoreUserUser => {
   return {
@@ -27,6 +28,10 @@ export const getStoreUserErrorFormat = (err: FirebaseError): StoreUserError => {
       case 'auth/too-many-requests': return {
         code: err.code,
         message: 'Please try later'
+      }
+      case 'auth/account-exists-with-different-credential': return {
+        code: err.code,
+        message: 'Account exists with different credential'
       }
     }
   }

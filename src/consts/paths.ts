@@ -1,4 +1,4 @@
-import { PathListItem, TPaths } from "../models/index";
+import { PathListItem, TPaths } from "@models";
 
 export const PATHS_LIST: PathListItem[] = [
   {

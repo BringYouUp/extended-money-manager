@@ -1,8 +1,8 @@
+import { useAppDispatch, useFirebase, useLoading } from "@hooks";
+import { USER_SLICES } from "@slices";
+import { getStoreUserFormat } from "@utils";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react"
-import { useAppDispatch, useFirebase, useLoading } from ".";
-import { USER_SLICES } from "../store/slices/slices";
-import { getStoreUserFormat } from "../utils";
 
 const useAuthListening = () => {
   const dispatch = useAppDispatch()

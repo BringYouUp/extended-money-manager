@@ -1,6 +1,5 @@
+import { cn } from "@utils";
 import styles from "./index.module.css";
-
-import { cn } from "../../../utils";
 
 type Props = {
   id?: string;

@@ -1,4 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import {
+  signInWithProvider,
+  userSignInWithEmailAndPassword,
+} from "@async-actions";
 import {
   Button,
   Flex,
@@ -8,18 +11,10 @@ import {
   Spinner,
   Text,
   Unwrap,
-} from "../../../components";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useForm,
-  useLoading,
-} from "../../../hooks";
-import {
-  signInWithProvider,
-  userSignInWithEmailAndPassword,
-} from "../../../store/asyncActions";
-import { PATHS } from "../../../consts";
+} from "@components";
+import { PATHS } from "@consts";
+import { useAppDispatch, useAppSelector, useForm, useLoading } from "@hooks";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
   const dispatch = useAppDispatch();

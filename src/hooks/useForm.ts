@@ -1,6 +1,6 @@
+import { UseFormErrors, UseFormFields, UseFormValidators } from "@models";
+import { getValidatorsForField } from "@utils";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { UseFormErrors, UseFormFields, UseFormValidators } from "../models";
-import { getValidatorsForField } from "../utils";
 
 type isCorrect = boolean
 

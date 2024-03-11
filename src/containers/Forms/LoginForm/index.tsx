@@ -1,4 +1,9 @@
 import {
+  signInWithProvider,
+  userResetPassword,
+  userSignInWithEmailAndPassword,
+} from "@async-actions";
+import {
   Button,
   Flex,
   Icon,
@@ -7,19 +12,9 @@ import {
   Spinner,
   Text,
   Unwrap,
-} from "../../../components";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useForm,
-  useLoading,
-} from "../../../hooks";
-import {
-  signInWithProvider,
-  userResetPassword,
-  userSignInWithEmailAndPassword,
-} from "../../../store/asyncActions";
-import { PATHS } from "../../../consts";
+} from "@components";
+import { PATHS } from "@consts";
+import { useAppDispatch, useAppSelector, useForm, useLoading } from "@hooks";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm: React.FC = () => {

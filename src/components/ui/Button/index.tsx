@@ -1,6 +1,6 @@
+import { cn } from "@utils";
 import styles from "./index.module.css";
 
-import { cn } from "../../../utils";
 import { ReactNode } from "react";
 
 enum Themes {
