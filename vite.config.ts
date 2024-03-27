@@ -37,6 +37,8 @@ export default defineConfig({
       '@slices': path.resolve(__dirname, './src/store/slices'),
       '@style': path.resolve(__dirname, './src/style'),
       '@utils': path.resolve(__dirname, './src/utils'),
+      '@providers': path.resolve(__dirname, './src/providers'),
+      'src': path.resolve(__dirname, './src'),
     }
   }
 })
