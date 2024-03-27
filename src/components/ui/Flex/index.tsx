@@ -1,33 +1,43 @@
 import { cn } from "@utils";
 import styles from "./index.module.css";
 
-import { ReactNode } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 
 type Props = {
   column?: boolean;
   full?: boolean;
-  fullW?: boolean;
-  fullH?: boolean;
+  w100?: boolean;
+  h100?: boolean;
   center?: boolean;
   justifyBetween?: boolean;
+  justifyFlexEnd?: boolean;
+  alignFlexEnd?: boolean;
   alignCenter?: boolean;
   className?: string;
   gap?: string | number;
+  wrap?: boolean;
   style?: React.CSSProperties;
+  onClick?: MouseEventHandler<HTMLDivElement>;
   children?: ReactNode;
 };
 
-const Flex: React.FC<Props> = ({
+export const Flex: React.FC<Props> = ({
   column,
   full,
-  fullW,
-  fullH,
+  w100,
+  h100,
   center,
   justifyBetween,
+  justifyFlexEnd,
+  alignFlexEnd,
   alignCenter,
   gap,
+  wrap,
+  onClick,
   style,
+  className,
   children,
+  ...rest
 }) => {
   return (
     <div
@@ -37,20 +47,27 @@ const Flex: React.FC<Props> = ({
           ...style,
         } as React.CSSProperties
       }
-      className={cn(styles.flex, {
-        [styles.column]: column,
-        full,
-        ["full-w"]: fullW,
-        ["full-h"]: fullH,
-        [styles.center]: center,
-        [styles.gap]: gap,
-        [styles.justifyBetween]: justifyBetween,
-        [styles.alignCenter]: alignCenter,
-      })}
+      className={cn(
+        styles.flex,
+        {
+          [styles.column]: column,
+          full,
+          ["w-100"]: w100,
+          ["h-100"]: h100,
+          [styles.center]: center,
+          [styles.gap]: gap,
+          [styles.justifyBetween]: justifyBetween,
+          [styles.alignCenter]: alignCenter,
+          [styles.justifyFlexEnd]: justifyFlexEnd,
+          [styles.alignFlexEnd]: alignFlexEnd,
+          [styles.wrap]: wrap,
+        },
+        className
+      )}
+      onClick={onClick}
+      {...rest}
     >
       {children}
     </div>
   );
 };
-
-export default Flex;

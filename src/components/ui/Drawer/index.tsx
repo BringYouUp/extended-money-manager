@@ -1,0 +1,68 @@
+import styles from "./index.module.css";
+
+import { MouseEvent, ReactNode } from "react";
+import { Flex, Transitioned } from "@components";
+import { cn } from "@utils";
+import { TransitionedPropsClasses } from "src/components/Transitioned";
+import { createPortal } from "react-dom";
+
+type Props = {
+  side: "left" | "right";
+  isOpened: boolean;
+  onClose: (e: MouseEvent<HTMLDivElement>) => void;
+  children?: ReactNode;
+};
+
+export const Wrap: React.FC<Props> = ({
+  side,
+  isOpened,
+  onClose,
+  children,
+}) => {
+  const onCloseInner = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.currentTarget === e.target) {
+      typeof onClose === "function" && onClose(e);
+    }
+  };
+
+  const defineStyles = {
+    left: {
+      default: cn(styles.drawer, styles.left),
+      enter: styles.drawerEnter,
+      exit: styles.drawerExit,
+    },
+    right: {
+      default: cn(styles.drawer, styles.right),
+      enter: styles.drawerEnter,
+      exit: styles.drawerExit,
+    },
+  };
+
+  return (
+    <>
+      <Transitioned
+        is={isOpened}
+        classes={{
+          default: styles.drawerWrapper,
+          enter: styles.drawerWrapperEnter,
+          exit: styles.drawerWrapperExit,
+        }}
+      >
+        <Flex full onClick={onCloseInner}></Flex>
+      </Transitioned>
+      <Transitioned
+        is={isOpened}
+        classes={defineStyles[side] as TransitionedPropsClasses}
+      >
+        <Flex full onClick={onCloseInner}>
+          {children}
+        </Flex>
+      </Transitioned>
+    </>
+  );
+};
+
+export function Drawer(props: Props) {
+  const el = document.getElementById("drawers") as HTMLElement;
+  return createPortal(<Wrap {...props} />, el);
+}

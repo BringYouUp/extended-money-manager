@@ -50,7 +50,7 @@
 }
 
 .transparent {
-  min-height: 36px;
+  height: 36px;
 }
 
 .outline:hover,
@@ -61,4 +61,16 @@
 .outline:active,
 .transparent:active {
   background-color: var(--primary-color-20);
+}
+
+.rounded {
+  padding: 0px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.active.transparent {
+  background-color: var(--primary-color-20);
+  outline: 1px solid var(--primary-color-10);
 }

@@ -8,7 +8,7 @@ type Props = {
   children?: never;
 };
 
-const Spinner: React.FC<Props> = ({ size, color }) => {
+export const Spinner: React.FC<Props> = ({ size, color }) => {
   return (
     <div
       style={
@@ -21,5 +21,3 @@ const Spinner: React.FC<Props> = ({ size, color }) => {
     />
   );
 };
-
-export default Spinner;

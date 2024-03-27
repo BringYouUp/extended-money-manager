@@ -1,4 +1,10 @@
 .offset {
+}
+
+.padding {
   padding: var(--offset-padding, none);
-  margin-top: var(--offset-margin-top, none);
+}
+
+.margin {
+  margin: var(--offset-margin, none);
 }

@@ -4,22 +4,30 @@ import styles from "./index.module.css";
 import { ReactNode } from "react";
 
 type Props = {
-  htmlFor?: string;
+  error?: boolean;
   className?: string;
   style?: React.CSSProperties;
   children?: ReactNode;
 };
 
-const Label: React.FC<Props> = ({ htmlFor, style, className, children }) => {
+export const FormGroup: React.FC<Props> = ({
+  error,
+  style,
+  className,
+  children,
+}) => {
   return (
-    <label
-      htmlFor={htmlFor}
+    <div
       style={style}
-      className={cn(styles.label, {}, className)}
+      className={cn(
+        styles.container,
+        {
+          [styles.error]: error,
+        },
+        className
+      )}
     >
       {children}
-    </label>
+    </div>
   );
 };
-
-export default Label;

@@ -11,7 +11,7 @@ type Props = {
   children?: ReactNode;
 };
 
-const Unwrap: React.FC<Props> = ({
+export const Unwrap: React.FC<Props> = ({
   visible,
   negativeOffset,
   style,
@@ -33,5 +33,3 @@ const Unwrap: React.FC<Props> = ({
     </div>
   );
 };
-
-export default Unwrap;

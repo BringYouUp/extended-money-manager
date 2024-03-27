@@ -10,8 +10,9 @@ enum Themes {
 }
 
 type Props = {
-  fullW?: boolean;
   disabled?: boolean;
+  rounded?: boolean;
+  active?: boolean;
   theme: keyof typeof Themes;
   type?: "button" | "reset" | "submit" | undefined;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -21,12 +22,13 @@ type Props = {
   children?: ReactNode;
 };
 
-const Button: React.FC<Props> = ({
-  fullW,
+export const Button: React.FC<Props> = ({
   disabled,
+  rounded,
   type,
   onClick,
   width,
+  active,
   style,
   theme,
   className = "",
@@ -43,12 +45,13 @@ const Button: React.FC<Props> = ({
       className={cn(
         styles.button,
         {
-          ["full-w"]: fullW,
           [styles.width]: width,
           [styles.disabled]: disabled,
+          [styles.rounded]: rounded,
           [styles.primary]: theme === Themes.primary,
           [styles.outline]: theme === Themes.outline,
           [styles.transparent]: theme === Themes.transparent,
+          [styles.active]: active,
         },
         className
       )}
@@ -59,5 +62,3 @@ const Button: React.FC<Props> = ({
     </button>
   );
 };
-
-export default Button;

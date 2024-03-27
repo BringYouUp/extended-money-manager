@@ -1,0 +1,47 @@
+.drawerWrapper {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  background-color: rgba(18, 18, 18, 0.5);
+}
+
+.drawerWrapperEnter {
+  transition: opacity var(--transition-default);
+  opacity: 1;
+}
+.drawerWrapperExit {
+  opacity: 0;
+}
+
+.drawer {
+  width: min-content;
+  transition: transform var(--transition-default);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+}
+
+.drawer.left {
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.drawer.right {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.drawerEnter.left {
+  transform: translateX(0%);
+}
+.drawerExit.left {
+  transform: translateX(-100%);
+}
+
+.drawerEnter.right {
+  transform: translateX(0%);
+}
+.drawerExit.right {
+  transform: translateX(100%);
+}

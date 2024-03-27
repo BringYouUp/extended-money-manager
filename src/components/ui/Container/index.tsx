@@ -5,8 +5,8 @@ import { ReactNode } from "react";
 
 type Props = {
   full?: boolean;
-  fullW?: boolean;
-  fullH?: boolean;
+  w100?: boolean;
+  h100?: boolean;
   width?: string;
   height?: string;
   background?: string;
@@ -16,10 +16,10 @@ type Props = {
   children?: ReactNode;
 };
 
-const Container: React.FC<Props> = ({
-  full = false,
-  fullW = false,
-  fullH = false,
+export const Container: React.FC<Props> = ({
+  full,
+  w100,
+  h100,
   width,
   height,
   background,
@@ -40,9 +40,9 @@ const Container: React.FC<Props> = ({
       className={cn(
         styles.flex,
         {
-          full: full,
-          ["full-w"]: fullW,
-          ["full-h"]: fullH,
+          full,
+          ["w-100"]: w100,
+          ["h-100"]: h100,
           [styles.background]: background,
           [styles.width]: width,
           [styles.height]: height,
@@ -54,5 +54,3 @@ const Container: React.FC<Props> = ({
     </div>
   );
 };
-
-export default Container;

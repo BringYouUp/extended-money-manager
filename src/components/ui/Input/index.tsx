@@ -6,23 +6,37 @@ type Props = {
   name: string;
   placeholder?: string;
   type?: string;
+  error?: boolean;
+  hidden?: boolean;
   defaultValue?: string;
   style?: React.CSSProperties;
   className?: string;
   children?: never;
 };
 
-const Input: React.FC<Props> = ({
+export const Input: React.FC<Props> = ({
   style,
   id,
   name,
+  error,
+  hidden,
   className,
   type = "text",
   defaultValue,
   placeholder,
 }) => {
   return (
-    <div style={style} className={cn(styles.input, {}, className)}>
+    <div
+      style={style}
+      className={cn(
+        styles.input,
+        {
+          [styles.error]: error,
+          [styles.hidden]: hidden,
+        },
+        className
+      )}
+    >
       <input
         id={id}
         name={name}
@@ -33,5 +47,3 @@ const Input: React.FC<Props> = ({
     </div>
   );
 };
-
-export default Input;

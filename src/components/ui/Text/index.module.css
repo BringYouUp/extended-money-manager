@@ -24,6 +24,10 @@ h5.text {
   text-align: center;
 }
 
+.right {
+  text-align: right;
+}
+
 .color {
   color: var(--text-color, inherit);
 }
@@ -42,4 +46,13 @@ h5.text {
 
 .clickable {
   cursor: pointer;
+}
+
+.ellipsed {
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  line-height: inherit;
 }

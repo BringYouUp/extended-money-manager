@@ -20,13 +20,13 @@ const generateOffsetStyle = (values: number[]) => {
     case 2:
       return `${values[0]}px ${values[1]}px`;
     case 3:
-      return `{values[0]}px ${values[1]}px ${values[2]}px`;
+      return `${values[0]}px ${values[1]}px ${values[2]}px`;
     default:
       return `${values[0]}px ${values[1]}px ${values[2]}px ${values[3]}px`;
   }
 };
 
-const Offset: React.FC<Props> = ({
+export const Offset: React.FC<Props> = ({
   padding,
   margin,
   style,
@@ -42,11 +42,16 @@ const Offset: React.FC<Props> = ({
           ...style,
         } as React.CSSProperties
       }
-      className={cn(styles.offset, {}, className)}
+      className={cn(
+        styles.offset,
+        {
+          [styles.padding]: Boolean(padding),
+          [styles.margin]: Boolean(margin),
+        },
+        className
+      )}
     >
       {children}
     </div>
   );
 };
-
-export default Offset;

@@ -1,0 +1,9 @@
+.container {
+  padding: 4px;
+  border-radius: var(--border-radius-default);
+  outline: 1px solid var(--primary-color-10);
+}
+
+.container.error {
+  outline: 1px solid var(--text-color-error);
+}
