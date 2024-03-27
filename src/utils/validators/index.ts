@@ -35,7 +35,26 @@ export const minLength = (minLength: number): UseFormValidator => (value: string
 export const maxLength = (maxLength: number): UseFormValidator => (value: string = "") => {
   if (value.length > maxLength) {
     return {
-      error: `Max length is ${minLength} symbols`
+      error: `Max length is ${maxLength} symbols`
+    }
+  }
+}
+
+export const accountAmount = (value: string = "") => {
+  if (
+    !/^[1-9](\d+)?((\.|,)(\d+)?[1-9])?$/.test(value) &&    // 1.2323 || 1,2334 || 1,00300
+    !/^0(\.|,)(\d+)?[1-9]$/.test(value)    // 0.2323 || 0,0000000001
+  ) {
+    return {
+      error: `Please, enter valid number`
+    }
+  }
+}
+
+export const categoryIcon = (value: string = "") => {
+  if (!value) {
+    return {
+      error: `Please, choose icon`
     }
   }
 }
@@ -44,6 +63,15 @@ export const getValidatorsForField = (field: UseFormFields): UseFormValidator[] 
   switch (field) {
     case 'email': return [required, noOnlyWhitespace, email]
     case 'password': return [required, noOnlyWhitespace, minLength(6), maxLength(40)]
+    case 'account-name':
+    case 'category-name':
+      return [required, noOnlyWhitespace, minLength(3), maxLength(30)]
+    case 'account-amount': return [required, noOnlyWhitespace, accountAmount]
+    case 'account-color':
+    case 'category-color':
+      return [required]
+    case 'category-icon':
+      return [categoryIcon]
     default:
       console.error('THERE is NOT SUCH a FIELD')
 
