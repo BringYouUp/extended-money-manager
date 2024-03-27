@@ -2,7 +2,7 @@ import { PATHS } from "@consts"
 import { useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 
-const useAuthNavigating = () => {
+export const useAuthNavigating = () => {
   const navigate = useNavigate()
 
   const navigateToPlatform = useCallback(() => {
@@ -15,5 +15,3 @@ const useAuthNavigating = () => {
 
   return { navigateToPlatform, navigateFromPlatform }
 }
-
-export default useAuthNavigating

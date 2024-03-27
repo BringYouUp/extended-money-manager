@@ -1,27 +1,34 @@
-import { useAppDispatch, useFirebase, useLoading } from "@hooks";
+import { signInAutomatically } from "@async-actions";
+import { useAppDispatch, useAppSelector, useFirebase, useLoading } from "@hooks";
 import { USER_SLICES } from "@slices";
-import { getStoreUserFormat } from "@utils";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react"
 
-const useAuthListening = () => {
+export const useAuthListening = () => {
   const dispatch = useAppDispatch()
   const { auth } = useFirebase()
   const { isLoading, endLoading } = useLoading(true)
 
+  const userId = useAppSelector(state => state.user.user.uid)
+
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    if (userId) {
+      endLoading()
+      return
+    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(USER_SLICES.setUser(getStoreUserFormat(user)))
-        endLoading()
+        dispatch(signInAutomatically(user)).finally(() => endLoading())
       } else {
         dispatch(USER_SLICES.clearUser())
         endLoading()
       }
     });
-  }, [])
+
+    return () => {
+      unsubscribe()
+    }
+  }, [userId])
 
   return isLoading
 }
-
-export default useAuthListening
