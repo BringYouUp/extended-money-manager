@@ -1,0 +1,48 @@
+.wrapper {
+  scroll-snap-align: start;
+  box-shadow: var(--box-shadow-default);
+  border-radius: var(--border-radius-x3);
+  min-height: 84px;
+  min-width: 240px;
+  height: 84px;
+  overflow: hidden;
+  user-select: none;
+  cursor: pointer;
+  transition: transform var(--transition-default);
+}
+
+.wrapper:hover {
+  transform: translate(0.25px, 1px);
+}
+
+.wrapper:active {
+  transform: translate(0.5px, 3px);
+}
+
+.wrapper.empty .container::before {
+  background: black;
+}
+
+.container {
+  position: relative;
+  height: 100%;
+  background: linear-gradient(
+    67.5deg,
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.1)
+  );
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: hsl(
+    var(--account-color),
+    var(--default-saturation-for-background),
+    var(--default-lightness-for-background)
+  );
+  z-index: -1;
+  border: 1px solid var(--primary-color-50);
+  border-radius: var(--border-radius-x3);
+}
