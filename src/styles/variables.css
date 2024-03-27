@@ -13,6 +13,7 @@
   --text-color-white: white;
   --text-color-white-90: rgb(255, 255, 255, 0.9);
   --text-color-white-80: rgb(255, 255, 255, 0.8);
+  --text-color-white-50: rgb(255, 255, 255, 0.5);
   --text-color-error: rgb(255, 79, 79);
   --primary-color: rgb(18, 18, 18);
   --primary-color-90: rgba(18, 18, 18, 0.9);
@@ -32,11 +33,23 @@
   --transition-default: 0.2s;
   --transition-quick: 0.1s;
   --border-radius-default: 1px;
+  --border-radius-x2: 2px;
+  --border-radius-x3: 3px;
 
   --box-shadow-default: 0px 9px 24px -3px rgba(0, 0, 0, 0.16),
     0px 4px 8px -1px rgba(0, 0, 0, 0.08);
   --background-color: rgb(255, 255, 255);
-  --soft-background-color: rgb(248, 248, 248);
+  --border-color-default: var(--primary-color-50);
+  --soft-background-color-rgb: 248;
+  --soft-background-color: rgb(
+    var(--soft-background-color-rgb),
+    var(--soft-background-color-rgb),
+    var(--soft-background-color-rgb)
+  );
+
+  --input-height: 34px;
+  --default-saturation-for-background: 100%;
+  --default-lightness-for-background: 25%;
 }
 
 .light-theme {

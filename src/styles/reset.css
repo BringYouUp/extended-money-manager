@@ -180,3 +180,7 @@ select {
 *:before {
   box-sizing: border-box;
 }
+
+hr {
+  margin: 0;
+}
