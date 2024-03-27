@@ -29,12 +29,12 @@ export const Component: React.FC = () => {
         <Flex full center>
           <Container width="300px">
             <Container
-              fullW
+              w100
               background="var(--background-color)"
               className={styles.container}
             >
               <Offset padding={[24, 16]}>
-                <Flex fullW column gap={24}>
+                <Flex w100 column gap={24}>
                   <Text uppercase as="h2" weight={400}>
                     Log in
                   </Text>
