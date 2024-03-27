@@ -16,6 +16,20 @@ const preloadedState = {
       code: '',
       message: ''
     },
+  },
+  accounts: {
+    accounts: [],
+    error: {
+      code: '',
+      message: ''
+    },
+  },
+  categories: {
+    categories: [],
+    error: {
+      code: '',
+      message: ''
+    },
   }
 }
 

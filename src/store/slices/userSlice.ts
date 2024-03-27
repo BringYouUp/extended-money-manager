@@ -20,15 +20,15 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, payload: PayloadAction<StoreUserUser>) => {
-      state.user = payload.payload
+    setUser: (state, { payload }: PayloadAction<StoreUserUser>) => {
+      state.user = payload
       state.error = initialState.error
     },
     clearUser: (state) => {
       state.user = initialState.user
     },
-    setError: (state, payload: PayloadAction<StoreUserError>) => {
-      state.error = payload.payload
+    setError: (state, { payload }: PayloadAction<StoreUserError>) => {
+      state.error = payload
     },
     clearError: (state) => {
       state.error = initialState.error

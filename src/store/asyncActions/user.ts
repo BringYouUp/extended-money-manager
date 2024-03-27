@@ -1,98 +1,46 @@
 import { USER_SLICES } from '@slices';
-import { auth, googleProvider, githubProvider } from '../../../config/firebase'
 
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
-import { getStoreUserErrorFormat, getStoreUserFormat } from '@utils';
+import { getRef, getStoreUserFormat } from '@utils';
 import { AppDispatch } from '@store';
+import { getDoc, setDoc } from 'firebase/firestore';
+import { GotDoc, StoreUserUser } from '@models';
 
-export const userSignUpWithEmailAndPassword = (email: string, password: string) => (dispatch: AppDispatch) => {
+import { User } from 'firebase/auth';
+
+export const accountsSetUser = (uid: string, user: User) => (dispatch: AppDispatch) => {
   return new Promise((resolve, reject) => {
-    dispatch(USER_SLICES.clearError())
+    const docRef = getRef.user(uid)
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(data => {
-        console.log(`→ userSignUpWithEmailAndPassword data`, data);
-
-        dispatch(USER_SLICES.setUser(getStoreUserFormat(data.user)))
-        resolve(data)
-      })
-      .catch(err => {
-        console.log(`→ error`, err);
-        dispatch(USER_SLICES.setError(getStoreUserErrorFormat(err)))
-        reject(err)
-      })
-  })
-}
-
-export const userSignInWithEmailAndPassword = (email: string, password: string) => (dispatch: AppDispatch) => {
-  return new Promise((resolve, reject) => {
-    dispatch(USER_SLICES.clearError())
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then(data => {
-        console.log(`→ signInWithEmailAndPassword data`, data);
-
-        dispatch(USER_SLICES.setUser(getStoreUserFormat(data.user)))
-        resolve(data)
-      })
-      .catch(err => {
-        console.log(`→ error`, err);
-        dispatch(USER_SLICES.setError(getStoreUserErrorFormat(err)))
-        reject(err)
-      })
-  })
-}
-
-export const userLogOut = () => (dispatch: AppDispatch) => {
-  return new Promise((resolve, reject) => {
-    signOut(auth)
-      .then(data => {
-        dispatch(USER_SLICES.clearUser())
-        resolve(data)
-      })
-      .catch(err => {
-        console.log(`→ error`, err);
-        dispatch(USER_SLICES.setError(getStoreUserErrorFormat(err)))
-        reject(err)
-      })
-  })
-}
-
-export const userResetPassword = (email: string) => (dispatch: AppDispatch) => {
-  return new Promise((resolve, reject) => {
-    sendPasswordResetEmail(auth, email)
-      .then(data => {
-        console.log(`→ sendPasswordResetEmail data`, data);
-        dispatch(USER_SLICES.clearError())
-        resolve(data)
-      })
-      .catch(err => {
-        console.log(`→ error`, err);
-        dispatch(USER_SLICES.setError(getStoreUserErrorFormat(err)))
-        reject(err)
-      })
-  })
-}
-
-export const signInWithProvider = (provider: 'google' | 'github') => (dispatch: AppDispatch) => {
-  return new Promise((resolve, reject) => {
-    const providers = {
-      google: googleProvider,
-      github: githubProvider
+    const createProfileSnap = () => {
+      const profile = getStoreUserFormat(user)
+      return Promise.all<[unknown, StoreUserUser]>([
+        setDoc(getRef.user(uid), { profile }, { merge: true }),
+        profile
+      ])
     }
 
-    signInWithPopup(auth, providers[provider])
-      .then(data => {
-        console.log(`→ signInWithProvider data`, data);
+    getDoc(docRef)
+      .then(docSnap => {
+        if (docSnap.exists()) {
+          const data = docSnap.data() as GotDoc
 
-        dispatch(USER_SLICES.setUser(getStoreUserFormat(data.user)))
-        resolve(data)
+          if (data.profile) {
+            dispatch(USER_SLICES.setUser(data.profile))
+            resolve(data.profile)
+            return
+          } else {
+            return createProfileSnap()
+          }
+        } else {
+          return createProfileSnap()
+        }
       })
-      .catch(err => {
-        console.log(`→ error`, err);
-        dispatch(USER_SLICES.setError(getStoreUserErrorFormat(err)))
-        reject(err)
+      .then(data => {
+        if (data?.[1]) {
+          dispatch(USER_SLICES.setUser(data?.[1]))
+          resolve(data?.[1])
+        }
       })
+      .catch(reject)
   })
 }
-
