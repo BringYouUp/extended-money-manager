@@ -1,7 +1,3 @@
 export * from './Forms'
-
-import Root from './Root'
-
-export {
-  Root
-}
+export * from './Root'
+export * from './Drawers/index'

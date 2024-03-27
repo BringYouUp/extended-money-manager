@@ -1,7 +1,4 @@
-import LoginForm from './LoginForm'
-import SignUpForm from './SignUpForm'
-
-export {
-  SignUpForm,
-  LoginForm,
-}
+export * from './AccountForm'
+export * from './LoginForm'
+export * from './SignUpForm'
+export * from './CategoryForm'

@@ -17,7 +17,7 @@ import { PATHS } from "@consts";
 import { useAppDispatch, useAppSelector, useForm, useLoading } from "@hooks";
 import { useNavigate } from "react-router-dom";
 
-const LoginForm: React.FC = () => {
+export const LoginForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const message = useAppSelector((state) => state.user.error.message);
@@ -32,7 +32,7 @@ const LoginForm: React.FC = () => {
   const onSuccessSubmit = () => {
     if (isLoading) return;
 
-    const [email, password] = getValues();
+    const { email, password } = getValues();
     startLoading({ submitting: true });
 
     dispatch(userSignInWithEmailAndPassword(email, password)).finally(() =>
@@ -43,7 +43,7 @@ const LoginForm: React.FC = () => {
   const onForgotPassword = () => {
     startLoading({ forgot: true });
 
-    const [email] = getValues();
+    const { email } = getValues();
 
     dispatch(userResetPassword(email)).finally(() => endLoading());
   };
@@ -52,12 +52,9 @@ const LoginForm: React.FC = () => {
     navigate(PATHS.SIGN_UP);
   };
 
-  const onSignInWithGoogle = () => {
-    dispatch(signInWithProvider("google"));
-  };
-
-  const onSignInWithGithub = () => {
-    dispatch(signInWithProvider("github"));
+  const onSignInWithProvider = (provider: "google" | "github") => {
+    startLoading({ provider });
+    dispatch(signInWithProvider(provider)).finally(() => endLoading());
   };
 
   const actionManager = (type: string) => () => {
@@ -70,9 +67,9 @@ const LoginForm: React.FC = () => {
       case "onNavigateToSignUp":
         return onNavigateToSignUp();
       case "onSignInWithGoogle":
-        return onSignInWithGoogle();
+        return onSignInWithProvider("google");
       case "onSignInWithGithub":
-        return onSignInWithGithub();
+        return onSignInWithProvider("github");
     }
   };
 
@@ -83,18 +80,23 @@ const LoginForm: React.FC = () => {
       onSubmit={onSubmitForm(actionManager("onSuccessSubmit"))}
       className="full-w"
     >
-      <Flex fullW column gap={20}>
-        <Flex fullW column gap={6}>
+      <Flex w100 column gap={20}>
+        <Flex w100 column gap={6}>
           <Label htmlFor="email">Email</Label>
-          <Input id="email" name="email" placeholder="Enter email..." />
+          <Input
+            id="email"
+            name="email"
+            placeholder="Enter email..."
+            error={Boolean(errors.email)}
+          />
           <Unwrap visible={Boolean(errors.email)} negativeOffset="6px">
             <Text size={11} color="var(--text-color-error)">
               {errors.email}
             </Text>
           </Unwrap>
         </Flex>
-        <Flex fullW column gap={6}>
-          <Flex fullW justifyBetween alignCenter>
+        <Flex w100 column gap={6}>
+          <Flex w100 justifyBetween alignCenter>
             <Label htmlFor="password">Password</Label>
             <Text
               size={10}
@@ -115,6 +117,7 @@ const LoginForm: React.FC = () => {
             name="password"
             type="password"
             placeholder="Enter password..."
+            error={Boolean(errors.password)}
           />
           <Unwrap visible={Boolean(errors.password)} negativeOffset="6px">
             <Text size={11} color="var(--text-color-error)">
@@ -153,18 +156,26 @@ const LoginForm: React.FC = () => {
               theme="outline"
               type="button"
               onClick={actionManager("onSignInWithGoogle")}
-              disabled={isLoading && loadingData.current?.submitting}
+              disabled={isLoading}
             >
-              <Icon name="google" size={16} />
+              {isLoading && loadingData.current?.provider === "google" ? (
+                <Spinner size={16} />
+              ) : (
+                <Icon name="google" size={16} />
+              )}
               Continue with Google
             </Button>
             <Button
               theme="outline"
               type="button"
               onClick={actionManager("onSignInWithGithub")}
-              disabled={isLoading && loadingData.current?.submitting}
+              disabled={isLoading}
             >
-              <Icon name="github" size={16} />
+              {isLoading && loadingData.current?.provider === "github" ? (
+                <Spinner size={16} />
+              ) : (
+                <Icon name="github" size={16} />
+              )}
               Continue with Github
             </Button>
           </Flex>
@@ -173,5 +184,3 @@ const LoginForm: React.FC = () => {
     </form>
   );
 };
-
-export default LoginForm;
