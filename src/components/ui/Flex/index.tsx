@@ -11,10 +11,12 @@ type Props = {
   center?: boolean;
   justifyBetween?: boolean;
   justifyFlexEnd?: boolean;
+  justifyCenter?: boolean;
   alignFlexEnd?: boolean;
   alignCenter?: boolean;
   gap?: string | number;
   wrap?: boolean;
+  flex1?: boolean;
   className?: string;
   style?: React.CSSProperties;
   onClick?: MouseEventHandler<HTMLDivElement>;
@@ -26,8 +28,10 @@ export const Flex: React.FC<Props> = ({
   full,
   w100,
   h100,
+  flex1,
   center,
   justifyBetween,
+  justifyCenter,
   justifyFlexEnd,
   alignFlexEnd,
   alignCenter,
@@ -52,14 +56,16 @@ export const Flex: React.FC<Props> = ({
         {
           [styles.column]: column,
           full,
-          ["w-100"]: w100,
-          ["h-100"]: h100,
+          w100,
+          h100,
+          [styles.flex1]: flex1,
           [styles.center]: center,
           [styles.gap]: gap,
           [styles.justifyBetween]: justifyBetween,
           [styles.alignCenter]: alignCenter,
           [styles.justifyFlexEnd]: justifyFlexEnd,
           [styles.alignFlexEnd]: alignFlexEnd,
+          [styles.justifyCenter]: justifyCenter,
           [styles.wrap]: wrap,
         },
         className

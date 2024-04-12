@@ -6,6 +6,7 @@ import styles from "./index.module.css";
 import { cn } from "@utils";
 import { useModal } from "@hooks";
 import { CategoryDrawer } from "@containers";
+import { MouseEvent, MouseEventHandler } from "react";
 
 type Props = {
   data:
@@ -13,14 +14,27 @@ type Props = {
     | Omit<StoreCategoriesCategory, "id" | "createdAt">;
   style?: React.CSSProperties;
   noClick?: boolean;
+  selected?: boolean;
+  onClick?: MouseEventHandler<HTMLDivElement> | ((e: unknown) => void);
 };
 
-export const Category: React.FC<Props> = ({ noClick, data, style }) => {
+export const Category: React.FC<Props> = ({
+  noClick,
+  data,
+  style,
+  selected,
+  onClick,
+}) => {
   const [isOpened, onOpen, onClose] = useModal();
 
-  const onOpenHandler = () => {
+  const onClickHandler = (e: MouseEvent<HTMLDivElement>) => {
     if (noClick) return;
-    onOpen();
+
+    if (onClick || typeof onClick === "function") {
+      return onClick(e);
+    } else {
+      onOpen();
+    }
   };
 
   return (
@@ -32,12 +46,24 @@ export const Category: React.FC<Props> = ({ noClick, data, style }) => {
             ...style,
           } as React.CSSProperties
         }
-        className={styles.wrapper}
+        className={cn(styles.category, {
+          [styles.selected]: selected,
+          [styles.deleted]: data.deleted,
+        })}
         alignCenter
-        onClick={onOpenHandler}
+        onClick={onClickHandler}
       >
-        <Flex gap={8} className={styles.container} alignCenter>
-          <Icon size={24} fill="var(--text-color-white-90)" name={data.icon} />
+        <Flex gap={6} className={styles.container} alignCenter>
+          {data.deleted ? (
+            <Icon size={24} fill="var(--text-color-white-90)" name="trash" />
+          ) : (
+            <Icon
+              size={24}
+              fill="var(--text-color-white-90)"
+              name={data.icon}
+            />
+          )}
+
           <Text
             ellipsed
             weight={600}
@@ -56,7 +82,6 @@ export const Category: React.FC<Props> = ({ noClick, data, style }) => {
         is={isOpened}
         onClose={onClose}
         data={data as StoreCategoriesCategory}
-        mode="edit"
       />
     </>
   );

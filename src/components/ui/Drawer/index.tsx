@@ -13,12 +13,7 @@ type Props = {
   children?: ReactNode;
 };
 
-export const Wrap: React.FC<Props> = ({
-  side,
-  isOpened,
-  onClose,
-  children,
-}) => {
+const Wrap: React.FC<Props> = ({ side, isOpened, onClose, children }) => {
   const onCloseInner = (e: MouseEvent<HTMLDivElement>) => {
     if (e.currentTarget === e.target) {
       typeof onClose === "function" && onClose(e);
@@ -63,6 +58,6 @@ export const Wrap: React.FC<Props> = ({
 };
 
 export function Drawer(props: Props) {
-  const el = document.getElementById("drawers") as HTMLElement;
+  const el = document.getElementById("layers") as HTMLElement;
   return createPortal(<Wrap {...props} />, el);
 }

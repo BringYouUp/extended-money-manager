@@ -3,6 +3,9 @@ export enum Paths {
   SIGN_UP,
   HOME,
   ROOT,
+  ACCOUNTS,
+  CATEGORIES,
+  TRANSACTIONS,
 }
 
 export type PathListItem = {

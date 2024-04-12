@@ -23,7 +23,8 @@ export const Icon: React.FC<Props> = ({
       height={size}
       style={
         {
-          "--fill": fill || "var(--text-color)",
+          "--fill": fill || "currentColor",
+          "--icon-size": `${size}px` || "24px",
           ...style,
         } as React.CSSProperties
       }

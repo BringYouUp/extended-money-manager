@@ -12,9 +12,11 @@ enum Themes {
 type Props = {
   disabled?: boolean;
   rounded?: boolean;
+  centered?: boolean;
   active?: boolean;
   theme: keyof typeof Themes;
   type?: "button" | "reset" | "submit" | undefined;
+  role?: "warning" | "success" | "error";
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   width?: string;
   className?: string;
@@ -25,12 +27,14 @@ type Props = {
 export const Button: React.FC<Props> = ({
   disabled,
   rounded,
+  role,
   type,
   onClick,
   width,
   active,
   style,
   theme,
+  centered = true,
   className = "",
   children,
 }) => {
@@ -51,7 +55,11 @@ export const Button: React.FC<Props> = ({
           [styles.primary]: theme === Themes.primary,
           [styles.outline]: theme === Themes.outline,
           [styles.transparent]: theme === Themes.transparent,
+          [styles.warning]: role === "warning",
+          [styles.success]: role === "success",
+          [styles.error]: role === "error",
           [styles.active]: active,
+          [styles.centered]: centered,
         },
         className
       )}

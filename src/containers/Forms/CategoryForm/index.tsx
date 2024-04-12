@@ -7,6 +7,8 @@ import {
   Icon,
   Input,
   Label,
+  Select,
+  SelectOption,
   Spinner,
   Text,
   Unwrap,
@@ -21,14 +23,14 @@ import {
   useUID,
 } from "@hooks";
 import {
+  CategoryFormFormFields,
   FormFields,
+  StoreAccountsAccountCurrencies,
   StoreCategoriesCategory,
+  StoreCategoriesCategoryTypes,
   StoreCategoryIcon,
-  UseFormValues,
 } from "@models";
 import { ChangeEvent } from "react";
-
-type UseFormFields = "category-name" | "category-icon" | "category-color";
 
 type Props = (
   | {
@@ -37,11 +39,11 @@ type Props = (
     }
   | {
       mode: "create";
-      data?: never;
+      data?: unknown;
     }
 ) & {
   onClose: (...args: unknown[]) => void;
-  setValues: (values: UseFormValues<UseFormFields>) => void;
+  setValues: (values: CategoryFormFormFields) => void;
 };
 
 export const CategoryForm: React.FC<Props> = ({
@@ -51,7 +53,7 @@ export const CategoryForm: React.FC<Props> = ({
   setValues,
 }: Props) => {
   const dispatch = useAppDispatch();
-  const message = useAppSelector((state) => state.user.error.message);
+  const message = useAppSelector((state) => state.categories.error.message);
 
   const uid = useUID();
   const forceUpdate = useForceUpdate();
@@ -67,17 +69,19 @@ export const CategoryForm: React.FC<Props> = ({
     getValue,
     formRef,
     setValue,
-  } = useForm<UseFormFields>(
-    ["category-name", "category-icon", "category-color"],
+  } = useForm<CategoryFormFormFields>(
+    {
+      "category-color":
+        mode === "edit" ? data.color : `${Math.floor(Math.random() * 360)}`,
+      "category-icon": mode === "edit" ? data.icon : "",
+      "category-name": mode === "edit" ? data.name : "",
+      "category-type": mode === "edit" ? data.type : "",
+      "category-currency": mode === "edit" ? data.currency : "",
+    },
     {
       updateOnChange: {
         value: true,
         callback: (_, values) => setValues(values),
-      },
-      defaultValues: {
-        "category-color": mode === "edit" ? data?.color : "",
-        "category-icon": mode === "edit" ? data?.icon : "",
-        "category-name": mode === "edit" ? data?.name : "",
       },
     }
   );
@@ -91,8 +95,12 @@ export const CategoryForm: React.FC<Props> = ({
           category: {
             name: values["category-name"],
             color: values["category-color"],
-            currency: "$",
             icon: values["category-icon"] as StoreCategoryIcon,
+            type: values["category-type"] as StoreCategoriesCategoryTypes,
+            deleted: false,
+            currency: values[
+              "category-currency"
+            ] as StoreAccountsAccountCurrencies,
           },
           uid,
         })
@@ -108,7 +116,12 @@ export const CategoryForm: React.FC<Props> = ({
             name: values["category-name"],
             color: values["category-color"],
             icon: values["category-icon"] as StoreCategoryIcon,
-            id: data?.id,
+            id: data.id,
+            type: values["category-type"] as StoreCategoriesCategoryTypes,
+            deleted: false,
+            currency: values[
+              "category-currency"
+            ] as StoreAccountsAccountCurrencies,
           },
           uid,
         })
@@ -132,7 +145,9 @@ export const CategoryForm: React.FC<Props> = ({
           return onSuccessSubmit();
         case "onChangeForm":
           return onChangeForm(
-            data[0] as ChangeEvent<HTMLFormElement & FormFields<UseFormFields>>
+            data[0] as ChangeEvent<
+              HTMLFormElement & FormFields<CategoryFormFormFields>
+            >
           );
         case "onSetIcon":
           return onSetIcon(data[0] as StoreCategoryIcon);
@@ -141,10 +156,11 @@ export const CategoryForm: React.FC<Props> = ({
 
   return (
     <form
+      autoComplete="off"
       ref={formRef}
       onChange={actionManager("onChangeForm")}
       onSubmit={onSubmitForm(actionManager("onSuccessSubmit"))}
-      className="full-w"
+      className="w100"
     >
       <Flex w100 column gap={20}>
         <Flex w100 column gap={6}>
@@ -166,11 +182,93 @@ export const CategoryForm: React.FC<Props> = ({
         </Flex>
 
         <Flex w100 column gap={6}>
+          <Flex style={{ flex: 1 }} w100 column gap={6}>
+            <Label htmlFor="category-type">Type</Label>
+            <Select<{
+              name: Capitalize<StoreCategoriesCategoryTypes>;
+              value: StoreCategoriesCategoryTypes;
+            }>
+              mode="single"
+              placeholder="Select type..."
+              name="category-type"
+              error={Boolean(errors["category-type"])}
+              items={[
+                { name: "Withdraw", value: "withdraw" },
+                { name: "Income", value: "income" },
+              ]}
+              parseItem={(item) => item.name}
+              selectedCallback={(type) =>
+                getValue("category-type") === type.value
+              }
+              onChange={(e) => {
+                setValue("category-type", e.value);
+              }}
+              Component={SelectOption}
+              Wrapper={({ children }) => (
+                <Flex style={{ width: "264px", padding: "4px 0px" }} column>
+                  {children}
+                </Flex>
+              )}
+            />
+
+            <Unwrap
+              visible={Boolean(errors["category-type"])}
+              negativeOffset="6px"
+            >
+              <Text size={11} color="var(--text-color-error)">
+                {errors["category-type"]}
+              </Text>
+            </Unwrap>
+          </Flex>
+        </Flex>
+
+        <Flex w100 column gap={6}>
+          <Flex style={{ flex: 1 }} w100 column gap={6}>
+            <Label htmlFor="category-currency">Currency</Label>
+            <Select<{
+              name: StoreAccountsAccountCurrencies;
+              value: StoreAccountsAccountCurrencies;
+            }>
+              mode="single"
+              placeholder="Select currency..."
+              name="category-currency"
+              error={Boolean(errors["category-currency"])}
+              items={[
+                { name: "$", value: "$" },
+                { name: "€", value: "€" },
+              ]}
+              parseItem={(item) => item.name}
+              selectedCallback={(currency) =>
+                getValue("category-currency") === currency.value
+              }
+              onChange={(e) => {
+                setValue("category-currency", e.value);
+              }}
+              Component={SelectOption}
+              Wrapper={({ children }) => (
+                <Flex style={{ width: "264px", padding: "4px 0px" }} column>
+                  {children}
+                </Flex>
+              )}
+            />
+
+            <Unwrap
+              visible={Boolean(errors["category-currency"])}
+              negativeOffset="6px"
+            >
+              <Text size={11} color="var(--text-color-error)">
+                {errors["category-currency"]}
+              </Text>
+            </Unwrap>
+          </Flex>
+        </Flex>
+
+        <Flex w100 column gap={6}>
           <Label htmlFor="category-color">Color</Label>
           <ColorPicker
             id="category-color"
             name="category-color"
-            value={mode === "edit" ? data?.color : ""}
+            value={getValue("category-color")}
           />
           <Unwrap
             visible={Boolean(errors["category-color"])}
@@ -188,9 +286,7 @@ export const CategoryForm: React.FC<Props> = ({
           <FormGroup error={Boolean(errors["category-icon"])}>
             <Flex gap={6} wrap>
               {CATEGORIES_ICONS.map((icon) => {
-                const isIconActive = formRef.current
-                  ? getValue("category-icon") === icon
-                  : (mode === "edit" ? data?.icon : "") === icon;
+                const isIconActive = getValue("category-icon") === icon;
 
                 return (
                   <Button

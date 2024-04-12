@@ -56,3 +56,7 @@ h5.text {
   width: 100%;
   line-height: inherit;
 }
+
+.secondary {
+  color: var(--text-color-70);
+}
