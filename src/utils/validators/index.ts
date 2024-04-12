@@ -1,4 +1,4 @@
-import { UseFormFields, UseFormValidator } from "@models"
+import { StoreAccountsAccountCurrencies, StoreCategoriesCategoryTypes, StoreTransactionsTransactionType, UseFormFields, UseFormValidator } from "@models"
 
 export const required: UseFormValidator = (value: string = "") => {
   if (!value) {
@@ -42,8 +42,8 @@ export const maxLength = (maxLength: number): UseFormValidator => (value: string
 
 export const accountAmount = (value: string = "") => {
   if (
-    !/^[1-9](\d+)?((\.|,)(\d+)?[1-9])?$/.test(value) &&    // 1.2323 || 1,2334 || 1,00300
-    !/^0(\.|,)(\d+)?[1-9]$/.test(value)    // 0.2323 || 0,0000000001
+    !/^[1-9](\d+)?(\.([1-9]{1,2})|(\d[1-9]))?$/.test(value) &&    // 1.23 || 1,23 || 1,03
+    !/^0\.\d[1-9]?$/.test(value)    // 0.23 || 0,01
   ) {
     return {
       error: `Please, enter valid number`
@@ -59,22 +59,62 @@ export const categoryIcon = (value: string = "") => {
   }
 }
 
-export const getValidatorsForField = (field: UseFormFields): UseFormValidator[] => {
+export const accountCurrency = (value: string) => {
+  const acceptedValues: StoreAccountsAccountCurrencies[] = ['$', '€']
+  if (!acceptedValues.includes(value as StoreAccountsAccountCurrencies)) {
+    return {
+      error: 'Please, choose currency'
+    }
+  }
+}
+
+export const categoryType = (value: string) => {
+  const acceptedValues: StoreCategoriesCategoryTypes[] = ['withdraw', 'income']
+  if (!acceptedValues.includes(value as StoreCategoriesCategoryTypes)) {
+    return {
+      error: 'Please, choose correct type'
+    }
+  }
+}
+
+export const transactionType = (value: string) => {
+  const acceptedValues: StoreTransactionsTransactionType[] = ['income', 'transfer', 'withdraw']
+  if (!acceptedValues.includes(value as StoreTransactionsTransactionType)) {
+    return {
+      error: 'Please, choose correct type'
+    }
+  }
+}
+
+export const getValidatorsForField = (field: keyof UseFormFields): UseFormValidator[] => {
   switch (field) {
     case 'email': return [required, noOnlyWhitespace, email]
     case 'password': return [required, noOnlyWhitespace, minLength(6), maxLength(40)]
     case 'account-name':
     case 'category-name':
+    case 'transaction-description':
       return [required, noOnlyWhitespace, minLength(3), maxLength(30)]
-    case 'account-amount': return [required, noOnlyWhitespace, accountAmount]
+    case 'account-amount':
+    case 'transaction-amount':
+      return [required, noOnlyWhitespace, accountAmount]
     case 'account-color':
     case 'category-color':
+    case 'transaction-category-id':
+    case 'transaction-account-id':
+    case 'transaction-to-account-id':
+    case 'transaction-date':
       return [required]
     case 'category-icon':
       return [categoryIcon]
+    case 'account-currency':
+    case 'category-currency':
+      return [required, accountCurrency]
+    case 'category-type':
+      return [required, categoryType]
+    case 'transaction-type':
+      return [required, transactionType]
     default:
       console.error('THERE is NOT SUCH a FIELD')
-
       return []
   }
 }

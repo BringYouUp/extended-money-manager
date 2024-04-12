@@ -8,4 +8,6 @@ export const getRef = {
   categories: (uid: string) => collection(db, "users", uid, "categories"),
   accountsEdit: (uid: string, id: string) => doc(db, "users", uid, "accounts", id),
   categoriesEdit: (uid: string, id: string) => doc(db, "users", uid, "categories", id),
+  transactions: (uid: string) => collection(db, "users", uid, "transactions"),
+  transactionsEdit: (uid: string, id: string) => doc(db, "users", uid, "transactions", id),
 }

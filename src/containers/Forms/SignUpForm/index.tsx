@@ -14,6 +14,7 @@ import {
 } from "@components";
 import { PATHS } from "@consts";
 import { useAppDispatch, useAppSelector, useForm, useLoading } from "@hooks";
+import { SignUpInFormFields } from "@models";
 import { useNavigate } from "react-router-dom";
 
 export const SignUpForm: React.FC = () => {
@@ -22,9 +23,8 @@ export const SignUpForm: React.FC = () => {
 
   const message = useAppSelector((state) => state.user.error.message);
 
-  const { errors, onChangeForm, onSubmitForm, getValues, formRef } = useForm<
-    "email" | "password"
-  >(["email", "password"]);
+  const { errors, onChangeForm, onSubmitForm, getValues, formRef } =
+    useForm<SignUpInFormFields>({ email: "", password: "" });
 
   const { isLoading, startLoading, endLoading, loadingData } =
     useLoading(false);
@@ -66,10 +66,11 @@ export const SignUpForm: React.FC = () => {
 
   return (
     <form
+      autoComplete="off"
       ref={formRef}
       onChange={onChangeForm}
       onSubmit={onSubmitForm(actionManager("onSuccessSubmit"))}
-      className="full-w"
+      className="w100"
     >
       <Flex w100 column gap={20}>
         <Flex w100 column gap={6}>

@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 
 type Props = {
   size?: number;
+  secondary?: boolean;
   weight?: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
   color?: string;
   block?: boolean;
@@ -33,6 +34,7 @@ export const Text: React.FC<Props> = ({
   weight,
   style,
   className,
+  secondary,
   onClick,
   children,
 }) => {
@@ -58,6 +60,7 @@ export const Text: React.FC<Props> = ({
           [styles.size]: size,
           [styles.clickable]: clickable,
           [styles.ellipsed]: ellipsed,
+          [styles.secondary]: secondary,
         },
         className
       )}

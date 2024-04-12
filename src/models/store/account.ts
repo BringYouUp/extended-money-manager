@@ -1,11 +1,14 @@
+export type StoreAccountsAccountCurrencies = '$' | '€'
+
 export type StoreAccountsAccount = {
   name: string;
   color: string;
   type: 'regular',
-  amount: string,
-  currency: '$',
+  amount: number,
+  currency: StoreAccountsAccountCurrencies,
   id: string,
-  createdAt: string
+  createdAt: string,
+  deleted: boolean,
 }
 
 export type StoreAccountsAccounts = StoreAccountsAccount[]

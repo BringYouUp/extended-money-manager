@@ -4,6 +4,9 @@ import styles from "./index.module.css";
 import { ReactNode } from "react";
 
 type Props = {
+  full?: boolean;
+  w100?: boolean;
+  h100?: boolean;
   padding?: number[];
   margin?: number[];
   style?: React.CSSProperties;
@@ -27,6 +30,9 @@ const generateOffsetStyle = (values: number[]) => {
 };
 
 export const Offset: React.FC<Props> = ({
+  full,
+  w100,
+  h100,
   padding,
   margin,
   style,
@@ -45,6 +51,9 @@ export const Offset: React.FC<Props> = ({
       className={cn(
         styles.offset,
         {
+          full,
+          w100,
+          h100,
           [styles.padding]: Boolean(padding),
           [styles.margin]: Boolean(margin),
         },

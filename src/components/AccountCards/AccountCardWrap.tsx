@@ -5,18 +5,22 @@ import { MouseEventHandler, ReactNode } from "react";
 import { cn } from "@utils";
 
 type Props = {
+  selected?: boolean;
   style?: React.CSSProperties;
   onClick: MouseEventHandler<HTMLDivElement>;
   color: string;
   empty?: boolean;
+  deleted?: boolean;
   children: ReactNode;
 };
 
 export const AccountCardWrap: React.FC<Props> = ({
   style,
+  selected,
   color,
   onClick,
   empty,
+  deleted,
   children,
 }) => {
   return (
@@ -27,7 +31,11 @@ export const AccountCardWrap: React.FC<Props> = ({
           ...style,
         } as React.CSSProperties
       }
-      className={cn(styles.wrapper, { [styles.empty]: empty })}
+      className={cn(styles.account, {
+        [styles.empty]: empty,
+        [styles.selected]: selected,
+        [styles.deleted]: deleted,
+      })}
       column
       onClick={onClick}
     >

@@ -20,7 +20,7 @@ export const FormGroup: React.FC<Props> = ({
     <div
       style={style}
       className={cn(
-        styles.container,
+        styles.formGroup,
         {
           [styles.error]: error,
         },

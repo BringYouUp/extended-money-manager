@@ -8,5 +8,5 @@ type Props = {
 };
 
 export const Skeleton: React.FC<Props> = ({ style, className }) => {
-  return <div style={style} className={cn(styles.wrapper, className)} />;
+  return <div style={style} className={cn(styles.skeleton, className)} />;
 };

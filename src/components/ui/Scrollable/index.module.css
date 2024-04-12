@@ -1,0 +1,41 @@
+.scrollable::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  border-radius: var(--border-radius-default);
+  background-color: var(--primary-color-20);
+}
+
+.scrollable.hidden {
+  overflow: hidden;
+}
+
+.scrollable.hiddenX {
+  overflow-x: hidden;
+}
+
+.scrollable.auto {
+  overflow: auto;
+}
+
+.scrollable.overlay {
+  overflow: overlay;
+}
+
+.scrollable.overlay::-webkit-scrollbar-thumb {
+  visibility: hidden;
+}
+
+.scrollable.overlay:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+}
+
+.scrollable.stableGutter {
+  scrollbar-gutter: stable;
+}
+
+.scrollable.none {
+  display: none;
+}
