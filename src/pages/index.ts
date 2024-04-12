@@ -1,9 +1,15 @@
-import { Component as LoginPage } from './Login'
-import { Component as SignUp } from './SignUp'
-import { Component as Main } from './Main'
+import { LoginPage } from './Login'
+import { SignUpPage } from './SignUp'
+import { MainPage } from './Main'
+import { AccountsPage } from './Accounts'
+import { CategoriesPage } from './Categories'
+import { TransactionsPage } from './Transactions'
 
 export {
   LoginPage,
-  SignUp,
-  Main,
+  SignUpPage,
+  MainPage,
+  AccountsPage,
+  CategoriesPage,
+  TransactionsPage,
 }
