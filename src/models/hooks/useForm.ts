@@ -1,27 +1,48 @@
-export type UseFormFields = 'email' | 'password' | 'account-name' | 'account-amount' | 'account-color' | 'category-name' | 'category-color' | 'category-icon'
+export type UseFormFieldsKeys =
+  'email' |
+  'password' |
+  'account-name' |
+  'account-amount' |
+  'account-color' |
+  'account-currency' |
+  'category-name' |
+  'category-color' |
+  'category-icon' |
+  "category-type" |
+  "category-currency" |
+  'transaction-description' |
+  'transaction-category-id' |
+  'transaction-account-id' |
+  'transaction-to-account-id' |
+  'transaction-amount' |
+  'transaction-date' |
+  'transaction-type'
 
-export type UseFormErrors<Fields extends UseFormFields> = {
-  [keyof in Fields]?: string
-}
-
-export type UseFormValues<Fields extends UseFormFields> = {
-  [keyof in Fields]?: string
-}
-
-export type UseFormValidator = (value: string) => undefined | { error: string }
-
-export type UseFormValidators<Fields extends string> = {
-  [keyof in Fields]?: UseFormValidator[]
+export type UseFormFields = {
+  [keyof in UseFormFieldsKeys]?: unknown
 }
 
 export type UseFormOptions<Fields extends UseFormFields> = {
   updateOnChange?: {
     value: boolean,
-    callback: (e: React.ChangeEvent<HTMLFormElement>, values: { [keyof in Fields]: string }) => void
+    callback: (e: React.ChangeEvent<HTMLFormElement>, values: { [K in keyof Fields]: Fields[K] }) => void
   },
-  defaultValues?: { [keyof in Fields]?: string }
 }
 
-export type FormFields<T> = {
-  [K in keyof T]: HTMLInputElement
+export type UseFormErrors<Fields extends UseFormFields> = {
+  [K in keyof Fields]?: string
+}
+
+export type UseFormValues<Fields extends UseFormFields> = {
+  [K in keyof Fields]?: string
+}
+
+export type UseFormValidator = (value: string) => undefined | { error: string }
+
+export type UseFormValidators<Fields extends UseFormFields> = {
+  [K in keyof Fields]?: UseFormValidator[]
+}
+
+export type FormFields<Fields extends UseFormFields> = {
+  [K in keyof Fields]: HTMLInputElement
 }

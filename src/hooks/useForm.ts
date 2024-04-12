@@ -2,15 +2,17 @@ import { FormFields, UseFormErrors, UseFormFields, UseFormOptions, UseFormValida
 import { getValidatorsForField } from "@utils";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-export const useForm = <Fields extends UseFormFields>(fields: Fields[], options?: UseFormOptions<Fields>) => {
+export const useForm = <Fields extends UseFormFields>(
+  fields: Fields,
+  options?: UseFormOptions<Fields>
+) => {
   const [errors, setErrors] = useState<UseFormErrors<Fields>>({})
   const validatorsRef = useRef<UseFormValidators<Fields>>({})
   const formRef = useRef<HTMLFormElement & FormFields<Fields>>(null)
 
-  const getValue = (field: Fields) => {
+  const getValue = (field: keyof Fields) => {
     if (!formRef.current) {
-      console.error('Form is not mounted yet !!!', field)
-      return ''
+      return fields[field]
     }
     if (!(field in formRef.current.elements)) {
       console.error('There is not such a registered input !!!', field)
@@ -19,16 +21,16 @@ export const useForm = <Fields extends UseFormFields>(fields: Fields[], options?
     return formRef.current?.[field]?.value
   }
 
-  const getValues = (): { [keyof in Fields]: string } => {
-    return fields.reduce((acc, field) => {
+  const getValues = (): { [K in keyof Fields]: Fields[K] } => {
+    return Object.keys(fields).reduce((acc, field) => {
       return {
         ...acc,
-        [field]: getValue(field)
+        [field]: getValue(field as keyof Fields)
       }
-    }, {} as { [keyof in Fields]: string })
+    }, {} as { [K in keyof Fields]: Fields[K] })
   }
 
-  const setValue = (field: Fields, value: string) => {
+  const setValue = (field: keyof Fields, value: string) => {
     if (formRef.current) {
       formRef.current[field].value = value
 
@@ -56,9 +58,9 @@ export const useForm = <Fields extends UseFormFields>(fields: Fields[], options?
   };
 
   const onValidate = (e: React.ChangeEvent<HTMLFormElement>): boolean => {
-    const keys = Object.keys(e.target.elements).filter(key => !/\d+/.test(key)) as Fields[]
+    const keys = Object.keys(e.target.elements).filter(key => !/\d+/.test(key)) as (keyof Fields)[]
 
-    if (keys.length !== fields.length) {
+    if (keys.length !== Object.keys(fields).length) {
       console.error('Every field must be registered !!!')
       return false
     }
@@ -70,7 +72,7 @@ export const useForm = <Fields extends UseFormFields>(fields: Fields[], options?
       const validators = validatorsRef.current?.[key]
 
       if (validators) {
-        zzz: for (const validator of validators) {
+        breakPoint: for (const validator of validators) {
           const mayBeError = validator(value)
           if (mayBeError) {
             isWithoutError = false
@@ -78,7 +80,7 @@ export const useForm = <Fields extends UseFormFields>(fields: Fields[], options?
               ...prev,
               [key]: mayBeError.error
             }))
-            break zzz
+            break breakPoint
           }
         }
       }
@@ -98,30 +100,25 @@ export const useForm = <Fields extends UseFormFields>(fields: Fields[], options?
   }
 
   useEffect(() => {
-    fields.forEach((field: Fields) => {
-      validatorsRef.current[field] = getValidatorsForField(field)
+    (Object.keys(fields) as (keyof Fields)[]).forEach((field) => {
+      validatorsRef.current[field] = getValidatorsForField(field as keyof UseFormFields)
     })
   }, [fields])
 
   useEffect(() => {
-    if (options?.defaultValues) {
-      if (formRef.current) {
-        Object.keys(options?.defaultValues).forEach(key => {
-          if (formRef.current?.[key]) {
-            if (key === 'account-color') {
-              // debugger
-            }
-            formRef.current[key].value = options?.defaultValues?.[key as keyof Fields]
-            formRef?.current[key].dispatchEvent(new Event('change'))
-          }
-        })
+    if (formRef.current) {
+      Object.keys(fields).forEach(key => {
+        if (formRef.current?.[key]) {
+          formRef.current[key].value = fields?.[key as keyof Fields]
+          formRef?.current[key].dispatchEvent(new Event('change'))
+        }
+      })
 
-        const handler = (e: unknown) => onChangeForm(e as React.ChangeEvent<HTMLFormElement & FormFields<Fields>>)
+      const handler = (e: unknown) => onChangeForm(e as React.ChangeEvent<HTMLFormElement & FormFields<Fields>>)
 
-        formRef.current.addEventListener('change', handler)
-        formRef.current.dispatchEvent(new Event('change'))
-        formRef.current.removeEventListener('change', handler)
-      }
+      formRef.current.addEventListener('change', handler)
+      formRef.current.dispatchEvent(new Event('change'))
+      formRef.current.removeEventListener('change', handler)
     }
   }, [])
 
