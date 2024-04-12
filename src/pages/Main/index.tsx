@@ -4,33 +4,38 @@ import {
   Button,
   Categories,
   Flex,
+  Grid,
   Icon,
   Offset,
-  Spinner,
   Text,
+  Transactions,
 } from "@components";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useAuthListening,
-  useAuthNavigating,
-  useModal,
-} from "@hooks";
+import { useAppDispatch, useModal } from "@hooks";
 
 import styles from "./index.module.css";
 
-import { AccountDrawer, CategoryDrawer } from "@containers";
+import {
+  EditAccountDrawer,
+  EditCategoryDrawer,
+  EditTransactionDrawer,
+} from "@containers";
+import { useNavigate } from "react-router-dom";
 
-export const Component: React.FC = () => {
-  const isAuthLoading = useAuthListening();
+export const MainPage: React.FC = () => {
+  const navigate = useNavigate();
 
-  const [isAccountDrawerOpened, onOpenAccountDrawer, onCloseAccountDrawer] =
-    useModal();
+  const [
+    isEditAccountDrawerOpened,
+    onOpenEditAccountDrawer,
+    onCloseEditAccountDrawer,
+  ] = useModal();
   const [isCategoryDrawerOpened, onOpenCategoryDrawer, onCloseCategoryDrawer] =
     useModal();
-
-  const { navigateFromPlatform } = useAuthNavigating();
-  const user = useAppSelector((state) => state.user.user.uid);
+  const [
+    isTransactionDrawerOpened,
+    onOpenTransactionDrawer,
+    onCloseTransactionDrawer,
+  ] = useModal();
 
   const dispatch = useAppDispatch();
 
@@ -38,18 +43,10 @@ export const Component: React.FC = () => {
     dispatch(userLogOut());
   };
 
-  if (isAuthLoading) {
-    return (
-      <Flex full center>
-        <Spinner size={24} />
-      </Flex>
-    );
-  }
-
-  if (!user) {
-    navigateFromPlatform();
-    return;
-  }
+  const onNavigate =
+    (page: "accounts" | "categories" | "transactions") => () => {
+      navigate(page);
+    };
 
   return (
     <>
@@ -58,16 +55,21 @@ export const Component: React.FC = () => {
           <Flex column gap={12}>
             <Offset padding={[0, 24]}>
               <Flex alignCenter justifyBetween>
-                <Text color="var(--text-color-80)" as="h2">
-                  Accounts
+                <Flex alignCenter gap={6}>
+                  <Text color="var(--text-color-80)" as="h2">
+                    Accounts
+                  </Text>
+                  <Button
+                    theme="transparent"
+                    rounded
+                    onClick={onOpenEditAccountDrawer}
+                  >
+                    <Icon name="plus" size={16} fill="var(--text-color-80)" />
+                  </Button>
+                </Flex>
+                <Text onClick={onNavigate("accounts")} clickable secondary>
+                  See all
                 </Text>
-                <Button
-                  theme="transparent"
-                  rounded
-                  onClick={onOpenAccountDrawer}
-                >
-                  <Icon name="plus" size={16} fill="var(--text-color-80)" />
-                </Button>
               </Flex>
             </Offset>
             <Flex className={styles.container2}>
@@ -80,16 +82,21 @@ export const Component: React.FC = () => {
           <Flex column gap={12}>
             <Offset padding={[0, 24]}>
               <Flex alignCenter justifyBetween>
-                <Text color="var(--text-color-80)" as="h3">
-                  Categories
+                <Flex alignCenter gap={6}>
+                  <Text color="var(--text-color-80)" as="h3">
+                    Categories
+                  </Text>
+                  <Button
+                    theme="transparent"
+                    rounded
+                    onClick={onOpenCategoryDrawer}
+                  >
+                    <Icon name="plus" size={16} fill="var(--text-color-80)" />
+                  </Button>
+                </Flex>
+                <Text onClick={onNavigate("categories")} clickable secondary>
+                  See all
                 </Text>
-                <Button
-                  theme="transparent"
-                  rounded
-                  onClick={onOpenCategoryDrawer}
-                >
-                  <Icon name="plus" size={16} fill="var(--text-color-80)" />
-                </Button>
               </Flex>
             </Offset>
             <Flex className={styles.container2}>
@@ -98,18 +105,54 @@ export const Component: React.FC = () => {
               </Flex>
             </Flex>
           </Flex>
+
+          <Flex column gap={12}>
+            <Offset padding={[0, 24]}>
+              <Flex alignCenter justifyBetween>
+                <Flex alignCenter gap={6}>
+                  <Text color="var(--text-color-80)" as="h3">
+                    Transactions
+                  </Text>
+                  <Button
+                    theme="transparent"
+                    rounded
+                    onClick={onOpenTransactionDrawer}
+                  >
+                    <Icon name="plus" size={16} fill="var(--text-color-80)" />
+                  </Button>
+                </Flex>
+                <Text onClick={onNavigate("transactions")} clickable secondary>
+                  See all
+                </Text>
+              </Flex>
+            </Offset>
+            <Flex className={styles.container2}>
+              <Grid.Wrap
+                templateColumns="repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)"
+                gap={12}
+                className={styles.container}
+              >
+                <Transactions />
+              </Grid.Wrap>
+            </Flex>
+          </Flex>
           <button onClick={onLogout}>logout</button>
         </Offset>
       </Flex>
-      <AccountDrawer
+      <EditAccountDrawer
         mode="create"
-        is={isAccountDrawerOpened}
-        onClose={onCloseAccountDrawer}
+        is={isEditAccountDrawerOpened}
+        onClose={onCloseEditAccountDrawer}
       />
-      <CategoryDrawer
+      <EditCategoryDrawer
         mode="create"
         is={isCategoryDrawerOpened}
         onClose={onCloseCategoryDrawer}
+      />
+      <EditTransactionDrawer
+        mode="create"
+        is={isTransactionDrawerOpened}
+        onClose={onCloseTransactionDrawer}
       />
     </>
   );

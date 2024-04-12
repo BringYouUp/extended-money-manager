@@ -5,6 +5,8 @@ import {
   Flex,
   Input,
   Label,
+  Select,
+  SelectOption,
   Spinner,
   Text,
   Unwrap,
@@ -17,49 +19,62 @@ import {
   useLoading,
   useUID,
 } from "@hooks";
-import { FormFields, StoreAccountsAccount, UseFormValues } from "@models";
+import {
+  AccountFormFormFields,
+  FormFields,
+  StoreAccountsAccount,
+  StoreAccountsAccountCurrencies,
+} from "@models";
 import { ChangeEvent } from "react";
 
-type UseFormFields = "account-name" | "account-amount" | "account-color";
+type Edit = {
+  mode: "edit";
+  data: StoreAccountsAccount;
+};
+
+type Create = {
+  mode: "create";
+  data?: unknown;
+};
 
 type Props = {
   onClose: (...args: unknown[]) => void;
-  setValues: (values: UseFormValues<UseFormFields>) => void;
-} & (
-  | {
-      mode: "edit";
-      data: StoreAccountsAccount;
-    }
-  | {
-      mode: "create";
-      data?: never;
-    }
-);
+  setValues: (values: AccountFormFormFields) => void;
+} & (Create | Edit);
 
 export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
   const dispatch = useAppDispatch();
-  const message = useAppSelector((state) => state.user.error.message);
+  const message = useAppSelector((state) => state.accounts.error.message);
 
   const uid = useUID();
 
   const { isLoading, startLoading, endLoading, loadingData } =
     useLoading(false);
 
-  const { errors, onChangeForm, onSubmitForm, getValues, formRef } =
-    useForm<UseFormFields>(
-      ["account-name", "account-amount", "account-color"],
-      {
-        updateOnChange: {
-          value: true,
-          callback: (_, values) => setValues(values),
+  const {
+    errors,
+    onChangeForm,
+    onSubmitForm,
+    getValues,
+    getValue,
+    setValue,
+    formRef,
+  } = useForm<AccountFormFormFields>(
+    {
+      "account-color": mode === "edit" ? data.color : "",
+      "account-amount": mode === "edit" ? data.amount : 0,
+      "account-name": mode === "edit" ? data.name : "",
+      "account-currency": mode === "edit" ? data.currency : "$",
+    },
+    {
+      updateOnChange: {
+        value: true,
+        callback: (_, values) => {
+          setValues(values);
         },
-        defaultValues: {
-          "account-color": mode === "edit" ? data?.color : "",
-          "account-amount": mode === "edit" ? data?.amount : "",
-          "account-name": mode === "edit" ? data?.name : "",
-        },
-      }
-    );
+      },
+    }
+  );
 
   const onSuccessSubmit = () => {
     const values = getValues();
@@ -73,8 +88,11 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
             name: values["account-name"],
             color: values["account-color"],
             type: "regular",
-            amount: values["account-amount"],
-            currency: "$",
+            amount: +values["account-amount"],
+            currency: values[
+              "account-currency"
+            ] as StoreAccountsAccountCurrencies,
+            deleted: false,
           },
           uid: uid,
         })
@@ -89,8 +107,12 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           account: {
             name: values["account-name"],
             color: values["account-color"],
-            amount: values["account-amount"],
+            amount: +values["account-amount"],
+            currency: values[
+              "account-currency"
+            ] as StoreAccountsAccountCurrencies,
             id: data.id,
+            deleted: false,
           },
           uid,
         })
@@ -109,17 +131,20 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           return onSuccessSubmit();
         case "onChangeForm":
           return onChangeForm(
-            data[0] as ChangeEvent<HTMLFormElement & FormFields<UseFormFields>>
+            data[0] as ChangeEvent<
+              HTMLFormElement & FormFields<AccountFormFormFields>
+            >
           );
       }
     };
 
   return (
     <form
+      autoComplete="off"
       ref={formRef}
       onChange={actionManager("onChangeForm")}
       onSubmit={onSubmitForm(actionManager("onSuccessSubmit"))}
-      className="full-w"
+      className="w100"
     >
       <Flex w100 column gap={20}>
         <Flex w100 column gap={6}>
@@ -145,6 +170,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
             <Input
               id="account-amount"
               name="account-amount"
+              type="number"
               placeholder="Enter amount..."
               error={Boolean(errors["account-amount"])}
             />
@@ -160,9 +186,50 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
         </Flex>
 
         <Flex w100 column gap={6}>
+          <Flex style={{ flex: 1 }} w100 column gap={6}>
+            <Label htmlFor="account-currency">Currency</Label>
+            <Select<{
+              name: StoreAccountsAccountCurrencies;
+              value: StoreAccountsAccountCurrencies;
+            }>
+              mode="single"
+              placeholder="Select currency..."
+              name="account-currency"
+              error={Boolean(errors["account-currency"])}
+              items={[
+                { name: "$", value: "$" },
+                { name: "€", value: "€" },
+              ]}
+              parseItem={(item) => item.name}
+              selectedCallback={(currency) =>
+                getValue("account-currency") === currency.value
+              }
+              onChange={(e) => {
+                setValue("account-currency", e.value);
+              }}
+              Component={SelectOption}
+              Wrapper={({ children }) => (
+                <Flex style={{ width: "264px", padding: "4px 0px" }} column>
+                  {children}
+                </Flex>
+              )}
+            />
+
+            <Unwrap
+              visible={Boolean(errors["account-currency"])}
+              negativeOffset="6px"
+            >
+              <Text size={11} color="var(--text-color-error)">
+                {errors["account-currency"]}
+              </Text>
+            </Unwrap>
+          </Flex>
+        </Flex>
+
+        <Flex w100 column gap={6}>
           <Label htmlFor="account-color">Color</Label>
           <ColorPicker
-            value={mode === "edit" ? data?.color : ""}
+            value={mode === "edit" ? data.color : ""}
             id="account-color"
             name="account-color"
           />

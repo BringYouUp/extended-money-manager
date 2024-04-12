@@ -21,6 +21,21 @@ export const PATHS_LIST: PathListItem[] = [
     name: 'ROOT',
     title: ''
   },
+  {
+    path: '/accounts',
+    name: 'ACCOUNTS',
+    title: ''
+  },
+  {
+    path: '/categories',
+    name: 'CATEGORIES',
+    title: ''
+  },
+  {
+    path: '/transactions',
+    name: 'TRANSACTIONS',
+    title: ''
+  },
 ];
 
 

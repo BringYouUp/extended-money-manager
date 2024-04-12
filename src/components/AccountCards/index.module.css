@@ -1,9 +1,10 @@
-.wrapper {
+.account {
   scroll-snap-align: start;
   box-shadow: var(--box-shadow-default);
   border-radius: var(--border-radius-x3);
   min-height: 84px;
   min-width: 240px;
+  width: 240px;
   height: 84px;
   overflow: hidden;
   user-select: none;
@@ -11,16 +12,25 @@
   transition: transform var(--transition-default);
 }
 
-.wrapper:hover {
+.account:hover {
   transform: translate(0.25px, 1px);
 }
 
-.wrapper:active {
+.account:active {
   transform: translate(0.5px, 3px);
 }
 
-.wrapper.empty .container::before {
+.account.empty .container::before {
   background: black;
+}
+
+.account.deleted {
+  opacity: 0.33;
+  filter: saturate(0);
+}
+
+.account.selected {
+  opacity: 0.33;
 }
 
 .container {

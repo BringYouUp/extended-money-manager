@@ -184,3 +184,23 @@ select {
 hr {
   margin: 0;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--border-radius-default);
+}
+
+::-webkit-scrollbar-track {
+  border-radius: var(--border-radius-default);
+  visibility: hidden;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: var(--border-radius-default);
+  background-color: var(--hoverScrollBarBackgroundColor, red);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: rgba(0, 0, 0, 0);
+}
