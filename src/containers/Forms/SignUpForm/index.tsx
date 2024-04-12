@@ -1,6 +1,6 @@
 import {
   signInWithProvider,
-  userSignInWithEmailAndPassword,
+  userSignUpWithEmailAndPassword,
 } from "@async-actions";
 import {
   Button,
@@ -35,7 +35,7 @@ export const SignUpForm: React.FC = () => {
     const { email, password } = getValues();
     startLoading({ submitting: true });
 
-    dispatch(userSignInWithEmailAndPassword(email, password)).finally(() =>
+    dispatch(userSignUpWithEmailAndPassword({ email, password })).finally(() =>
       endLoading()
     );
   };
@@ -46,7 +46,7 @@ export const SignUpForm: React.FC = () => {
 
   const onSignInWithProvider = (provider: "google" | "github") => {
     startLoading({ provider });
-    dispatch(signInWithProvider(provider)).finally(() => endLoading());
+    dispatch(signInWithProvider({ provider })).finally(() => endLoading());
   };
 
   const actionManager = (type: string) => () => {

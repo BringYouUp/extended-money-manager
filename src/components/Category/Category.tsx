@@ -12,10 +12,16 @@ type Props = {
     | StoreCategoriesCategory
     | Omit<StoreCategoriesCategory, "id" | "createdAt">;
   style?: React.CSSProperties;
+  noClick?: boolean;
 };
 
-export const Category: React.FC<Props> = ({ data, style }) => {
+export const Category: React.FC<Props> = ({ noClick, data, style }) => {
   const [isOpened, onOpen, onClose] = useModal();
+
+  const onOpenHandler = () => {
+    if (noClick) return;
+    onOpen();
+  };
 
   return (
     <>
@@ -28,7 +34,7 @@ export const Category: React.FC<Props> = ({ data, style }) => {
         }
         className={styles.wrapper}
         alignCenter
-        onClick={onOpen}
+        onClick={onOpenHandler}
       >
         <Flex gap={8} className={styles.container} alignCenter>
           <Icon size={24} fill="var(--text-color-white-90)" name={data.icon} />

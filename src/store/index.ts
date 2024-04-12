@@ -23,6 +23,7 @@ const preloadedState = {
       code: '',
       message: ''
     },
+    status: ''
   },
   categories: {
     categories: [],
@@ -30,6 +31,7 @@ const preloadedState = {
       code: '',
       message: ''
     },
+    status: ''
   }
 }
 

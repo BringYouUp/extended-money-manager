@@ -13,9 +13,9 @@ type Props = {
   justifyFlexEnd?: boolean;
   alignFlexEnd?: boolean;
   alignCenter?: boolean;
-  className?: string;
   gap?: string | number;
   wrap?: boolean;
+  className?: string;
   style?: React.CSSProperties;
   onClick?: MouseEventHandler<HTMLDivElement>;
   children?: ReactNode;

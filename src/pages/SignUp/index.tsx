@@ -35,7 +35,7 @@ export const Component: React.FC = () => {
             >
               <Offset padding={[24, 16]}>
                 <Flex w100 column gap={24}>
-                  <Text uppercase as="h2" weight={400}>
+                  <Text uppercase as="h2" weight={500}>
                     Sign up
                   </Text>
                   <SignUpForm />

@@ -21,6 +21,7 @@ import {
   useUID,
 } from "@hooks";
 import {
+  FormFields,
   StoreCategoriesCategory,
   StoreCategoryIcon,
   UseFormValues,
@@ -29,23 +30,26 @@ import { ChangeEvent } from "react";
 
 type UseFormFields = "category-name" | "category-icon" | "category-color";
 
-type PropsEdit = {
+type Props = (
+  | {
+      mode: "edit";
+      data: StoreCategoriesCategory;
+    }
+  | {
+      mode: "create";
+      data?: never;
+    }
+) & {
   onClose: (...args: unknown[]) => void;
   setValues: (values: UseFormValues<UseFormFields>) => void;
-  mode: "edit";
-  data: StoreCategoriesCategory;
 };
 
-type PropsCreate = {
-  onClose: (...args: unknown[]) => void;
-  setValues: (values: UseFormValues<UseFormFields>) => void;
-  mode: "create";
-};
-
-type Props = PropsEdit | PropsCreate;
-
-export const CategoryForm: React.FC<Props> = (props: Props) => {
-  const { mode, onClose, setValues } = props;
+export const CategoryForm: React.FC<Props> = ({
+  data,
+  mode,
+  onClose,
+  setValues,
+}: Props) => {
   const dispatch = useAppDispatch();
   const message = useAppSelector((state) => state.user.error.message);
 
@@ -71,9 +75,9 @@ export const CategoryForm: React.FC<Props> = (props: Props) => {
         callback: (_, values) => setValues(values),
       },
       defaultValues: {
-        "category-color": mode === "edit" ? props?.data?.color : "",
-        "category-icon": mode === "edit" ? props?.data?.icon : "",
-        "category-name": mode === "edit" ? props?.data?.name : "",
+        "category-color": mode === "edit" ? data?.color : "",
+        "category-icon": mode === "edit" ? data?.icon : "",
+        "category-name": mode === "edit" ? data?.name : "",
       },
     }
   );
@@ -83,15 +87,15 @@ export const CategoryForm: React.FC<Props> = (props: Props) => {
 
     if (mode === "create") {
       dispatch(
-        categoriesAddCategory(
-          {
+        categoriesAddCategory({
+          category: {
             name: values["category-name"],
             color: values["category-color"],
             currency: "$",
             icon: values["category-icon"] as StoreCategoryIcon,
           },
-          uid
-        )
+          uid,
+        })
       )
         .then(() => onClose())
         .finally(() => endLoading());
@@ -99,15 +103,15 @@ export const CategoryForm: React.FC<Props> = (props: Props) => {
 
     if (mode === "edit") {
       dispatch(
-        categoriesEditCategory(
-          {
+        categoriesEditCategory({
+          category: {
             name: values["category-name"],
             color: values["category-color"],
             icon: values["category-icon"] as StoreCategoryIcon,
-            id: props?.data?.id,
+            id: data?.id,
           },
-          uid
-        )
+          uid,
+        })
       )
         .then(() => onClose())
         .finally(() => endLoading());
@@ -127,7 +131,9 @@ export const CategoryForm: React.FC<Props> = (props: Props) => {
         case "onSuccessSubmit":
           return onSuccessSubmit();
         case "onChangeForm":
-          return onChangeForm(data[0] as ChangeEvent<HTMLFormElement>);
+          return onChangeForm(
+            data[0] as ChangeEvent<HTMLFormElement & FormFields<UseFormFields>>
+          );
         case "onSetIcon":
           return onSetIcon(data[0] as StoreCategoryIcon);
       }
@@ -164,7 +170,7 @@ export const CategoryForm: React.FC<Props> = (props: Props) => {
           <ColorPicker
             id="category-color"
             name="category-color"
-            value={mode === "edit" ? props?.data?.color : ""}
+            value={mode === "edit" ? data?.color : ""}
           />
           <Unwrap
             visible={Boolean(errors["category-color"])}
@@ -184,7 +190,7 @@ export const CategoryForm: React.FC<Props> = (props: Props) => {
               {CATEGORIES_ICONS.map((icon) => {
                 const isIconActive = formRef.current
                   ? getValue("category-icon") === icon
-                  : (mode === "edit" ? props?.data?.icon : "") === icon;
+                  : (mode === "edit" ? data?.icon : "") === icon;
 
                 return (
                   <Button

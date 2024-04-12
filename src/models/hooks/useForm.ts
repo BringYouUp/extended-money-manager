@@ -22,3 +22,6 @@ export type UseFormOptions<Fields extends UseFormFields> = {
   defaultValues?: { [keyof in Fields]?: string }
 }
 
+export type FormFields<T> = {
+  [K in keyof T]: HTMLInputElement
+}

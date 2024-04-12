@@ -1,7 +1,7 @@
 export * from './useLoading'
 export * from './useAppDispatch'
 export * from './useAppSelector'
-export { useFormValidation as useForm } from './useForm'
+export * from './useForm'
 export * from './useFirebase'
 export * from './useAuthListening'
 export * from './useAuthNavigating'

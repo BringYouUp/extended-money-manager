@@ -1,3 +1,4 @@
+import { accountsAddAccount, accountsEditAccount, accountsSetAccounts } from '@async-actions'
 import { StoreAccounts, StoreAccountsAccount, StoreAccountsAccounts, StoreAccountsError } from '@models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
@@ -7,48 +8,54 @@ const initialState: StoreAccounts = {
     code: '',
     message: ''
   },
+  status: 'accounts/accountsSetAccounts/pending'
 }
 
 const accounts = createSlice({
-  name: 'accounts',
+  name: 'account',
   initialState,
-  reducers: {
-    setAccounts: (state, { payload }: PayloadAction<StoreAccountsAccounts>) => {
-      state.accounts = payload || []
-      state.error = initialState.error
-    },
-    editAccount: (state, { payload }: PayloadAction<Partial<StoreAccountsAccount> & Pick<StoreAccountsAccount, 'id'>>) => {
-      const index = state.accounts.findIndex(account => account.id === payload.id);
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(accountsSetAccounts.fulfilled, (state, { payload }: PayloadAction<StoreAccountsAccounts>) => {
+        state.accounts = payload || []
+        state.error = initialState.error
+      })
+      .addCase(accountsAddAccount.fulfilled, (state, { payload }: PayloadAction<StoreAccountsAccount>) => {
+        state.accounts.push(payload)
+        state.error = initialState.error
+      })
+      .addCase(accountsEditAccount.fulfilled, (state, { payload }: PayloadAction<Partial<StoreAccountsAccount> & Pick<StoreAccountsAccount, 'id'>>) => {
+        const index = state.accounts.findIndex(account => account.id === payload.id);
 
-      state.accounts[index] = {
-        ...state.accounts[index],
-        ...payload
-      }
-    },
-    addAccount: (state, { payload }: PayloadAction<StoreAccountsAccount>) => {
-      state.accounts.push(payload)
-      state.error = initialState.error
-    },
-    clearAccounts: (state) => {
-      state.accounts = initialState.accounts
-    },
-    setError: (state, { payload }: PayloadAction<StoreAccountsError>) => {
-      state.error = payload
-    },
-    clearError: (state) => {
-      state.error = initialState.error
-    }
+        state.accounts[index] = {
+          ...state.accounts[index],
+          ...payload
+        }
+      })
+      .addMatcher(
+        ({ type }) => type.startsWith('accounts/') && type.endsWith('pending'),
+        (state, { type }) => {
+          state.error = initialState.error
+          state.status = type
+        }
+      )
+      .addMatcher(
+        ({ type }) => type.startsWith('accounts/') && type.endsWith('fulfilled'),
+        (state) => {
+          state.status = null
+        }
+      )
+      .addMatcher(
+        ({ type }) => type.startsWith('accounts/') && type.endsWith('rejected'),
+        (state, { payload }: PayloadAction<StoreAccountsError>) => {
+          state.error = payload
+        }
+      )
   }
 })
 
 
-export const {
-  setAccounts,
-  addAccount,
-  editAccount,
-  clearAccounts,
-  setError,
-  clearError,
-} = accounts.actions;
+export const { } = accounts.actions;
 
 export default accounts.reducer;

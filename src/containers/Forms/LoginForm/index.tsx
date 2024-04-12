@@ -35,7 +35,7 @@ export const LoginForm: React.FC = () => {
     const { email, password } = getValues();
     startLoading({ submitting: true });
 
-    dispatch(userSignInWithEmailAndPassword(email, password)).finally(() =>
+    dispatch(userSignInWithEmailAndPassword({ email, password })).finally(() =>
       endLoading()
     );
   };
@@ -45,7 +45,7 @@ export const LoginForm: React.FC = () => {
 
     const { email } = getValues();
 
-    dispatch(userResetPassword(email)).finally(() => endLoading());
+    dispatch(userResetPassword({ email })).finally(() => endLoading());
   };
 
   const onNavigateToSignUp = () => {
@@ -54,7 +54,7 @@ export const LoginForm: React.FC = () => {
 
   const onSignInWithProvider = (provider: "google" | "github") => {
     startLoading({ provider });
-    dispatch(signInWithProvider(provider)).finally(() => endLoading());
+    dispatch(signInWithProvider({ provider })).finally(() => endLoading());
   };
 
   const actionManager = (type: string) => () => {
