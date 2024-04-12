@@ -1,0 +1,43 @@
+.dropdownWrapper {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+}
+
+.dropdownWrapperEnter {
+  transition: opacity var(--transition-default);
+  opacity: 1;
+}
+.dropdownWrapperExit {
+  opacity: 0;
+}
+
+.dropdown {
+  --dropdown-border-radius: var(--border-radius-default);
+  width: min-content;
+  transition: opacity var(--transition-default);
+  position: fixed;
+  opacity: 0;
+  top: 0px;
+  left: 0px;
+  box-shadow: var(--box-shadow-soft);
+  background-color: var(--background-color);
+  border-radius: var(--dropdown-border-radius);
+  overflow: hidden;
+  border: 1px solid var(--primary-color-20);
+}
+
+.dropdownEnter {
+  opacity: 1;
+}
+
+.dropdownExit {
+  opacity: 0;
+}
+
+.dropdownInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* border-radius: var(--dropdown-border-radius); */
+}

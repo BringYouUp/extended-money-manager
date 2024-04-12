@@ -238,7 +238,7 @@ input[type="range"] {
   width: 100%;
 }
 input[type="range"]:focus {
-  outline: none;
+  border: none;
 }
 input[type="range"]::-webkit-slider-runnable-track {
   width: 100%;
@@ -246,7 +246,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   cursor: pointer;
   background: var(--range-background);
   border-radius: var(--border-radius-default);
-  outline: 1px solid var(--primary-color-10);
+  border: 1px solid var(--primary-color-10);
 }
 input[type="range"]::-webkit-slider-thumb {
   --slider-thumb-background-color: hsl(
@@ -254,7 +254,7 @@ input[type="range"]::-webkit-slider-thumb {
     var(--default-saturation-for-background),
     var(--default-lightness-for-background)
   );
-  outline: 1px solid var(--primary-color-10);
+  border: 1px solid var(--primary-color-10);
   /* box-shadow: inset 0 0 0 calc(var(--slider-thumb-size) / 4) white; */
   /* background: var(--slider-thumb-background-color); */
   background-color: var(--soft-background-color);
@@ -278,11 +278,11 @@ input[type="range"]::-moz-range-track {
   box-shadow: var(--box-shadow-default);
   background: var(--range-background);
   border-radius: var(--border-radius-default);
-  outline: 1px solid var(--primary-color-10);
+  border: 1px solid var(--primary-color-10);
 }
 input[type="range"]::-moz-range-thumb {
   box-shadow: var(--box-shadow-default);
-  outline: 1px solid var(--primary-color-10);
+  border: 1px solid var(--primary-color-10);
   height: 36px;
   width: 16px;
   border-radius: 3px;
@@ -299,19 +299,19 @@ input[type="range"]::-ms-track {
 }
 input[type="range"]::-ms-fill-lower {
   background: var(--range-background);
-  outline: 1px solid var(--primary-color-10);
+  border: 1px solid var(--primary-color-10);
   border-radius: 2.6px;
   box-shadow: var(--box-shadow-default);
 }
 input[type="range"]::-ms-fill-upper {
   background: var(--range-background);
-  outline: 1px solid var(--primary-color-10);
+  border: 1px solid var(--primary-color-10);
   border-radius: 2.6px;
   box-shadow: var(--box-shadow-default);
 }
 input[type="range"]::-ms-thumb {
   box-shadow: var(--box-shadow-default);
-  outline: 1px solid var(--primary-color-10);
+  border: 1px solid var(--primary-color-10);
   height: 36px;
   width: 16px;
   border-radius: 3px;
@@ -331,11 +331,11 @@ input[type="range"]:focus::-ms-fill-upper {
   font-size: inherit;
   border-radius: var(--border-radius-default);
   width: 100%;
-  outline: 1px solid var(--primary-color-10);
+  border: 1px solid var(--primary-color-10);
   transition: outline var(--transition-quick);
   height: var(--input-height);
 }
 
 .container.error {
-  outline: 1px solid var(--text-color-error);
+  border: 1px solid var(--text-color-error);
 }

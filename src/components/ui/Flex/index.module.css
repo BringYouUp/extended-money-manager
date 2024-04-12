@@ -34,3 +34,11 @@
 .wrap {
   flex-wrap: wrap;
 }
+
+.flex1 {
+  flex: 1;
+}
+
+.justifyCenter {
+  justify-content: center;
+}

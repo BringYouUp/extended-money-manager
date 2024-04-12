@@ -10,9 +10,14 @@
   max-height: 34px;
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 8px;
   transition: var(--transition-default) background-color;
+  z-index: 0;
+}
+
+.button.centered {
+  justify-content: center;
+  align-items: center;
 }
 
 .width {
@@ -27,7 +32,7 @@
 
 .primary {
   background-color: var(--primary-color-90);
-  outline: 1px solid var(--primary-color-90);
+  border: 1px solid var(--primary-color-90);
   color: var(--text-color-white-90);
 }
 
@@ -46,19 +51,19 @@
 }
 
 .outline {
-  outline: 1px solid var(--primary-color-30);
+  border: 1px solid var(--primary-color-30);
 }
 
 .transparent {
   height: 36px;
 }
 
-.outline:hover,
+.border:hover,
 .transparent:hover {
   background-color: var(--primary-color-10);
 }
 
-.outline:active,
+.border:active,
 .transparent:active {
   background-color: var(--primary-color-20);
 }
@@ -71,6 +76,35 @@
 }
 
 .active.transparent {
-  background-color: var(--primary-color-20);
-  outline: 1px solid var(--primary-color-10);
+  background-color: var(--primary-color-10);
+  border: 1px solid var(--primary-color-20);
+}
+
+.success,
+.warning,
+.error {
+  position: relative;
+  z-index: 0;
+}
+
+.success:after,
+.error:after,
+.warning:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.warning:after {
+  background-color: var(--text-color-warning);
+}
+
+.error:after {
+  background-color: var(--text-color-error);
+}
+
+.success:after {
+  background-color: var(--text-color-success);
 }

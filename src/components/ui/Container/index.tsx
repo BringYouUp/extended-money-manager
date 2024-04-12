@@ -38,11 +38,11 @@ export const Container: React.FC<Props> = ({
         } as React.CSSProperties
       }
       className={cn(
-        styles.flex,
+        styles.container,
         {
           full,
-          ["w-100"]: w100,
-          ["h-100"]: h100,
+          w100,
+          h100,
           [styles.background]: background,
           [styles.width]: width,
           [styles.height]: height,
