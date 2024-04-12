@@ -1,7 +1,7 @@
 {
   "name": "money-manager",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
+    "autoprefixer": "^10.4.19",
     "firebase": "^10.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -29,5 +30,9 @@
     "typescript": "^5.2.2",
     "vite": "^5.1.4",
     "vite-plugin-svg-spriter": "1.0.0"
-  }
+  },
+  "browserslist": [
+    "> 1%",
+    "not dead"
+  ]
 }

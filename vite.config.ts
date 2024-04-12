@@ -2,6 +2,8 @@ import { defineConfig } from 'vite'
 import createSvgSpritePlugin from 'vite-plugin-svg-spriter'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import autoprefixer from 'autoprefixer'
+import packageJSON from './package.json'
 
 const SVG_FOLDER_PATH = path.resolve(__dirname, 'src', 'assets')
 
@@ -11,6 +13,11 @@ const formattedDate = formatter.format(date);
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  css: {
+    postcss: {
+      plugins: [autoprefixer],
+    },
+  },
   plugins: [
     react(),
     createSvgSpritePlugin({
@@ -20,8 +27,13 @@ export default defineConfig({
       },
     })
   ],
+  server: {
+    port: 4200,
+    host: true,
+  },
   define: {
-    __LAST_BUILD_AT__: JSON.stringify(formattedDate)
+    __LAST_BUILD_AT__: JSON.stringify(formattedDate),
+    __APP_VERSION__: JSON.stringify(packageJSON.version),
   },
   resolve: {
     alias: {
@@ -34,6 +46,7 @@ export default defineConfig({
       '@models': path.resolve(__dirname, './src/models'),
       '@pages': path.resolve(__dirname, './src/pages'),
       '@store': path.resolve(__dirname, './src/store'),
+      '@selectors': path.resolve(__dirname, './src/store/slices/selectors'),
       '@slices': path.resolve(__dirname, './src/store/slices'),
       '@style': path.resolve(__dirname, './src/style'),
       '@utils': path.resolve(__dirname, './src/utils'),
