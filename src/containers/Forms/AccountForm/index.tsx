@@ -17,28 +17,26 @@ import {
   useLoading,
   useUID,
 } from "@hooks";
-import { StoreAccountsAccount, UseFormValues } from "@models";
+import { FormFields, StoreAccountsAccount, UseFormValues } from "@models";
 import { ChangeEvent } from "react";
 
 type UseFormFields = "account-name" | "account-amount" | "account-color";
 
-type PropsEdit = {
+type Props = {
   onClose: (...args: unknown[]) => void;
   setValues: (values: UseFormValues<UseFormFields>) => void;
-  mode: "edit";
-  data: StoreAccountsAccount;
-};
+} & (
+  | {
+      mode: "edit";
+      data: StoreAccountsAccount;
+    }
+  | {
+      mode: "create";
+      data?: never;
+    }
+);
 
-type PropsCreate = {
-  onClose: (...args: unknown[]) => void;
-  setValues: (values: UseFormValues<UseFormFields>) => void;
-  mode: "create";
-};
-
-type Props = PropsEdit | PropsCreate;
-
-export const AccountForm: React.FC<Props> = (props: Props) => {
-  const { mode, onClose, setValues } = props;
+export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
   const dispatch = useAppDispatch();
   const message = useAppSelector((state) => state.user.error.message);
 
@@ -56,9 +54,9 @@ export const AccountForm: React.FC<Props> = (props: Props) => {
           callback: (_, values) => setValues(values),
         },
         defaultValues: {
-          "account-color": mode === "edit" ? props?.data?.color : "",
-          "account-amount": mode === "edit" ? props?.data?.amount : "",
-          "account-name": mode === "edit" ? props?.data?.name : "",
+          "account-color": mode === "edit" ? data?.color : "",
+          "account-amount": mode === "edit" ? data?.amount : "",
+          "account-name": mode === "edit" ? data?.name : "",
         },
       }
     );
@@ -70,16 +68,16 @@ export const AccountForm: React.FC<Props> = (props: Props) => {
 
     if (mode === "create") {
       dispatch(
-        accountsAddAccount(
-          {
+        accountsAddAccount({
+          account: {
             name: values["account-name"],
             color: values["account-color"],
             type: "regular",
             amount: values["account-amount"],
             currency: "$",
           },
-          uid
-        )
+          uid: uid,
+        })
       )
         .then(() => onClose())
         .finally(() => endLoading());
@@ -87,15 +85,15 @@ export const AccountForm: React.FC<Props> = (props: Props) => {
 
     if (mode === "edit") {
       dispatch(
-        accountsEditAccount(
-          {
+        accountsEditAccount({
+          account: {
             name: values["account-name"],
             color: values["account-color"],
             amount: values["account-amount"],
-            id: props.data.id,
+            id: data.id,
           },
-          uid
-        )
+          uid,
+        })
       )
         .then(() => onClose())
         .finally(() => endLoading());
@@ -110,7 +108,9 @@ export const AccountForm: React.FC<Props> = (props: Props) => {
         case "onSuccessSubmit":
           return onSuccessSubmit();
         case "onChangeForm":
-          return onChangeForm(data[0] as ChangeEvent<HTMLFormElement>);
+          return onChangeForm(
+            data[0] as ChangeEvent<HTMLFormElement & FormFields<UseFormFields>>
+          );
       }
     };
 
@@ -162,7 +162,7 @@ export const AccountForm: React.FC<Props> = (props: Props) => {
         <Flex w100 column gap={6}>
           <Label htmlFor="account-color">Color</Label>
           <ColorPicker
-            value={mode === "edit" ? props.data?.color : ""}
+            value={mode === "edit" ? data?.color : ""}
             id="account-color"
             name="account-color"
           />

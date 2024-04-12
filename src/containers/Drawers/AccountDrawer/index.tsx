@@ -13,23 +13,26 @@ import { SetStateAction, useState } from "react";
 import { StoreAccountsAccount, UseFormValues } from "@models";
 import { useDebounce } from "@hooks";
 
-type PropsEdit = {
+type Props = {
   is: boolean;
   onClose: () => void;
-  mode: "edit";
-  data: StoreAccountsAccount;
-};
+} & (
+  | {
+      mode: "edit";
+      data: StoreAccountsAccount;
+    }
+  | {
+      mode: "create";
+      data?: never;
+    }
+);
 
-type PropsCreate = {
-  is: boolean;
-  onClose: () => void;
-  mode: "create";
-};
-
-type Props = PropsEdit | PropsCreate;
-
-export const AccountDrawer: React.FC<Props> = (props: Props) => {
-  const { is, mode, onClose } = props;
+export const AccountDrawer: React.FC<Props> = ({
+  is,
+  mode,
+  onClose,
+  data,
+}: Props) => {
   const [values, setValues] = useState<
     UseFormValues<"account-amount" | "account-color" | "account-name">
   >({});
@@ -59,7 +62,7 @@ export const AccountDrawer: React.FC<Props> = (props: Props) => {
             </Flex>
             <AccountForm
               mode={mode}
-              data={mode === "edit" ? props.data : (undefined as never)}
+              data={mode === "edit" ? data : (undefined as never)}
               setValues={setDebouncedValues}
               onClose={onClose}
             />

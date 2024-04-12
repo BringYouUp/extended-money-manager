@@ -17,23 +17,26 @@ import {
 import { useDebounce } from "@hooks";
 import { Category } from "src/components/Category";
 
-type PropsEdit = {
+type Props = {
   is: boolean;
   onClose: () => void;
-  mode: "edit";
-  data: StoreCategoriesCategory;
-};
+} & (
+  | {
+      mode: "edit";
+      data: StoreCategoriesCategory;
+    }
+  | {
+      mode: "create";
+      data?: never;
+    }
+);
 
-type PropsCreate = {
-  is: boolean;
-  onClose: () => void;
-  mode: "create";
-};
-
-type Props = PropsEdit | PropsCreate;
-
-export const CategoryDrawer: React.FC<Props> = (props: Props) => {
-  const { is, mode, onClose } = props;
+export const CategoryDrawer: React.FC<Props> = ({
+  is,
+  data,
+  mode,
+  onClose,
+}: Props) => {
   const [values, setValues] = useState<
     UseFormValues<"category-name" | "category-icon" | "category-color">
   >({});
@@ -64,7 +67,7 @@ export const CategoryDrawer: React.FC<Props> = (props: Props) => {
               onClose={onClose}
               setValues={setDebouncedValues}
               mode={mode}
-              data={mode === "edit" ? props.data : (undefined as never)}
+              data={data}
             />
             <hr />
             <Offset margin={[12, 0, 0, 0]}>
@@ -74,6 +77,7 @@ export const CategoryDrawer: React.FC<Props> = (props: Props) => {
             </Offset>
             <Flex center full>
               <Category
+                noClick
                 style={{ zIndex: 2 }}
                 data={{
                   color: values["category-color"] || "",

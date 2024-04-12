@@ -18,7 +18,11 @@ export const useAuthListening = () => {
     }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(signInAutomatically(user)).finally(() => endLoading())
+        dispatch(signInAutomatically(user))
+          .then(() => {
+            console.log('→ 1');
+          })
+          .finally(() => endLoading())
       } else {
         dispatch(USER_SLICES.clearUser())
         endLoading()

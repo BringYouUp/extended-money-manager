@@ -18,4 +18,5 @@ export type StoreAccountsError = {
 export type StoreAccounts = {
   accounts: StoreAccountsAccounts,
   error: StoreAccountsError,
+  status: null | string
 }

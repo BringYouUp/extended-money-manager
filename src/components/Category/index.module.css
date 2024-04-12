@@ -1,5 +1,5 @@
 .wrapper {
-  box-shadow: var(--box-shadow-default);
+  box-shadow: var(--box-shadow-soft);
   border-radius: var(--border-radius-x3);
   overflow: hidden;
   user-select: none;
@@ -7,6 +7,8 @@
   transition: transform var(--transition-default);
   width: fit-content;
   max-width: 100%;
+  min-width: var(--category-min-width, 75px);
+  height: 36px;
 }
 
 .wrapper:hover {
@@ -23,6 +25,7 @@
 
 .container {
   position: relative;
+  min-width: inherit;
   height: 100%;
   background: linear-gradient(
     67.5deg,

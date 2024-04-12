@@ -18,6 +18,6 @@ export type StoreCategoriesError = {
 
 export type StoreCategories = {
   categories: StoreCategoriesCategories,
-  error: StoreCategoriesError
-  ,
+  error: StoreCategoriesError,
+  status: null | string
 }
