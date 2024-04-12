@@ -32,6 +32,14 @@ const preloadedState = {
       message: ''
     },
     status: ''
+  },
+  transactions: {
+    transactions: [],
+    error: {
+      code: '',
+      message: ''
+    },
+    status: ''
   }
 }
 

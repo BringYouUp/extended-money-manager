@@ -7,7 +7,7 @@ import { auth, googleProvider, githubProvider } from '../../../config/firebase'
 import { User, UserCredential, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 import { getStoreUserErrorFormat } from '@utils';
 
-import { accountsSetAccounts, categoriesSetCategories } from '@async-actions';
+import { accountsSetAccounts, categoriesSetCategories, transactionsSetTransactions } from '@async-actions';
 
 export const userSetUser = createAsyncThunk<StoreUserUser, { uid: string, user: User }>(
   'user/userSetUser',
@@ -57,11 +57,11 @@ export const userSignUpWithEmailAndPassword = createAsyncThunk<unknown, { email:
       createUserWithEmailAndPassword(auth, email, password)
         .then(data => {
           authData = data
-          return dispatch(accountsSetAccounts(data.user.uid))
+          dispatch(accountsSetAccounts(authData.user.uid))
+          dispatch(categoriesSetCategories(authData.user.uid))
+          dispatch(transactionsSetTransactions(authData.user.uid))
+          resolve(fulfillWithValue(authData))
         })
-        .then(() => dispatch(categoriesSetCategories(authData.user.uid)))
-        .then(() => dispatch(userSetUser({ uid: authData.user.uid, user: authData.user })))
-        .then(data => resolve(fulfillWithValue(data)))
         .catch(err => {
           console.log(`→ error`, err);
           reject(rejectWithValue(getStoreUserErrorFormat(err)))
@@ -77,10 +77,13 @@ export const userSignInWithEmailAndPassword = createAsyncThunk<unknown, { email:
       let authData: UserCredential
 
       signInWithEmailAndPassword(auth, email, password)
-        .then(data => (authData = data, dispatch(accountsSetAccounts(data.user.uid))))
-        .then(() => dispatch(categoriesSetCategories(authData.user.uid)))
-        .then(() => dispatch(userSetUser({ uid: authData.user.uid, user: authData.user })))
-        .then(data => resolve(fulfillWithValue(data)))
+        .then(data => {
+          authData = data
+          dispatch(accountsSetAccounts(authData.user.uid))
+          dispatch(categoriesSetCategories(authData.user.uid))
+          dispatch(transactionsSetTransactions(authData.user.uid))
+          resolve(fulfillWithValue(authData))
+        })
         .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
     })
   }
@@ -114,11 +117,14 @@ export const signInWithProvider = createAsyncThunk<unknown, { provider: 'google'
       signInWithPopup(auth, providers[provider])
         .then(data => {
           authData = data
-          return dispatch(accountsSetAccounts(data.user.uid))
+          dispatch(userSetUser({ uid: authData.user.uid, user: authData.user }))
         })
-        .then(() => dispatch(categoriesSetCategories(authData.user.uid)))
-        .then(() => dispatch(userSetUser({ uid: authData.user.uid, user: authData.user })))
-        .then(data => resolve(fulfillWithValue(data)))
+        .then(() => {
+          dispatch(accountsSetAccounts(authData.user.uid))
+          dispatch(categoriesSetCategories(authData.user.uid))
+          dispatch(transactionsSetTransactions(authData.user.uid))
+          resolve(fulfillWithValue(authData))
+        })
         .catch(err => {
           console.log(`→ error`, err);
           reject(rejectWithValue(getStoreUserErrorFormat(err)))
@@ -150,10 +156,10 @@ export const signInAutomatically = createAsyncThunk<unknown, User>(
     return new Promise((resolve, reject) => {
       dispatch(userSetUser({ uid: data.uid, user: data }))
         .then(() => {
-          resolve(fulfillWithValue(data))
-          console.log('→ 2');
           dispatch(accountsSetAccounts(data.uid))
           dispatch(categoriesSetCategories(data.uid))
+          dispatch(transactionsSetTransactions(data.uid))
+          resolve(fulfillWithValue(getStoreUserFormat(data)))
         })
         .catch(err => {
           console.log(`→ error`, err);
