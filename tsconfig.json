@@ -18,6 +18,7 @@
       "@pages": ["src/pages/index.ts"],
       "@slices": ["src/store/slices/index.ts"],
       "@store": ["src/store/index.ts"],
+      "@selectors": ["src/store/slices/selectors"],
       "@style": ["src/style/index.ts"],
       "@utils": ["src/utils/index.ts"],
       "@providers": ["src/providers/index.ts"],
