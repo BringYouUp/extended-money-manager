@@ -1,9 +1,9 @@
-.container {
+.formGroup {
   padding: 4px;
   border-radius: var(--border-radius-default);
-  outline: 1px solid var(--primary-color-10);
+  border: 1px solid var(--primary-color-10);
 }
 
-.container.error {
-  outline: 1px solid var(--text-color-error);
+.formGroup.error {
+  border: 1px solid var(--text-color-error);
 }

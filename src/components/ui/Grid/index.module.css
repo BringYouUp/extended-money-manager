@@ -1,0 +1,61 @@
+.grid {
+  display: grid;
+}
+
+.gridGap {
+  gap: var(--grid-gap);
+}
+
+.gridCenter {
+  align-content: center;
+  justify-content: center;
+}
+
+.gridAlignCenter {
+  align-content: center;
+}
+
+.gridJustifyCenter {
+  justify-content: center;
+}
+
+.gridTemplateAreas {
+  grid-template-areas: var(--grid-template-areas);
+}
+
+.gridTemplateRows {
+  grid-template-rows: var(--grid-template-rows);
+}
+
+.gridTemplateColumns {
+  grid-template-columns: var(--grid-template-columns);
+}
+
+.gridArea {
+  grid-area: var(--grid-area);
+}
+
+.gridAutoflow {
+  grid-auto-flow: var(--grid-autoflow);
+}
+
+.gridItem-gap {
+  gap: var(--grid-item-gap, 0);
+}
+
+.gridItemCenterSelf {
+  align-self: center;
+  justify-self: center;
+}
+
+.gridItemAlignSelf {
+  align-self: center;
+}
+
+.gridItemJustifySelf {
+  justify-self: center;
+}
+
+.gridItemFrea {
+  grid-area: var(--grid-item-area);
+}
