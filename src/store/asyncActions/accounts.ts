@@ -1,7 +1,7 @@
 
 import { getRef, getStoreUserErrorFormat } from '@utils';
 import { addDoc, getDocs, setDoc } from 'firebase/firestore';
-import { StoreAccountsAccount, StoreAccountsAccounts } from '@models';
+import { OmittedStoreFields, StoreAccountsAccount, StoreAccountsAccounts } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const accountsSetAccounts = createAsyncThunk<StoreAccountsAccounts, string>(
@@ -30,22 +30,18 @@ export const accountsSetAccounts = createAsyncThunk<StoreAccountsAccounts, strin
   }
 )
 
-export const accountsAddAccount = createAsyncThunk<StoreAccountsAccount, { account: Omit<StoreAccountsAccount, 'id' | 'createdAt'>, uid: string }>(
+export const accountsAddAccount = createAsyncThunk<StoreAccountsAccount, { account: Omit<StoreAccountsAccount, OmittedStoreFields>, uid: string }>(
   'accounts/accountsAddAccount',
   ({ account, uid }, { fulfillWithValue, rejectWithValue }) => {
     return new Promise((resolve, reject) => {
       const docRef = getRef.accounts(uid)
-      const editedAccount: Omit<StoreAccountsAccount, 'id'> = {
-        ...account,
-        createdAt: new Date().toISOString()
-      }
 
-      addDoc(docRef, editedAccount)
+      addDoc(docRef, account)
         .then(data => {
           resolve(fulfillWithValue({
-            ...editedAccount,
+            ...account,
             id: data.id,
-          }))
+          } as StoreAccountsAccount))
         })
         .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
     })

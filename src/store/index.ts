@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { combineReducers } from "redux";
 import * as REDUCERS from './slices/reducers'
+import * as MIDDLEWARES from './middlewares'
 import { configureStore } from "@reduxjs/toolkit";
 
 const preloadedState = {
@@ -40,6 +42,16 @@ const preloadedState = {
       message: ''
     },
     status: ''
+  },
+  platform: {
+    platform: {
+      settings: {}
+    },
+    error: {
+      code: '',
+      message: ''
+    },
+    status: ''
   }
 }
 
@@ -48,7 +60,9 @@ const rootReducer = combineReducers(REDUCERS);
 export const store = configureStore({
   preloadedState,
   reducer: rootReducer,
-  devTools: true
+  devTools: true,
+  // @ts-ignore
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(...(Object.keys(MIDDLEWARES).reduce((acc, middleware) => { return acc.concat(MIDDLEWARES[middleware]) }, []))),
 });
 
 export type RootState = ReturnType<typeof store.getState>
