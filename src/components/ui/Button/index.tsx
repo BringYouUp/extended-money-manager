@@ -50,7 +50,7 @@ export const Button: React.FC<Props> = ({
         styles.button,
         {
           [styles.width]: width,
-          [styles.disabled]: disabled,
+          disabled,
           [styles.rounded]: rounded,
           [styles.primary]: theme === Themes.primary,
           [styles.outline]: theme === Themes.outline,

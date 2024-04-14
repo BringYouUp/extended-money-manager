@@ -10,6 +10,7 @@ type Props = {
   hidden?: boolean;
   hiddenX?: boolean;
   overlay?: boolean;
+  scroll?: boolean;
   stableGutter?: boolean;
   auto?: boolean;
   className?: string;
@@ -27,6 +28,7 @@ export const Scrollable: React.FC<Props> = ({
   auto,
   stableGutter,
   overlay,
+  scroll,
   style,
   className,
   children,
@@ -41,6 +43,7 @@ export const Scrollable: React.FC<Props> = ({
           w100,
           h100,
           [styles.overlay]: overlay,
+          [styles.scroll]: scroll,
           [styles.none]: none,
           [styles.hidden]: hidden,
           [styles.hiddenX]: hiddenX,

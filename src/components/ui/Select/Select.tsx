@@ -1,7 +1,7 @@
 import { cn } from "@utils";
 import styles from "./index.module.css";
 import { Key, ReactNode, useRef } from "react";
-import { Dropdown, Flex, Input, Scrollable } from "@components";
+import { Dropdown, Flex, Input, Scrollable, Text } from "@components";
 import { useModal } from "@hooks";
 
 type Props<T extends object> = {
@@ -9,6 +9,7 @@ type Props<T extends object> = {
   parseItem: (item: T) => React.ReactNode;
   onChange: (item: T) => void;
   items: T[];
+  disabled?: boolean;
   placeholder?: string;
   error?: boolean;
   style?: React.CSSProperties;
@@ -32,6 +33,7 @@ export function Select<T extends object>({
   parseItem,
   items,
   style,
+  disabled,
   error,
   className,
   placeholder,
@@ -44,6 +46,12 @@ export function Select<T extends object>({
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const selectedItem = items.find(selectedCallback);
+
+  const onOpenHandler = () => {
+    if (disabled) return;
+
+    onOpen();
+  };
 
   const onClick = (item: T) => {
     switch (mode) {
@@ -62,23 +70,28 @@ export function Select<T extends object>({
       {name && <Input name={name} hidden />}
       <div
         ref={wrapperRef}
-        onClick={onOpen}
+        onClick={onOpenHandler}
         style={style}
         className={cn(
           styles.select,
           {
             [styles.error]: error,
+            disabled,
           },
           className
         )}
       >
         {selectedItem ? (
-          <Flex alignCenter h100>
-            {parseItem(selectedItem)}
+          <Flex className={cn(styles.preview)} alignCenter h100>
+            <Text ellipsed>{parseItem(selectedItem)}</Text>
           </Flex>
         ) : (
-          <Flex className={styles.placeholder} alignCenter h100>
-            {placeholder || "Select..."}
+          <Flex
+            className={cn(styles.preview, styles.placeholder)}
+            alignCenter
+            h100
+          >
+            <Text ellipsed>{placeholder || "Select..."}</Text>
           </Flex>
         )}
       </div>
