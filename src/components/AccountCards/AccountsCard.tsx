@@ -21,7 +21,7 @@ export const AccountCards: React.FC = () => {
 
   if (accounts.length === 0) {
     return (
-      <Flex w100 center column gap={6}>
+      <Flex w100 center column gap={8}>
         <Text as="h4">You have not any account</Text>
         <AccountCardEmpty />
       </Flex>

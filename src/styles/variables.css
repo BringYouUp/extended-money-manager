@@ -1,5 +1,5 @@
 :root {
-  --bg: red;
+  --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --text-color: black;
   --text-color-90: rgba(0, 0, 0, 0.9);
   --text-color-80: rgba(0, 0, 0, 0.8);

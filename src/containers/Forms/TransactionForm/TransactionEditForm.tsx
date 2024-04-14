@@ -30,7 +30,7 @@ import {
   StoreTransactionsTransactionType,
   TransactionFormProps,
 } from "@models";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useMemo } from "react";
 import {
   ACCOUNT_SELECTOR,
   CATEGORY_SELECTOR,
@@ -38,16 +38,19 @@ import {
 
 type Props = TransactionFormProps & {
   onClose: (...args: unknown[]) => void;
+  transactionType: Exclude<StoreTransactionsTransactionType, "transfer">;
 };
 
-export const TransactionEditDrawer: React.FC<Props> = ({
+export const TransactionEditForm: React.FC<Props> = ({
   data,
   initialValues,
   mode,
+  transactionType,
   onClose,
 }: Props) => {
   const dispatch = useAppDispatch();
-  const accounts = useAppSelector(ACCOUNT_SELECTOR.visibleAccountsSelector);
+  const accounts = useAppSelector(ACCOUNT_SELECTOR.allAccountsSelector);
+
   const categories = useAppSelector(
     CATEGORY_SELECTOR.visibleCategoriesSelector
   );
@@ -71,7 +74,8 @@ export const TransactionEditDrawer: React.FC<Props> = ({
     {
       "transaction-description": mode === "edit" ? data.description : "",
       "transaction-amount": mode === "edit" ? data.amount : 0,
-      "transaction-category-id": mode === "edit" ? data.categoryId : "",
+      "transaction-category-id":
+        mode === "edit" ? data.categoryId : initialValues?.categoryId || "",
       "transaction-account-id":
         mode === "edit" ? data.accountId : initialValues?.accountId || "",
       "transaction-date": mode === "edit" ? data.date : "",
@@ -87,6 +91,7 @@ export const TransactionEditDrawer: React.FC<Props> = ({
       },
     }
   );
+
   const onSuccessSubmit = () => {
     const values = getValues();
     startLoading({ submitting: true });
@@ -121,9 +126,10 @@ export const TransactionEditDrawer: React.FC<Props> = ({
             description: values["transaction-description"],
             categoryId: values["transaction-category-id"],
             accountId: values["transaction-account-id"],
+            toAccountId: "",
             amount: values["transaction-amount"],
             date: values["transaction-date"],
-            type: data.type,
+            type: data.type as "withdraw" | "income",
             deleted: false,
           },
           uid,
@@ -149,6 +155,16 @@ export const TransactionEditDrawer: React.FC<Props> = ({
           );
       }
     };
+
+  const appropriateCategories: StoreCategoriesCategory[] = useMemo(() => {
+    return categories.filter((category) => category.type === transactionType);
+  }, [transactionType]);
+
+  useEffect(() => {
+    return () => {
+      formRef.current && setValue("transaction-category-id", "");
+    };
+  }, [transactionType]);
 
   return (
     <form
@@ -216,7 +232,7 @@ export const TransactionEditDrawer: React.FC<Props> = ({
               mode="single"
               name="transaction-category-id"
               error={Boolean(errors["transaction-category-id"])}
-              items={categories}
+              items={appropriateCategories}
               parseItem={(item) => item.name}
               selectedCallback={(account) =>
                 getValue("transaction-category-id") === account.id
@@ -244,11 +260,11 @@ export const TransactionEditDrawer: React.FC<Props> = ({
             />
 
             <Unwrap
-              visible={Boolean(errors["transaction-account-id"])}
+              visible={Boolean(errors["transaction-category-id"])}
               negativeOffset="6px"
             >
               <Text size={11} color="var(--text-color-error)">
-                {errors["transaction-account-id"]}
+                {errors["transaction-category-id"]}
               </Text>
             </Unwrap>
           </Flex>

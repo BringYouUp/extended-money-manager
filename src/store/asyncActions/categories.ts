@@ -1,6 +1,6 @@
 import { getRef, getStoreUserErrorFormat } from '@utils';
 import { addDoc, getDocs, setDoc } from 'firebase/firestore';
-import { StoreCategoriesCategory, StoreCategoriesCategories } from '@models';
+import { StoreCategoriesCategory, StoreCategoriesCategories, OmittedStoreFields } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const categoriesSetCategories = createAsyncThunk<StoreCategoriesCategories, string>(
@@ -30,22 +30,18 @@ export const categoriesSetCategories = createAsyncThunk<StoreCategoriesCategorie
 
 )
 
-export const categoriesAddCategory = createAsyncThunk<StoreCategoriesCategory, { category: Omit<StoreCategoriesCategory, 'id' | 'createdAt'>, uid: string }>(
+export const categoriesAddCategory = createAsyncThunk<StoreCategoriesCategory, { category: Omit<StoreCategoriesCategory, OmittedStoreFields>, uid: string }>(
   'categories/categoriesAddCategory',
   ({ category, uid }, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
       const docRef = getRef.categories(uid)
-      const editedCategory: Omit<StoreCategoriesCategory, 'id'> = {
-        ...category,
-        createdAt: new Date().toISOString()
-      }
 
-      addDoc(docRef, editedCategory)
+      addDoc(docRef, category)
         .then(data => {
           resolve(fulfillWithValue({
-            ...editedCategory,
+            ...category,
             id: data.id,
-          }))
+          } as StoreCategoriesCategory))
         })
         .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
     })
@@ -58,7 +54,6 @@ export const categoriesEditCategory = createAsyncThunk<Partial<StoreCategoriesCa
     return new Promise((resolve, reject) => {
       const docRef = getRef.categoriesEdit(uid, category.id)
 
-      console.log(`→ category`, category);
       setDoc(docRef, category, { merge: true })
         .then(() => resolve(fulfillWithValue(category)))
         .catch(err => reject(rejectWithValue(err)))

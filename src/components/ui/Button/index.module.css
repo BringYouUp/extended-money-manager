@@ -24,16 +24,10 @@
   width: var(--button-width, none);
 }
 
-.disabled {
-  pointer-events: none;
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .primary {
   background-color: var(--primary-color-90);
   border: 1px solid var(--primary-color-90);
-  color: var(--text-color-white-90);
+  color: var(--text-color-white-80);
 }
 
 .primary:hover {
@@ -47,7 +41,7 @@
 .outline,
 .transparent {
   background-color: transparent;
-  color: var(--text-color-70);
+  color: var(--text-color-80);
 }
 
 .outline {
@@ -58,12 +52,12 @@
   height: 36px;
 }
 
-.border:hover,
+.outline:hover,
 .transparent:hover {
   background-color: var(--primary-color-10);
 }
 
-.border:active,
+.outline:active,
 .transparent:active {
   background-color: var(--primary-color-20);
 }
@@ -94,7 +88,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  opacity: 0.3;
+  opacity: 0.2;
 }
 
 .warning:after {

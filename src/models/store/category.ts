@@ -52,7 +52,8 @@ export type StoreCategoriesCategory = {
   icon: StoreCategoryIcon;
   currency: StoreAccountsAccountCurrencies;
   id: string,
-  createdAt: string
+  createdAt: string,
+  updatedAt: string,
   type: StoreCategoriesCategoryTypes,
   deleted: boolean,
 }

@@ -11,7 +11,7 @@ import {
   Text,
 } from "@components";
 import { AccountCard } from "@components";
-import { EditAccountDrawer } from "@containers";
+import { EditAccountDrawer, EditTransactionDrawer } from "@containers";
 import { useAppDispatch, useLoading, useModal, useUID } from "@hooks";
 import {
   StoreAccountsAccount,
@@ -40,13 +40,13 @@ export const AccountDrawer: React.FC<Props> = ({
     onCloseEditAccountDrawer,
   ] = useModal();
 
-  // const [
-  //   isTransactionDrawerOpened,
-  //   onOpenTransactionDrawer,
-  //   onCloseTransactionDrawer,
-  // ] = useModal();
+  const [
+    isTransactionDrawerOpened,
+    onOpenTransactionDrawer,
+    onCloseTransactionDrawer,
+  ] = useModal();
 
-  const transactionTraderType = useRef<StoreTransactionsTransactionType>();
+  const transactionDrawerTypeRef = useRef<StoreTransactionsTransactionType>();
 
   // const onShowTransactions = () => {
   //   console.log("→ show");
@@ -67,8 +67,8 @@ export const AccountDrawer: React.FC<Props> = ({
 
   const onOpenTransactionDrawerHandler =
     (type: StoreTransactionsTransactionType) => () => {
-      transactionTraderType.current = type;
-      // onOpenTransactionDrawer();
+      transactionDrawerTypeRef.current = type;
+      onOpenTransactionDrawer();
     };
 
   return (
@@ -106,10 +106,10 @@ export const AccountDrawer: React.FC<Props> = ({
                       theme="outline"
                     >
                       <Flex w100 gap={6} alignCenter justifyBetween>
-                        <Text color="var(--text-color-70)" as="h6">
+                        <Text uppercase weight={500}>
                           Transactions
                         </Text>
-                        <Icon fill="var(--text-color-70)" name="browse" />
+                        <Icon name="browse" />
                       </Flex>
                     </Button>
                     {!data.deleted && (
@@ -121,10 +121,10 @@ export const AccountDrawer: React.FC<Props> = ({
                           role="success"
                         >
                           <Flex w100 gap={6} alignCenter justifyBetween>
-                            <Text color="var(--text-color-70)" as="h6">
+                            <Text uppercase weight={500}>
                               Income
                             </Text>
-                            <Icon fill="var(--text-color-70)" name="income" />
+                            <Icon name="income" />
                           </Flex>
                         </Button>
                         <Button
@@ -134,10 +134,10 @@ export const AccountDrawer: React.FC<Props> = ({
                           role="warning"
                         >
                           <Flex w100 gap={6} alignCenter justifyBetween>
-                            <Text color="var(--text-color-70)" as="h6">
+                            <Text uppercase weight={500}>
                               Withdraw
                             </Text>
-                            <Icon fill="var(--text-color-70)" name="withdraw" />
+                            <Icon name="withdraw" />
                           </Flex>
                         </Button>
                         <Button
@@ -146,10 +146,10 @@ export const AccountDrawer: React.FC<Props> = ({
                           theme="outline"
                         >
                           <Flex w100 gap={6} alignCenter justifyBetween>
-                            <Text color="var(--text-color-70)" as="h6">
+                            <Text uppercase weight={500}>
                               Transfer
                             </Text>
-                            <Icon fill="var(--text-color-70)" name="transfer" />
+                            <Icon name="transfer" />
                           </Flex>
                         </Button>
                       </>
@@ -164,13 +164,13 @@ export const AccountDrawer: React.FC<Props> = ({
                       disabled={isLoading}
                     >
                       <Flex w100 gap={6} alignCenter justifyBetween>
-                        <Text color="var(--text-color-70)" as="h6">
+                        <Text uppercase weight={500}>
                           Delete
                         </Text>
                         {isLoading ? (
                           <Spinner size={14} />
                         ) : (
-                          <Icon fill="var(--text-color-70)" name="trash" />
+                          <Icon name="trash" />
                         )}
                       </Flex>
                     </Button>
@@ -183,13 +183,13 @@ export const AccountDrawer: React.FC<Props> = ({
                       disabled={isLoading}
                     >
                       <Flex w100 gap={6} alignCenter justifyBetween>
-                        <Text color="var(--text-color-70)" as="h6">
+                        <Text uppercase weight={500}>
                           Restore
                         </Text>
                         {isLoading ? (
                           <Spinner size={14} />
                         ) : (
-                          <Icon fill="var(--text-color-70)" name="restore" />
+                          <Icon name="restore" />
                         )}
                       </Flex>
                     </Button>
@@ -205,6 +205,15 @@ export const AccountDrawer: React.FC<Props> = ({
         mode="edit"
         data={data as StoreAccountsAccount}
         onClose={onCloseEditAccountDrawer}
+      />
+      <EditTransactionDrawer
+        is={isTransactionDrawerOpened}
+        mode="create"
+        onClose={onCloseTransactionDrawer}
+        initialValues={{
+          type: transactionDrawerTypeRef.current,
+          accountId: data.id,
+        }}
       />
     </>
   );

@@ -80,6 +80,7 @@ export const useForm = <Fields extends UseFormFields>(
               ...prev,
               [key]: mayBeError.error
             }))
+            console.error(`→ KEY`, key, mayBeError);
             break breakPoint
           }
         }

@@ -1,7 +1,8 @@
 import { getRef, getStoreUserErrorFormat } from '@utils';
-import { addDoc, getDocs, setDoc } from 'firebase/firestore';
-import { StoreTransactionsTransaction, StoreTransactionsTransactions } from '@models';
+import { addDoc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { OmittedStoreFields, StoreAccountsAccount, StoreTransactionsTransaction, StoreTransactionsTransactions } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { accountsEditAccount } from '@async-actions';
 
 export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTransactions, string>(
   'transactions/transactionsSetTransactions',
@@ -30,35 +31,141 @@ export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTra
 
 )
 
-export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTransaction, { transaction: Omit<StoreTransactionsTransaction, 'id' | 'createdAt'>, uid: string }>(
+export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTransaction, { transaction: Omit<StoreTransactionsTransaction, OmittedStoreFields>, uid: string }>(
   'transactions/transactionsAddTransaction',
-  ({ transaction, uid }, { rejectWithValue, fulfillWithValue }) => {
+  ({ transaction, uid }, { rejectWithValue, fulfillWithValue, dispatch }) => {
     return new Promise((resolve, reject) => {
-      const docRef = getRef.transactions(uid)
-      const editedTransaction: Omit<StoreTransactionsTransaction, 'id'> = {
-        ...transaction,
-        createdAt: new Date().toISOString()
-      }
+      const docTransactionsRef = getRef.transactions(uid)
+      const docAccountRef = getRef.account(uid, transaction.accountId)
+      let accountData: StoreAccountsAccount
+      let toAccountData: StoreAccountsAccount
 
-      addDoc(docRef, editedTransaction)
+      getDoc(docAccountRef).then(snap => {
+        accountData = snap.data() as StoreAccountsAccount
+
+        switch (transaction.type) {
+          case 'transfer': {
+            accountData.amount -= transaction.amount
+            const docToAccountRef = getRef.account(uid, transaction.toAccountId)
+            return getDoc(docToAccountRef)
+          }
+          case 'withdraw': {
+            accountData.amount -= transaction.amount
+            return
+          }
+          case 'income': {
+            accountData.amount += transaction.amount
+            return
+          }
+        }
+      })
+        .then(snap => {
+          dispatch(accountsEditAccount({
+            account: {
+              ...accountData,
+              id: transaction.accountId
+            },
+            uid
+          }))
+          if (snap) {
+            toAccountData = snap.data() as StoreAccountsAccount
+            toAccountData.amount -= transaction.amount
+
+            dispatch(accountsEditAccount({
+              account: {
+                ...toAccountData,
+                id: transaction.toAccountId
+              },
+              uid
+            }))
+          }
+          return addDoc(docTransactionsRef, transaction)
+        })
         .then(data => {
           resolve(fulfillWithValue({
-            ...editedTransaction,
+            ...transaction,
             id: data.id,
-          }))
+          } as StoreTransactionsTransaction))
         })
         .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
     })
   }
 )
 
-export const transactionsEditTransaction = createAsyncThunk<Partial<StoreTransactionsTransaction> & Pick<StoreTransactionsTransaction, "id">, { transaction: Partial<StoreTransactionsTransaction> & Pick<StoreTransactionsTransaction, 'id'>, uid: string }>(
+export const transactionsEditTransaction = createAsyncThunk<Partial<StoreTransactionsTransaction> & Pick<StoreTransactionsTransaction, "id" | "accountId" | "amount" | "toAccountId">, { transaction: Partial<StoreTransactionsTransaction> & Pick<StoreTransactionsTransaction, "id" | "accountId" | "amount" | "toAccountId">, uid: string }>(
   'transactions/transactionsEditTransaction',
-  ({ transaction, uid }, { rejectWithValue, fulfillWithValue }) => {
+  ({ transaction, uid }, { rejectWithValue, fulfillWithValue, dispatch }) => {
     return new Promise((resolve, reject) => {
-      const docRef = getRef.transactionsEdit(uid, transaction.id)
+      const transactionRef = getRef.transactionsEdit(uid, transaction.id)
+      const docAccountRef = getRef.account(uid, transaction.accountId)
+      let transactionData: StoreTransactionsTransaction
+      let accountData: StoreAccountsAccount
+      let toAccountData: StoreAccountsAccount
 
-      setDoc(docRef, transaction, { merge: true })
+      getDoc(transactionRef).then(snap => {
+        transactionData = snap.data() as StoreTransactionsTransaction
+        return getDoc(docAccountRef)
+      })
+        .then(snap => {
+          accountData = snap.data() as StoreAccountsAccount
+
+          switch (transaction.type) {
+            case 'transfer': {
+              if (transaction.deleted) {
+                accountData.amount += transaction.amount
+              } else {
+                accountData.amount -= transaction.amount
+              }
+              const docToAccountRef = getRef.account(uid, transaction.toAccountId)
+              return getDoc(docToAccountRef)
+            }
+            case 'withdraw': {
+              if (transaction.deleted) {
+                accountData.amount += transaction.amount
+              } else {
+                accountData.amount -= transaction.amount
+              }
+              return
+            }
+            case 'income': {
+              if (transaction.deleted) {
+                accountData.amount -= transaction.amount
+              } else {
+                accountData.amount += transaction.amount
+              }
+              return
+            }
+            default:
+              return
+          }
+        })
+        .then(snap => {
+          dispatch(accountsEditAccount({
+            account: {
+              ...accountData,
+              id: transaction.accountId
+            },
+            uid
+          }))
+          if (snap) {
+            toAccountData = snap.data() as StoreAccountsAccount
+
+            if (transaction.deleted) {
+              toAccountData.amount -= (transaction.amount - transactionData.amount)
+            } else {
+              toAccountData.amount += (transaction.amount - transactionData.amount)
+            }
+
+            dispatch(accountsEditAccount({
+              account: {
+                ...toAccountData,
+                id: transaction.toAccountId
+              },
+              uid
+            }))
+          }
+          return setDoc(transactionRef, transaction, { merge: true })
+        })
         .then(() => resolve(fulfillWithValue(transaction)))
         .catch(err => reject(rejectWithValue(err)))
     })

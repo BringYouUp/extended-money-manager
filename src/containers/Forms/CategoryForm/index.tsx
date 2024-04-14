@@ -188,6 +188,7 @@ export const CategoryForm: React.FC<Props> = ({
               name: Capitalize<StoreCategoriesCategoryTypes>;
               value: StoreCategoriesCategoryTypes;
             }>
+              disabled={mode === "edit"}
               mode="single"
               placeholder="Select type..."
               name="category-type"
@@ -297,7 +298,7 @@ export const CategoryForm: React.FC<Props> = ({
                     rounded
                     onClick={() => actionManager("onSetIcon")(icon)}
                   >
-                    <Icon name={icon} size={16} fill="var(--text-color-80)" />
+                    <Icon name={icon} size={16} />
                   </Button>
                 );
               })}
