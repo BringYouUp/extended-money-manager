@@ -25,6 +25,10 @@
   color: var(--primary-color-30);
 }
 
+.preview {
+  line-height: 24px;
+}
+
 .select.error {
   border: 1px solid var(--text-color-error);
 }

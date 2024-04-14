@@ -1,5 +1,5 @@
 import { Flex, Label, Select, SelectOption } from "@components";
-import { TransactionEditDrawer, TransactionTransferForm } from "@containers";
+import { TransactionEditForm, TransactionTransferForm } from "@containers";
 
 import {
   StoreTransactionsTransactionType,
@@ -35,6 +35,7 @@ export const TransactionForm: React.FC<Props> = ({
             name: Capitalize<StoreTransactionsTransactionType>;
             value: StoreTransactionsTransactionType;
           }>
+            disabled={mode === "edit"}
             mode="single"
             placeholder="Select type..."
             name="transaction-type"
@@ -58,13 +59,14 @@ export const TransactionForm: React.FC<Props> = ({
         </Flex>
       </Flex>
       {(transactionType === "income" || transactionType === "withdraw") && (
-        <TransactionEditDrawer
+        <TransactionEditForm
           mode={mode}
           onClose={onClose}
           initialValues={
             mode === "create" ? initialValues : (undefined as never)
           }
           data={mode === "edit" ? data : (undefined as never)}
+          transactionType={transactionType}
         />
       )}
       {transactionType === "transfer" && (

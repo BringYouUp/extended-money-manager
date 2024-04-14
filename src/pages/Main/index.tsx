@@ -7,6 +7,7 @@ import {
   Grid,
   Icon,
   Offset,
+  Scrollable,
   Text,
   Transactions,
 } from "@components";
@@ -20,6 +21,7 @@ import {
   EditTransactionDrawer,
 } from "@containers";
 import { useNavigate } from "react-router-dom";
+import { cn } from "@utils";
 
 export const MainPage: React.FC = () => {
   const navigate = useNavigate();
@@ -64,7 +66,7 @@ export const MainPage: React.FC = () => {
                     rounded
                     onClick={onOpenEditAccountDrawer}
                   >
-                    <Icon name="plus" size={16} fill="var(--text-color-80)" />
+                    <Icon name="plus" size={16} />
                   </Button>
                 </Flex>
                 <Text onClick={onNavigate("accounts")} clickable secondary>
@@ -72,10 +74,17 @@ export const MainPage: React.FC = () => {
                 </Text>
               </Flex>
             </Offset>
-            <Flex className={styles.container2}>
-              <Flex gap={12} className={styles.container}>
-                <AccountCards />
-              </Flex>
+            <Flex center className={styles.containerGradient}>
+              <Scrollable
+                none
+                scroll
+                style={{ display: "flex" }}
+                className={styles.container}
+              >
+                <Flex gap={12}>
+                  <AccountCards />
+                </Flex>
+              </Scrollable>
             </Flex>
           </Flex>
 
@@ -91,7 +100,7 @@ export const MainPage: React.FC = () => {
                     rounded
                     onClick={onOpenCategoryDrawer}
                   >
-                    <Icon name="plus" size={16} fill="var(--text-color-80)" />
+                    <Icon name="plus" size={16} />
                   </Button>
                 </Flex>
                 <Text onClick={onNavigate("categories")} clickable secondary>
@@ -99,7 +108,7 @@ export const MainPage: React.FC = () => {
                 </Text>
               </Flex>
             </Offset>
-            <Flex className={styles.container2}>
+            <Flex className={styles.containerGradient}>
               <Flex wrap gap={12} className={styles.container}>
                 <Categories />
               </Flex>
@@ -118,7 +127,7 @@ export const MainPage: React.FC = () => {
                     rounded
                     onClick={onOpenTransactionDrawer}
                   >
-                    <Icon name="plus" size={16} fill="var(--text-color-80)" />
+                    <Icon name="plus" size={16} />
                   </Button>
                 </Flex>
                 <Text onClick={onNavigate("transactions")} clickable secondary>
@@ -126,11 +135,11 @@ export const MainPage: React.FC = () => {
                 </Text>
               </Flex>
             </Offset>
-            <Flex className={styles.container2}>
+            <Flex className={styles.containerGradient}>
               <Grid.Wrap
                 templateColumns="repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)"
                 gap={12}
-                className={styles.container}
+                className={cn(styles.container, "w100")}
               >
                 <Transactions />
               </Grid.Wrap>

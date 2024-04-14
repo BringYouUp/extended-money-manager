@@ -1,13 +1,13 @@
 import { Flex, Icon, Text } from "@components";
 import { useModal } from "@hooks";
 
-import { StoreAccountsAccount } from "@models";
+import { OmittedStoreFields, StoreAccountsAccount } from "@models";
 import { AccountCardWrap } from "@components";
 import { AccountDrawer } from "@containers";
 import { MouseEvent, MouseEventHandler } from "react";
 
 type Props = {
-  data: StoreAccountsAccount | Omit<StoreAccountsAccount, "id" | "createdAt">;
+  data: StoreAccountsAccount | Omit<StoreAccountsAccount, OmittedStoreFields>;
   style?: React.CSSProperties;
   noClick?: boolean;
   selected?: boolean;

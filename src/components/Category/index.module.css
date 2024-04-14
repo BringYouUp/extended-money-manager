@@ -57,9 +57,26 @@
     var(--default-lightness-for-background)
   );
   z-index: -1;
-  border: 1px solid var(--primary-color-50);
+  border: 1.5px solid var(--primary-color-50);
   border-radius: var(--category-border-radius);
   line-height: 24px;
+}
+
+.withdraw {
+  --category-border-color: 0;
+}
+.income {
+  --category-border-color: 130;
+}
+
+.withdraw .container::before,
+.income .container::before {
+  border: 1.5px solid
+    hsl(
+      var(--category-border-color),
+      calc(var(--default-saturation-for-background) + 0%),
+      calc(var(--default-lightness-for-background) + 0%)
+    );
 }
 
 .label {

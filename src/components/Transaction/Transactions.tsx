@@ -8,10 +8,11 @@ import {
 
 import { useAppSelector } from "@hooks";
 import styles from "./index.module.css";
+import { TRANSACTION_SELECTOR } from "@selectors";
 
 export const Transactions = () => {
   const transactions = useAppSelector(
-    (state) => state.transactions.transactions
+    TRANSACTION_SELECTOR.visibleCategoriesSelector
   );
   const status = useAppSelector((state) => state.transactions.status);
 
@@ -23,7 +24,7 @@ export const Transactions = () => {
 
   if (transactions.length === 0) {
     return (
-      <Flex w100 center column gap={6}>
+      <Flex w100 center column gap={8}>
         <Text as="h4">You have not any transaction</Text>
         <TransactionEmpty style={{ width: "var(--transaction-list-width)" }} />
       </Flex>
