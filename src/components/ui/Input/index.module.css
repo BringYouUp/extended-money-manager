@@ -88,6 +88,7 @@ input[type="number"] {
 
 input[type="date"] {
   cursor: pointer;
+  font-family: var(--font-family);
 }
 
 input[type="date"]::-webkit-datetime-edit {

@@ -1,6 +1,6 @@
 import { Flex, Icon, Text } from "@components";
 
-import { StoreCategoriesCategory } from "@models";
+import { OmittedStoreFields, StoreCategoriesCategory } from "@models";
 
 import styles from "./index.module.css";
 import { cn } from "@utils";
@@ -11,7 +11,7 @@ import { MouseEvent, MouseEventHandler } from "react";
 type Props = {
   data:
     | StoreCategoriesCategory
-    | Omit<StoreCategoriesCategory, "id" | "createdAt">;
+    | Omit<StoreCategoriesCategory, OmittedStoreFields>;
   style?: React.CSSProperties;
   noClick?: boolean;
   selected?: boolean;
@@ -49,6 +49,7 @@ export const Category: React.FC<Props> = ({
         className={cn(styles.category, {
           [styles.selected]: selected,
           [styles.deleted]: data.deleted,
+          [styles[data.type]]: data.type,
         })}
         alignCenter
         onClick={onClickHandler}

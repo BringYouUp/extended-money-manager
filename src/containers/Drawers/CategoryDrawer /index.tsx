@@ -9,7 +9,7 @@ import {
   Spinner,
   Text,
 } from "@components";
-import { EditCategoryDrawer } from "@containers";
+import { EditCategoryDrawer, EditTransactionDrawer } from "@containers";
 import { StoreCategoriesCategory } from "@models";
 import { useAppDispatch, useLoading, useModal, useUID } from "@hooks";
 import { Category } from "src/components/Category";
@@ -36,11 +36,11 @@ export const CategoryDrawer: React.FC<Props> = ({
     onCloseEditCategoryDrawer,
   ] = useModal();
 
-  // const [
-  //   isTransactionDrawerOpened,
-  //   onOpenTransactionDrawer,
-  //   onCloseTransactionDrawer,
-  // ] = useModal();
+  const [
+    isTransactionDrawerOpened,
+    onOpenTransactionDrawer,
+    onCloseTransactionDrawer,
+  ] = useModal();
 
   const onUpdatedeleteStatus = (newDeleteStatus: boolean) => () => {
     startLoading();
@@ -93,10 +93,34 @@ export const CategoryDrawer: React.FC<Props> = ({
                       theme="outline"
                     >
                       <Flex w100 gap={6} alignCenter justifyBetween>
-                        <Text color="var(--text-color-70)" as="h6">
+                        <Text weight={500} uppercase>
                           Transactions
                         </Text>
-                        <Icon fill="var(--text-color-70)" name="browse" />
+                        <Icon name="browse" />
+                      </Flex>
+                    </Button>
+                    <Button
+                      centered={false}
+                      onClick={onOpenTransactionDrawer}
+                      theme="outline"
+                      role={
+                        data.type === "income"
+                          ? "success"
+                          : data.type === "withdraw"
+                          ? "warning"
+                          : undefined
+                      }
+                    >
+                      <Flex w100 gap={6} alignCenter justifyBetween>
+                        <Text weight={500} uppercase>
+                          Create{" "}
+                          {data.type === "income"
+                            ? "income"
+                            : data.type === "withdraw"
+                            ? "withdraw"
+                            : ""}
+                        </Text>
+                        <Icon name="browse" />
                       </Flex>
                     </Button>
                   </Flex>
@@ -109,13 +133,13 @@ export const CategoryDrawer: React.FC<Props> = ({
                       disabled={isLoading}
                     >
                       <Flex w100 gap={6} alignCenter justifyBetween>
-                        <Text color="var(--text-color-70)" as="h6">
+                        <Text weight={500} uppercase>
                           Delete
                         </Text>
                         {isLoading ? (
                           <Spinner size={14} />
                         ) : (
-                          <Icon fill="var(--text-color-70)" name="trash" />
+                          <Icon name="trash" />
                         )}
                       </Flex>
                     </Button>
@@ -128,13 +152,13 @@ export const CategoryDrawer: React.FC<Props> = ({
                       disabled={isLoading}
                     >
                       <Flex w100 gap={6} alignCenter justifyBetween>
-                        <Text color="var(--text-color-70)" as="h6">
+                        <Text weight={500} uppercase>
                           Restore
                         </Text>
                         {isLoading ? (
                           <Spinner size={14} />
                         ) : (
-                          <Icon fill="var(--text-color-70)" name="restore" />
+                          <Icon name="restore" />
                         )}
                       </Flex>
                     </Button>
@@ -150,6 +174,15 @@ export const CategoryDrawer: React.FC<Props> = ({
         mode="edit"
         data={data as StoreCategoriesCategory}
         onClose={onCloseEditCategoryDrawer}
+      />
+      <EditTransactionDrawer
+        is={isTransactionDrawerOpened}
+        mode="create"
+        onClose={onCloseTransactionDrawer}
+        initialValues={{
+          type: data.type,
+          categoryId: data.id,
+        }}
       />
     </>
   );

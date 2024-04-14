@@ -24,7 +24,6 @@ import {
 import {
   FormFields,
   StoreAccountsAccount,
-  StoreTransactionsTransactionType,
   TransactionTransferFormFormFields,
   TransactionFormProps,
 } from "@models";
@@ -42,7 +41,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
   onClose,
 }: Props) => {
   const dispatch = useAppDispatch();
-  const accounts = useAppSelector(ACCOUNT_SELECTOR.visibleAccountsSelector);
+  const accounts = useAppSelector(ACCOUNT_SELECTOR.allAccountsSelector);
   const message = useAppSelector((state) => state.transactions.error.message);
 
   const uid = useUID();
@@ -67,8 +66,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
       "transaction-account-id":
         mode === "edit" ? data.accountId : initialValues?.accountId || "",
       "transaction-date": mode === "edit" ? data.date : "",
-      "transaction-type":
-        mode === "edit" ? data.type : initialValues?.type || "",
+      "transaction-type": "transfer",
     },
     {
       updateOnChange: {
@@ -82,7 +80,6 @@ export const TransactionTransferForm: React.FC<Props> = ({
   const onSuccessSubmit = () => {
     const values = getValues();
     startLoading({ submitting: true });
-
     if (mode === "create") {
       dispatch(
         transactionsAddTransaction({
@@ -92,9 +89,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
             accountId: values["transaction-account-id"],
             amount: +values["transaction-amount"],
             date: values["transaction-date"],
-            type: values[
-              "transaction-type"
-            ] as StoreTransactionsTransactionType,
+            type: "transfer",
             toAccountId: values["transaction-to-account-id"],
             deleted: false,
           },
@@ -116,7 +111,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
             toAccountId: values["transaction-to-account-id"],
             amount: values["transaction-amount"],
             date: values["transaction-date"],
-            type: data.type,
+            type: "transfer",
             deleted: false,
           },
           uid,

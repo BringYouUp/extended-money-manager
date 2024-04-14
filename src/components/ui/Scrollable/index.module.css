@@ -12,6 +12,10 @@
   overflow: hidden;
 }
 
+.scrollable.scroll {
+  overflow: scroll;
+}
+
 .scrollable.hiddenX {
   overflow-x: hidden;
 }
@@ -37,5 +41,10 @@
 }
 
 .scrollable.none {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollable.none::-webkit-scrollbar {
   display: none;
 }
