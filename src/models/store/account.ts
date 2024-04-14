@@ -8,6 +8,7 @@ export type StoreAccountsAccount = {
   currency: StoreAccountsAccountCurrencies,
   id: string,
   createdAt: string,
+  updatedAt: string,
   deleted: boolean,
 }
 
