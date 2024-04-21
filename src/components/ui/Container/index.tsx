@@ -7,7 +7,7 @@ type Props = {
   full?: boolean;
   w100?: boolean;
   h100?: boolean;
-  width?: string;
+  width?: `${string}${"px"}`;
   height?: string;
   background?: string;
   className?: string;

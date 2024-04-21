@@ -51,12 +51,17 @@
     var(--soft-background-color-rgb)
   );
 
-  --input-height: 34px;
+  --form-field-height: 34px;
+  --input-height: var(--form-field-height);
+  --button-height: var(--form-field-height);
   --default-saturation-for-background: 10%;
   --default-lightness-for-background: 40%;
   --scrollbar-size: 4px;
 
   --transaction-list-width: 275px;
+
+  --zIndex-drawer: 1;
+  --zIndex-toast: 2;
 }
 
 .light-theme {

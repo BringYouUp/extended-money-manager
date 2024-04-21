@@ -2,7 +2,7 @@ import { cn } from "@utils";
 import styles from "./index.module.css";
 import { Key, ReactNode, useRef } from "react";
 import { Dropdown, Flex, Input, Scrollable, Text } from "@components";
-import { useModal } from "@hooks";
+import { useOpen } from "@hooks";
 
 type Props<T extends object> = {
   selectedCallback: (item: T) => boolean;
@@ -41,7 +41,7 @@ export function Select<T extends object>({
   Component,
   mode,
 }: Props<T>) {
-  const [isOpened, onOpen, onClose] = useModal();
+  const [isOpened, onOpen, onClose] = useOpen();
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 

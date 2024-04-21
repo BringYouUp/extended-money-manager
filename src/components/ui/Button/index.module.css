@@ -1,13 +1,12 @@
 .button {
   border: none;
   padding: 4px 10px;
-  line-height: 1.4375;
   font-size: inherit;
   width: 100%;
   border-radius: var(--border-radius-default);
   cursor: pointer;
-  height: 34px;
-  max-height: 34px;
+  height: var(--button-height);
+  max-height: var(--button-height);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -39,7 +38,7 @@
 }
 
 .outline,
-.transparent {
+.option {
   background-color: transparent;
   color: var(--text-color-80);
 }
@@ -48,28 +47,21 @@
   border: 1px solid var(--primary-color-30);
 }
 
-.transparent {
+.option {
   height: 36px;
 }
 
 .outline:hover,
-.transparent:hover {
+.option:hover {
   background-color: var(--primary-color-10);
 }
 
 .outline:active,
-.transparent:active {
+.option:active {
   background-color: var(--primary-color-20);
 }
 
-.rounded {
-  padding: 0px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-}
-
-.active.transparent {
+.active.option {
   background-color: var(--primary-color-10);
   border: 1px solid var(--primary-color-20);
 }
@@ -101,4 +93,42 @@
 
 .success:after {
   background-color: var(--text-color-success);
+}
+
+.button.transparent {
+  display: inline-flex;
+  position: relative;
+  color: var(--text-color-80);
+  background: none;
+  padding: 0;
+  width: revert;
+  min-width: revert;
+  height: revert;
+  max-height: revert;
+}
+
+.transparent::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: var(--border-radius-default);
+  transition: var(--transition-default) background-color;
+}
+
+.transparent:hover::before {
+  background-color: transparent;
+  background-color: var(--primary-color-10);
+}
+
+.transparent:active::before {
+  background-color: var(--primary-color-20);
+}
+
+.transparent.active::before {
+  background-color: var(--primary-color-10);
+  border: 1px solid var(--primary-color-20);
+}
+
+.transparent.rounded::before {
+  border-radius: 50%;
 }
