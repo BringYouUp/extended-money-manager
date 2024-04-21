@@ -3,6 +3,7 @@ import accounts from './accountsSlice.ts';
 import categories from './categoriesSlice.ts';
 import transactions from './transactionsSlice.ts';
 import platform from './platformSlice.ts';
+import toast from './toastSlice.ts';
 
 export {
   user,
@@ -10,4 +11,5 @@ export {
   categories,
   transactions,
   platform,
+  toast,
 }

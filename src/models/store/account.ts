@@ -1,4 +1,6 @@
-export type StoreAccountsAccountCurrencies = '$' | '€'
+import { StoreError } from "@models";
+
+export type StoreAccountsAccountCurrencies = '$' | '€' | '₽' | 'zł'
 
 export type StoreAccountsAccount = {
   name: string;
@@ -14,13 +16,8 @@ export type StoreAccountsAccount = {
 
 export type StoreAccountsAccounts = StoreAccountsAccount[]
 
-export type StoreAccountsError = {
-  message: string,
-  code: string
-}
-
 export type StoreAccounts = {
   accounts: StoreAccountsAccounts,
-  error: StoreAccountsError,
+  error: StoreError,
   status: null | string
 }

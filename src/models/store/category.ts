@@ -1,4 +1,4 @@
-import { StoreAccountsAccountCurrencies } from "@models";
+import { StoreAccountsAccountCurrencies, StoreError } from "@models";
 
 export type StoreCategoryIcon =
   "docs" |
@@ -60,13 +60,8 @@ export type StoreCategoriesCategory = {
 
 export type StoreCategoriesCategories = StoreCategoriesCategory[]
 
-export type StoreCategoriesError = {
-  message: string,
-  code: string
-}
-
 export type StoreCategories = {
   categories: StoreCategoriesCategories,
-  error: StoreCategoriesError,
+  error: StoreError,
   status: null | string
 }

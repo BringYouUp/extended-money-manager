@@ -1,5 +1,5 @@
 import { categoriesAddCategory, categoriesEditCategory, categoriesSetCategories } from '@async-actions'
-import { StoreCategories, StoreCategoriesCategory, StoreCategoriesCategories, StoreCategoriesError } from '@models'
+import { StoreCategories, StoreCategoriesCategory, StoreCategoriesCategories, StoreError } from '@models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 const initialState: StoreCategories = {
@@ -14,7 +14,11 @@ const initialState: StoreCategories = {
 const categories = createSlice({
   name: 'categories',
   initialState,
-  reducers: {},
+  reducers: {
+    clear: (state) => {
+      state.categories = initialState.categories
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(categoriesSetCategories.fulfilled, (state, { payload }: PayloadAction<StoreCategoriesCategories>) => {
@@ -48,13 +52,13 @@ const categories = createSlice({
       )
       .addMatcher(
         ({ type }) => type.startsWith('categories/') && type.endsWith('rejected'),
-        (state, { payload }: PayloadAction<StoreCategoriesError>) => {
+        (state, { payload }: PayloadAction<StoreError>) => {
           state.error = payload
         }
       )
   }
 })
 
-export const { } = categories.actions;
+export const { clear } = categories.actions;
 
 export default categories.reducer;

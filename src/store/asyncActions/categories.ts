@@ -1,4 +1,4 @@
-import { getRef, getStoreUserErrorFormat } from '@utils';
+import { getRef, getStoreErrorFormat } from '@utils';
 import { addDoc, getDocs, setDoc } from 'firebase/firestore';
 import { StoreCategoriesCategory, StoreCategoriesCategories, OmittedStoreFields } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -24,7 +24,7 @@ export const categoriesSetCategories = createAsyncThunk<StoreCategoriesCategorie
             resolve(fulfillWithValue([]))
           }
         })
-        .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 
@@ -43,7 +43,7 @@ export const categoriesAddCategory = createAsyncThunk<StoreCategoriesCategory, {
             id: data.id,
           } as StoreCategoriesCategory))
         })
-        .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
@@ -56,7 +56,7 @@ export const categoriesEditCategory = createAsyncThunk<Partial<StoreCategoriesCa
 
       setDoc(docRef, category, { merge: true })
         .then(() => resolve(fulfillWithValue(category)))
-        .catch(err => reject(rejectWithValue(err)))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
