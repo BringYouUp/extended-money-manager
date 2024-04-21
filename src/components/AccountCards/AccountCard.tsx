@@ -1,5 +1,5 @@
 import { Flex, Icon, Text } from "@components";
-import { useModal } from "@hooks";
+import { useOpen } from "@hooks";
 
 import { OmittedStoreFields, StoreAccountsAccount } from "@models";
 import { AccountCardWrap } from "@components";
@@ -22,7 +22,7 @@ export const AccountCard: React.FC<Props> = ({
   style,
   ...rest
 }) => {
-  const [isOpened, onOpen, onClose] = useModal();
+  const [isOpened, onOpen, onClose] = useOpen();
 
   const onClickHandler = (e: MouseEvent<HTMLDivElement>) => {
     if (noClick) return;

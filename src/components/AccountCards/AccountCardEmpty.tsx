@@ -1,11 +1,11 @@
 import { Flex, Icon, Text } from "@components";
-import { useModal } from "@hooks";
+import { useOpen } from "@hooks";
 
 import { AccountCardWrap } from "@components";
 import { EditAccountDrawer } from "@containers";
 
 export const AccountCardEmpty: React.FC = () => {
-  const [isOpened, onOpen, onClose] = useModal();
+  const [isOpened, onOpen, onClose] = useOpen();
 
   return (
     <>
