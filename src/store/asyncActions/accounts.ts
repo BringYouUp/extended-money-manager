@@ -1,5 +1,5 @@
 
-import { getRef, getStoreUserErrorFormat } from '@utils';
+import { getRef, getStoreErrorFormat } from '@utils';
 import { addDoc, getDocs, setDoc } from 'firebase/firestore';
 import { OmittedStoreFields, StoreAccountsAccount, StoreAccountsAccounts } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -25,7 +25,7 @@ export const accountsSetAccounts = createAsyncThunk<StoreAccountsAccounts, strin
             resolve(fulfillWithValue([]))
           }
         })
-        .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
@@ -43,7 +43,7 @@ export const accountsAddAccount = createAsyncThunk<StoreAccountsAccount, { accou
             id: data.id,
           } as StoreAccountsAccount))
         })
-        .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
@@ -56,7 +56,7 @@ export const accountsEditAccount = createAsyncThunk<Partial<StoreAccountsAccount
 
       setDoc(docRef, account, { merge: true })
         .then(() => resolve(fulfillWithValue(account)))
-        .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )

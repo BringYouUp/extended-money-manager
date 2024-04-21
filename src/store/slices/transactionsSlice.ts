@@ -1,5 +1,5 @@
 import { transactionsAddTransaction, transactionsEditTransaction, transactionsSetTransactions } from '@async-actions'
-import { StoreTransactionsTransaction, StoreTransactions, StoreTransactionsTransactions, StoreTransactionsError } from '@models'
+import { StoreTransactionsTransaction, StoreTransactions, StoreTransactionsTransactions, StoreError } from '@models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 const initialState: StoreTransactions = {
@@ -14,7 +14,11 @@ const initialState: StoreTransactions = {
 const transactions = createSlice({
   name: 'transactions',
   initialState,
-  reducers: {},
+  reducers: {
+    clear: (state) => {
+      state.transactions = initialState.transactions
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(transactionsSetTransactions.fulfilled, (state, { payload }: PayloadAction<StoreTransactionsTransactions>) => {
@@ -48,13 +52,13 @@ const transactions = createSlice({
       )
       .addMatcher(
         ({ type }) => type.startsWith('transactions/') && type.endsWith('rejected'),
-        (state, { payload }: PayloadAction<StoreTransactionsError>) => {
+        (state, { payload }: PayloadAction<StoreError>) => {
           state.error = payload
         }
       )
   }
 })
 
-// export const { } = transactions.actions;
+export const { clear } = transactions.actions;
 
 export default transactions.reducer;

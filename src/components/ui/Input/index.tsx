@@ -14,7 +14,7 @@ type Props = {
   children?: never;
 };
 
-export const Input: React.FC<Props> = ({
+export const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = ({
   style,
   id,
   name,
@@ -24,6 +24,7 @@ export const Input: React.FC<Props> = ({
   type = "text",
   defaultValue,
   placeholder,
+  ...rest
 }) => {
   return (
     <div
@@ -43,6 +44,7 @@ export const Input: React.FC<Props> = ({
         placeholder={placeholder}
         type={type}
         defaultValue={defaultValue}
+        {...rest}
       />
     </div>
   );

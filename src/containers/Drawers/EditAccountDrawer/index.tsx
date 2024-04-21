@@ -50,10 +50,10 @@ export const EditAccountDrawer: React.FC<Props> = ({
   return (
     <Drawer side="right" isOpened={is} onClose={onClose}>
       <Container h100 background="var(--soft-background-color)" width="300px">
-        <Offset full padding={[16]}>
-          <Flex full column gap={16} justifyBetween>
+        <Offset full padding={[24, 16]}>
+          <Flex full column gap={24} justifyBetween>
             <Flex justifyBetween alignCenter>
-              <Text as="h3">
+              <Text as="h3" uppercase>
                 {mode === "create" ? "Create Account" : "Edit account"}
               </Text>
               <Button theme="transparent" rounded onClick={onClose}>
@@ -68,7 +68,7 @@ export const EditAccountDrawer: React.FC<Props> = ({
                   setValues={setDebouncedValues}
                   onClose={onClose}
                 />
-                <Offset padding={[16, 0]}>
+                <Offset padding={[16, 0, 32]}>
                   <Flex column gap={16}>
                     <Text weight={500} as="h4" center>
                       Preview:
@@ -79,7 +79,7 @@ export const EditAccountDrawer: React.FC<Props> = ({
                         noClick
                         style={{ zIndex: 2 }}
                         data={{
-                          amount: +values?.["account-amount"] || 0,
+                          amount: +values["account-amount"] || 0,
                           color: values["account-color"] || "",
                           name: values["account-name"] || "",
                           type: "regular",

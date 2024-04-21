@@ -1,6 +1,6 @@
 import { signInAutomatically } from "@async-actions";
 import { useAppDispatch, useAppSelector, useFirebase, useLoading } from "@hooks";
-import { USER_SLICES } from "@slices";
+import { ACCOUNTS_SLICE, CATEGORIES_SLICE, PLATFORM_SLICE, TOAST_SLICE, TRANSACTIONS_SLICE, USER_SLICES } from "@slices";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react"
 
@@ -21,7 +21,12 @@ export const useAuthListening = () => {
         dispatch(signInAutomatically(user))
           .finally(() => endLoading())
       } else {
-        dispatch(USER_SLICES.clearUser())
+        dispatch(USER_SLICES.clear())
+        dispatch(ACCOUNTS_SLICE.clear())
+        dispatch(CATEGORIES_SLICE.clear())
+        dispatch(PLATFORM_SLICE.clear())
+        dispatch(TRANSACTIONS_SLICE.clear())
+        dispatch(TOAST_SLICE.clear())
         endLoading()
       }
     });

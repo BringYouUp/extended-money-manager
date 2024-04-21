@@ -5,6 +5,7 @@ import { MouseEventHandler, ReactNode } from "react";
 
 type Props = {
   column?: boolean;
+  columnReverse?: boolean;
   full?: boolean;
   w100?: boolean;
   h100?: boolean;
@@ -25,6 +26,7 @@ type Props = {
 
 export const Flex: React.FC<Props> = ({
   column,
+  columnReverse,
   full,
   w100,
   h100,
@@ -66,6 +68,7 @@ export const Flex: React.FC<Props> = ({
           [styles.justifyFlexEnd]: justifyFlexEnd,
           [styles.alignFlexEnd]: alignFlexEnd,
           [styles.justifyCenter]: justifyCenter,
+          [styles.columnReverse]: columnReverse,
           [styles.wrap]: wrap,
         },
         className

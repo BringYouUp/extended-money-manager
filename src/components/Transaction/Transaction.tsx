@@ -4,10 +4,10 @@ import { StoreTransactionsTransaction } from "@models";
 
 import styles from "./index.module.css";
 import { cn } from "@utils";
-import { useAppSelector, useModal } from "@hooks";
+import { useAppSelector, useOpen } from "@hooks";
 import { EditTransactionDrawer } from "@containers";
 import { useMemo } from "react";
-import { CATEGORY_SELECTOR } from "@selectors";
+import { ACCOUNT_SELECTOR, CATEGORY_SELECTOR } from "@selectors";
 
 type Props = {
   data:
@@ -17,11 +17,37 @@ type Props = {
   noClick?: boolean;
 };
 
+const TransactionTransferDescription = ({ data }: Pick<Props, "data">) => {
+  const accounts = useAppSelector(ACCOUNT_SELECTOR.allAccountsSelector);
+  const account = accounts.find((account) => account.id === data.accountId);
+  const toAccount = accounts.find((account) => account.id === data.toAccountId);
+
+  return (
+    <>
+      {account?.currency !== toAccount?.currency ? (
+        <>
+          {data.toAmount}
+          {toAccount?.currency}{" "}
+          <Text color="var(--text-color-white-50)" size={12}>
+            ({data.amount}
+            {account?.currency})
+          </Text>
+        </>
+      ) : (
+        <>
+          {data.toAmount}
+          {toAccount?.currency}{" "}
+        </>
+      )}
+    </>
+  );
+};
+
 export const Transaction: React.FC<Props> = ({ noClick, data, style }) => {
   const categories = useAppSelector(
     CATEGORY_SELECTOR.visibleCategoriesSelector
   );
-  const [isOpened, onOpen, onClose] = useModal();
+  const [isOpened, onOpen, onClose] = useOpen();
 
   const onOpenHandler = () => {
     if (noClick) return;
@@ -59,7 +85,13 @@ export const Transaction: React.FC<Props> = ({ noClick, data, style }) => {
                   : data.type === "income"
                   ? "+"
                   : ""}
-                {data.amount}
+                {data.type !== "transfer" ? (
+                  data.amount
+                ) : data.amount === data.toAmount ? (
+                  data.amount
+                ) : (
+                  <TransactionTransferDescription data={data} />
+                )}
                 {category?.currency}
               </Text>{" "}
               {data.description}

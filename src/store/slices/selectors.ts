@@ -12,3 +12,7 @@ export const CATEGORY_SELECTOR = {
 export const TRANSACTION_SELECTOR = {
   visibleCategoriesSelector: (state: RootState) => state.transactions.transactions.filter(transaction => !transaction.deleted)
 }
+
+export const PLATFORM_SELECTOR = {
+  currencies: (state: RootState) => state.platform.platform.currency
+}

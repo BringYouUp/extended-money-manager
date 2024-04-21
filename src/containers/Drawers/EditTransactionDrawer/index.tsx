@@ -11,7 +11,7 @@ import {
   Text,
 } from "@components";
 import { TransactionForm } from "@containers";
-import { useAppDispatch, useLoading, useUID } from "@hooks";
+import { useAppDispatch, useLoading, useToast, useUID } from "@hooks";
 import { StoreTransactionsTransaction } from "@models";
 
 type Props = {
@@ -39,7 +39,7 @@ export const EditTransactionDrawer: React.FC<Props> = ({
 }: Props) => {
   const dispatch = useAppDispatch();
   const uid = useUID();
-
+  const { createToast } = useToast();
   const { isLoading, startLoading, endLoading } = useLoading();
 
   const onDeleteTransaction = () => {
@@ -53,17 +53,22 @@ export const EditTransactionDrawer: React.FC<Props> = ({
           },
           uid,
         })
-      ).finally(() => endLoading());
+      )
+        .then(() => {
+          onClose();
+          createToast("transaction deleted", "success");
+        })
+        .finally(() => endLoading());
     }
   };
 
   return (
     <Drawer side="right" isOpened={Boolean(is)} onClose={onClose}>
       <Container h100 background="var(--soft-background-color)" width="300px">
-        <Offset full padding={[16]}>
-          <Flex full column gap={16}>
+        <Offset full padding={[24, 16]}>
+          <Flex full column gap={24}>
             <Flex justifyBetween alignCenter>
-              <Text as="h3">
+              <Text as="h3" uppercase>
                 {mode === "create" ? "Create transaction" : "Edit transaction"}
               </Text>
               <Button theme="transparent" rounded onClick={onClose}>

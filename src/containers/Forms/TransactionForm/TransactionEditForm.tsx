@@ -21,6 +21,7 @@ import {
   useForceUpdate,
   useLoading,
   useUID,
+  useToast,
 } from "@hooks";
 import {
   TransactionFormFormFields,
@@ -31,6 +32,7 @@ import {
   TransactionFormProps,
 } from "@models";
 import { ChangeEvent, useEffect, useMemo } from "react";
+import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 import {
   ACCOUNT_SELECTOR,
   CATEGORY_SELECTOR,
@@ -49,15 +51,17 @@ export const TransactionEditForm: React.FC<Props> = ({
   onClose,
 }: Props) => {
   const dispatch = useAppDispatch();
+
   const accounts = useAppSelector(ACCOUNT_SELECTOR.allAccountsSelector);
 
   const categories = useAppSelector(
     CATEGORY_SELECTOR.visibleCategoriesSelector
   );
-  const message = useAppSelector((state) => state.transactions.error.message);
 
   const uid = useUID();
   const forceUpdate = useForceUpdate();
+  useStoreErrorObserver("transactions");
+  const { createToast } = useToast();
 
   const { isLoading, startLoading, endLoading, loadingData } =
     useLoading(false);
@@ -83,12 +87,7 @@ export const TransactionEditForm: React.FC<Props> = ({
         mode === "edit" ? data.type : initialValues?.type || "",
     },
     {
-      updateOnChange: {
-        value: true,
-        callback: () => {
-          forceUpdate();
-        },
-      },
+      updateOnChange: () => forceUpdate(),
     }
   );
 
@@ -114,7 +113,10 @@ export const TransactionEditForm: React.FC<Props> = ({
           uid,
         })
       )
-        .then(() => onClose())
+        .then(() => {
+          onClose();
+          createToast("transaction created", "success");
+        })
         .finally(() => endLoading());
     }
 
@@ -127,7 +129,7 @@ export const TransactionEditForm: React.FC<Props> = ({
             categoryId: values["transaction-category-id"],
             accountId: values["transaction-account-id"],
             toAccountId: "",
-            amount: values["transaction-amount"],
+            amount: +values["transaction-amount"],
             date: values["transaction-date"],
             type: data.type as "withdraw" | "income",
             deleted: false,
@@ -135,7 +137,10 @@ export const TransactionEditForm: React.FC<Props> = ({
           uid,
         })
       )
-        .then(() => onClose())
+        .then(() => {
+          onClose();
+          createToast("transaction updated", "success");
+        })
         .finally(() => endLoading());
     }
   };
@@ -164,6 +169,12 @@ export const TransactionEditForm: React.FC<Props> = ({
     return () => {
       formRef.current && setValue("transaction-category-id", "");
     };
+  }, [transactionType]);
+
+  useEffect(() => {
+    if (transactionType && formRef.current && !getValue("transaction-type")) {
+      setValue("transaction-type", transactionType);
+    }
   }, [transactionType]);
 
   return (
@@ -278,6 +289,7 @@ export const TransactionEditForm: React.FC<Props> = ({
             id="transaction-amount"
             name="transaction-amount"
             placeholder="Enter transaction amount..."
+            step="any"
           />
           <Unwrap
             visible={Boolean(errors["transaction-amount"])}
@@ -328,20 +340,13 @@ export const TransactionEditForm: React.FC<Props> = ({
           </Unwrap>
         </Flex>
 
-        <Flex column gap={8}>
-          <Unwrap visible={Boolean(message)} negativeOffset="6px">
-            <Text size={11} color="var(--text-color-error)">
-              {message}
-            </Text>
-          </Unwrap>
-          <Flex column gap={12}>
-            <Button type="submit" theme="primary" disabled={isLoading}>
-              {isLoading && loadingData.current?.submitting && (
-                <Spinner size={16} />
-              )}
-              <Text uppercase>{mode === "create" ? "Create" : "Update"}</Text>
-            </Button>
-          </Flex>
+        <Flex column gap={12}>
+          <Button type="submit" theme="primary" disabled={isLoading}>
+            {isLoading && loadingData.current?.submitting && (
+              <Spinner size={16} />
+            )}
+            <Text uppercase>{mode === "create" ? "Create" : "Update"}</Text>
+          </Button>
         </Flex>
       </Flex>
     </form>

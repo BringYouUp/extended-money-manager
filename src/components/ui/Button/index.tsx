@@ -6,6 +6,7 @@ import { ReactNode } from "react";
 enum Themes {
   primary = "primary",
   outline = "outline",
+  option = "option",
   transparent = "transparent",
 }
 
@@ -52,12 +53,8 @@ export const Button: React.FC<Props> = ({
           [styles.width]: width,
           disabled,
           [styles.rounded]: rounded,
-          [styles.primary]: theme === Themes.primary,
-          [styles.outline]: theme === Themes.outline,
-          [styles.transparent]: theme === Themes.transparent,
-          [styles.warning]: role === "warning",
-          [styles.success]: role === "success",
-          [styles.error]: role === "error",
+          [styles[theme]]: theme,
+          [styles[role || ""]]: role,
           [styles.active]: active,
           [styles.centered]: centered,
         },

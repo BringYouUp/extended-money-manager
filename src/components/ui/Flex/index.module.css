@@ -42,3 +42,7 @@
 .justifyCenter {
   justify-content: center;
 }
+
+.columnReverse {
+  flex-direction: column-reverse;
+}
