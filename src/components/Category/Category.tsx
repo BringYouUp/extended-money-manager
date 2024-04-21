@@ -4,7 +4,7 @@ import { OmittedStoreFields, StoreCategoriesCategory } from "@models";
 
 import styles from "./index.module.css";
 import { cn } from "@utils";
-import { useModal } from "@hooks";
+import { useOpen } from "@hooks";
 import { CategoryDrawer } from "@containers";
 import { MouseEvent, MouseEventHandler } from "react";
 
@@ -25,7 +25,7 @@ export const Category: React.FC<Props> = ({
   selected,
   onClick,
 }) => {
-  const [isOpened, onOpen, onClose] = useModal();
+  const [isOpened, onOpen, onClose] = useOpen();
 
   const onClickHandler = (e: MouseEvent<HTMLDivElement>) => {
     if (noClick) return;

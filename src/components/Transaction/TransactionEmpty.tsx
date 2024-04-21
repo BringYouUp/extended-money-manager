@@ -2,7 +2,7 @@ import { Flex, Icon, Text } from "@components";
 
 import styles from "./index.module.css";
 import { cn } from "@utils";
-import { useModal } from "@hooks";
+import { useOpen } from "@hooks";
 import { EditTransactionDrawer } from "@containers";
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const TransactionEmpty: React.FC<Props> = ({ style }) => {
-  const [isOpened, onOpen, onClose] = useModal();
+  const [isOpened, onOpen, onClose] = useOpen();
 
   return (
     <>

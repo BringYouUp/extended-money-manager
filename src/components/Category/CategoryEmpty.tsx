@@ -2,11 +2,11 @@ import { Flex, Icon, Text } from "@components";
 
 import styles from "./index.module.css";
 import { cn } from "@utils";
-import { useModal } from "@hooks";
+import { useOpen } from "@hooks";
 import { EditCategoryDrawer } from "@containers";
 
 export const CategoryEmpty = () => {
-  const [isOpened, onOpen, onClose] = useModal();
+  const [isOpened, onOpen, onClose] = useOpen();
 
   return (
     <>
