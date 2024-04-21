@@ -1,0 +1,32 @@
+.modalWrapper {
+  position: fixed;
+  inset: 0;
+  opacity: 0;
+  background-color: rgba(18, 18, 18, 0.5);
+  transition: opacity var(--transition-default);
+}
+
+.modalWrapperEnter {
+  opacity: 1;
+}
+
+.modalWrapperExit {
+  opacity: 0;
+}
+
+.modal {
+  transition: opacity var(--transition-default);
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  inset: 0;
+}
+
+.modalEnter {
+  opacity: 1;
+}
+
+.modalExit {
+  opacity: 0;
+}

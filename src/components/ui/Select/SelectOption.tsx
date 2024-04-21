@@ -23,7 +23,7 @@ export function SelectOption<T>({
       style={style}
       className={className}
       centered={false}
-      theme="transparent"
+      theme="option"
       onClick={() => onClick(data)}
       active={selected}
       {...rest}
