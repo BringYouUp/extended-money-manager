@@ -45,13 +45,23 @@ const preloadedState = {
   },
   platform: {
     platform: {
-      settings: {}
+      settings: {},
+      currency: {
+        EUR: 0,
+        PLN: 0,
+        RUB: 0,
+        USD: 0,
+        updatedAt: ''
+      }
     },
     error: {
       code: '',
       message: ''
     },
     status: ''
+  },
+  toast: {
+    toasts: []
   }
 }
 

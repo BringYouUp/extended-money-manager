@@ -1,16 +1,14 @@
+import { Currencies, StoreError } from "@models"
+
 export type StorePlatformPlatform = {
   settings: {
-    [key: string]: string
-  }
-}
-
-export type StorePlatformError = {
-  message: string,
-  code: string
+    [key: string]: string,
+  },
+  currency: Currencies
 }
 
 export type StorePlatform = {
   platform: StorePlatformPlatform,
-  error: StorePlatformError,
+  error: StoreError,
   status: null | string
 }

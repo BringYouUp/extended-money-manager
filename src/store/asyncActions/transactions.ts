@@ -1,4 +1,4 @@
-import { getRef, getStoreUserErrorFormat } from '@utils';
+import { getRef, getStoreErrorFormat } from '@utils';
 import { addDoc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { OmittedStoreFields, StoreAccountsAccount, StoreTransactionsTransaction, StoreTransactionsTransactions } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -25,15 +25,15 @@ export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTra
             resolve(fulfillWithValue([]))
           }
         })
-        .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 
 )
 
-export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTransaction, { transaction: Omit<StoreTransactionsTransaction, OmittedStoreFields>, uid: string }>(
+export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTransaction, { transaction: Omit<StoreTransactionsTransaction, OmittedStoreFields>, uid: string, withoutModyfingAccount?: boolean }>(
   'transactions/transactionsAddTransaction',
-  ({ transaction, uid }, { rejectWithValue, fulfillWithValue, dispatch }) => {
+  ({ transaction, uid, withoutModyfingAccount }, { rejectWithValue, fulfillWithValue, dispatch }) => {
     return new Promise((resolve, reject) => {
       const docTransactionsRef = getRef.transactions(uid)
       const docAccountRef = getRef.account(uid, transaction.accountId)
@@ -47,6 +47,7 @@ export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTran
           case 'transfer': {
             accountData.amount -= transaction.amount
             const docToAccountRef = getRef.account(uid, transaction.toAccountId)
+
             return getDoc(docToAccountRef)
           }
           case 'withdraw': {
@@ -54,22 +55,26 @@ export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTran
             return
           }
           case 'income': {
-            accountData.amount += transaction.amount
+            if (!withoutModyfingAccount) {
+              accountData.amount += transaction.amount
+            }
             return
           }
         }
       })
         .then(snap => {
-          dispatch(accountsEditAccount({
-            account: {
-              ...accountData,
-              id: transaction.accountId
-            },
-            uid
-          }))
+          if (!withoutModyfingAccount) {
+            dispatch(accountsEditAccount({
+              account: {
+                ...accountData,
+                id: transaction.accountId
+              },
+              uid
+            }))
+          }
           if (snap) {
             toAccountData = snap.data() as StoreAccountsAccount
-            toAccountData.amount -= transaction.amount
+            toAccountData.amount += transaction.toAmount || transaction.amount
 
             dispatch(accountsEditAccount({
               account: {
@@ -87,7 +92,7 @@ export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTran
             id: data.id,
           } as StoreTransactionsTransaction))
         })
-        .catch(err => reject(rejectWithValue(getStoreUserErrorFormat(err))))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
@@ -112,26 +117,26 @@ export const transactionsEditTransaction = createAsyncThunk<Partial<StoreTransac
           switch (transaction.type) {
             case 'transfer': {
               if (transaction.deleted) {
-                accountData.amount += transaction.amount
+                accountData.amount += transactionData.amount
               } else {
-                accountData.amount -= transaction.amount
+                accountData.amount -= transaction.amount - transactionData.amount
               }
               const docToAccountRef = getRef.account(uid, transaction.toAccountId)
               return getDoc(docToAccountRef)
             }
             case 'withdraw': {
               if (transaction.deleted) {
-                accountData.amount += transaction.amount
+                accountData.amount += transactionData.amount
               } else {
-                accountData.amount -= transaction.amount
+                accountData.amount -= transaction.amount - transactionData.amount
               }
               return
             }
             case 'income': {
               if (transaction.deleted) {
-                accountData.amount -= transaction.amount
+                accountData.amount -= transactionData.amount
               } else {
-                accountData.amount += transaction.amount
+                accountData.amount += transaction.amount - transactionData.amount
               }
               return
             }
@@ -151,9 +156,9 @@ export const transactionsEditTransaction = createAsyncThunk<Partial<StoreTransac
             toAccountData = snap.data() as StoreAccountsAccount
 
             if (transaction.deleted) {
-              toAccountData.amount -= (transaction.amount - transactionData.amount)
+              toAccountData.amount -= transactionData.toAmount || transactionData.amount
             } else {
-              toAccountData.amount += (transaction.amount - transactionData.amount)
+              toAccountData.amount += ((transaction.toAmount || transaction.amount) - (transactionData.toAmount || transactionData.amount))
             }
 
             dispatch(accountsEditAccount({
@@ -167,7 +172,7 @@ export const transactionsEditTransaction = createAsyncThunk<Partial<StoreTransac
           return setDoc(transactionRef, transaction, { merge: true })
         })
         .then(() => resolve(fulfillWithValue(transaction)))
-        .catch(err => reject(rejectWithValue(err)))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )

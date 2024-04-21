@@ -1,3 +1,5 @@
+import { StoreError } from "@models"
+
 export type StoreTransactionsTransactionType = 'transfer' | 'withdraw' | 'income'
 
 export type StoreTransactionsTransaction = {
@@ -12,17 +14,13 @@ export type StoreTransactionsTransaction = {
   deleted: boolean,
   categoryId: string,
   toAccountId: string,
+  toAmount?: number
 }
 
 export type StoreTransactionsTransactions = StoreTransactionsTransaction[]
 
-export type StoreTransactionsError = {
-  message: string,
-  code: string
-}
-
 export type StoreTransactions = {
   transactions: StoreTransactionsTransactions,
-  error: StoreTransactionsError,
+  error: StoreError,
   status: null | string
 }
