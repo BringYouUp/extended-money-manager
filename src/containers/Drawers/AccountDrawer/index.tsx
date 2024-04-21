@@ -12,7 +12,7 @@ import {
 } from "@components";
 import { AccountCard } from "@components";
 import { EditAccountDrawer, EditTransactionDrawer } from "@containers";
-import { useAppDispatch, useLoading, useModal, useUID } from "@hooks";
+import { useAppDispatch, useLoading, useOpen, useToast, useUID } from "@hooks";
 import {
   StoreAccountsAccount,
   StoreTransactionsTransactionType,
@@ -33,18 +33,19 @@ export const AccountDrawer: React.FC<Props> = ({
   const dispatch = useAppDispatch();
   const uid = useUID();
   const { isLoading, startLoading, endLoading } = useLoading();
+  const { createToast } = useToast();
 
   const [
     isEditAccountDrawerOpened,
     onOpenEditAccountDrawer,
     onCloseEditAccountDrawer,
-  ] = useModal();
+  ] = useOpen();
 
   const [
     isTransactionDrawerOpened,
     onOpenTransactionDrawer,
     onCloseTransactionDrawer,
-  ] = useModal();
+  ] = useOpen();
 
   const transactionDrawerTypeRef = useRef<StoreTransactionsTransactionType>();
 
@@ -62,7 +63,12 @@ export const AccountDrawer: React.FC<Props> = ({
         },
         uid,
       })
-    ).finally(() => endLoading());
+    )
+      .then(() => {
+        onClose();
+        createToast("account updated", "success");
+      })
+      .finally(() => endLoading());
   };
 
   const onOpenTransactionDrawerHandler =
@@ -75,11 +81,13 @@ export const AccountDrawer: React.FC<Props> = ({
     <>
       <Drawer side="right" isOpened={is} onClose={onClose}>
         <Container h100 background="var(--soft-background-color)" width="300px">
-          <Offset h100 padding={[16]}>
+          <Offset h100 padding={[24, 16]}>
             <Flex column full gap={24}>
               <Flex justifyBetween alignCenter>
-                <Text as="h3">Account</Text>
-                <Flex gap={6}>
+                <Text as="h3" uppercase>
+                  Account
+                </Text>
+                <Flex gap={16}>
                   {!data.deleted && (
                     <Button
                       theme="transparent"
@@ -109,7 +117,7 @@ export const AccountDrawer: React.FC<Props> = ({
                         <Text uppercase weight={500}>
                           Transactions
                         </Text>
-                        <Icon name="browse" />
+                        <Icon name="list" />
                       </Flex>
                     </Button>
                     {!data.deleted && (

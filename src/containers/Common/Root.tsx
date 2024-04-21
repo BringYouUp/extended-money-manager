@@ -1,7 +1,6 @@
-import { Flex, Scrollable, Spinner } from "@components";
+import { Flex, Spinner } from "@components";
+import { Layout } from "@containers";
 import { useAppSelector, useAuthListening, useAuthNavigating } from "@hooks";
-
-import { Outlet } from "react-router-dom";
 
 export const Root: React.FC = () => {
   const isAuthLoading = useAuthListening();
@@ -22,9 +21,5 @@ export const Root: React.FC = () => {
     return;
   }
 
-  return (
-    <Scrollable full overlay>
-      <Outlet />
-    </Scrollable>
-  );
+  return <Layout />;
 };

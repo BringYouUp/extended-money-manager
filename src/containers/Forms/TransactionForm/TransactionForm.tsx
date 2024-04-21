@@ -26,6 +26,8 @@ export const TransactionForm: React.FC<Props> = ({
       }
     });
 
+  console.log(`→ transactionType`, transactionType);
+
   return (
     <Flex w100 column gap={20}>
       <Flex w100 column gap={6}>

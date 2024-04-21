@@ -20,15 +20,19 @@ import {
   useForceUpdate,
   useLoading,
   useUID,
+  useToast,
 } from "@hooks";
 import {
   FormFields,
   StoreAccountsAccount,
   TransactionTransferFormFormFields,
   TransactionFormProps,
+  StoreAccountsAccountCurrencies,
 } from "@models";
-import { ACCOUNT_SELECTOR } from "@selectors";
-import { ChangeEvent } from "react";
+import { ACCOUNT_SELECTOR, PLATFORM_SELECTOR } from "@selectors";
+import { ChangeEvent, useMemo } from "react";
+import { PLATFORM_CURRENCIES_CODE_MAP } from "src/consts/store";
+import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 type Props = TransactionFormProps & {
   onClose: (...args: unknown[]) => void;
@@ -41,11 +45,14 @@ export const TransactionTransferForm: React.FC<Props> = ({
   onClose,
 }: Props) => {
   const dispatch = useAppDispatch();
-  const accounts = useAppSelector(ACCOUNT_SELECTOR.allAccountsSelector);
-  const message = useAppSelector((state) => state.transactions.error.message);
 
+  const accounts = useAppSelector(ACCOUNT_SELECTOR.allAccountsSelector);
+  const currencies = useAppSelector(PLATFORM_SELECTOR.currencies);
+
+  useStoreErrorObserver("transactions");
   const uid = useUID();
   const forceUpdate = useForceUpdate();
+  const { createToast } = useToast();
 
   const { isLoading, startLoading, endLoading, loadingData } =
     useLoading(false);
@@ -67,16 +74,83 @@ export const TransactionTransferForm: React.FC<Props> = ({
         mode === "edit" ? data.accountId : initialValues?.accountId || "",
       "transaction-date": mode === "edit" ? data.date : "",
       "transaction-type": "transfer",
+      "transaction-to-amount": mode === "edit" ? data.toAmount || 0 : 0,
     },
     {
-      updateOnChange: {
-        value: true,
-        callback: () => {
-          forceUpdate();
-        },
+      updateOnChange: updateOnChangeCheckForAmountInput,
+      beforeSubmit: ({ values }) => {
+        const fromAccount = accounts.find(
+          (account) => account.id === values["transaction-account-id"]
+        );
+        const toAccount = accounts.find(
+          (account) => account.id === values["transaction-to-account-id"]
+        );
+        return {
+          notValidateFields:
+            fromAccount?.currency !== toAccount?.currency
+              ? []
+              : ["transaction-to-amount"],
+        };
       },
     }
   );
+
+  const fromToAccount = useMemo(() => {
+    let fromAccount;
+    switch (mode) {
+      case "edit":
+        fromAccount = data.accountId
+          ? accounts.find((account) => account.id === data.accountId)
+          : null;
+        break;
+      case "create":
+        fromAccount = initialValues?.accountId
+          ? accounts.find((account) => account.id === initialValues?.accountId)
+          : null;
+        break;
+    }
+    return [
+      fromAccount,
+      accounts.find(
+        (account) => account.id === getValue("transaction-to-account-id")
+      ) || null,
+    ];
+  }, [
+    getValue("transaction-account-id"),
+    getValue("transaction-to-account-id"),
+    accounts,
+  ]);
+
+  function updateOnChangeCheckForAmountInput(
+    e: React.ChangeEvent<
+      HTMLFormElement & FormFields<TransactionTransferFormFormFields>
+    >,
+    values: {
+      [K in keyof TransactionTransferFormFormFields]: TransactionTransferFormFormFields[K];
+    }
+  ): void {
+    if (e.target.name === "transaction-amount" && e.target.value) {
+      const [fromAccount, toAccount] = fromToAccount;
+
+      if (fromAccount?.currency !== toAccount?.currency) {
+        setValue(
+          "transaction-to-amount",
+          `${(
+            (+values["transaction-amount"] || 0) *
+            currencies[
+              PLATFORM_CURRENCIES_CODE_MAP[
+                toAccount?.currency as StoreAccountsAccountCurrencies
+              ]
+            ]
+          ).toFixed(2)}`
+        );
+      } else {
+        setValue("transaction-to-amount", values["transaction-amount"]);
+      }
+    }
+    forceUpdate();
+  }
+
   const onSuccessSubmit = () => {
     const values = getValues();
     startLoading({ submitting: true });
@@ -92,11 +166,16 @@ export const TransactionTransferForm: React.FC<Props> = ({
             type: "transfer",
             toAccountId: values["transaction-to-account-id"],
             deleted: false,
+            toAmount:
+              +values["transaction-to-amount"] || +values["transaction-amount"],
           },
           uid,
         })
       )
-        .then(() => onClose())
+        .then(() => {
+          onClose();
+          createToast("transaction created", "success");
+        })
         .finally(() => endLoading());
     }
 
@@ -109,15 +188,20 @@ export const TransactionTransferForm: React.FC<Props> = ({
             categoryId: "",
             accountId: values["transaction-account-id"],
             toAccountId: values["transaction-to-account-id"],
-            amount: values["transaction-amount"],
+            amount: +values["transaction-amount"],
             date: values["transaction-date"],
             type: "transfer",
             deleted: false,
+            toAmount:
+              +values["transaction-to-amount"] || +values["transaction-amount"],
           },
           uid,
         })
       )
-        .then(() => onClose())
+        .then(() => {
+          onClose();
+          createToast("transaction updated", "success");
+        })
         .finally(() => endLoading());
     }
   };
@@ -244,23 +328,63 @@ export const TransactionTransferForm: React.FC<Props> = ({
           </Flex>
         </Flex>
 
-        <Flex w100 column gap={6}>
-          <Label htmlFor="transaction-amount">Amount</Label>
-          <Input
-            type="number"
-            error={Boolean(errors["transaction-amount"])}
-            id="transaction-amount"
-            name="transaction-amount"
-            placeholder="Enter transaction amount..."
-          />
-          <Unwrap
-            visible={Boolean(errors["transaction-amount"])}
-            negativeOffset="6px"
+        <Flex gap={16}>
+          <Flex w100 column gap={6}>
+            <Label htmlFor="transaction-amount">
+              Amount{" "}
+              {fromToAccount[0] ? `(${fromToAccount[0]?.currency})` : null}
+            </Label>
+            <Input
+              type="number"
+              error={Boolean(errors["transaction-amount"])}
+              id="transaction-amount"
+              name="transaction-amount"
+              placeholder="Enter transaction amount..."
+              step="any"
+            />
+            <Unwrap
+              visible={Boolean(errors["transaction-amount"])}
+              negativeOffset="6px"
+            >
+              <Text size={11} color="var(--text-color-error)">
+                {errors["transaction-amount"]}
+              </Text>
+            </Unwrap>
+          </Flex>
+
+          <Flex
+            style={{
+              display:
+                fromToAccount[1] &&
+                fromToAccount[0]?.currency !== fromToAccount[1]?.currency
+                  ? "flex"
+                  : "none",
+            }}
+            w100
+            column
+            gap={6}
           >
-            <Text size={11} color="var(--text-color-error)">
-              {errors["transaction-amount"]}
-            </Text>
-          </Unwrap>
+            <Label htmlFor="transaction-to-amount">
+              Amount{" "}
+              {fromToAccount[1] ? `(${fromToAccount[1]?.currency})` : null}
+            </Label>
+            <Input
+              type="number"
+              error={Boolean(errors["transaction-to-amount"])}
+              id="transaction-to-amount"
+              name="transaction-to-amount"
+              placeholder="Enter transaction amount..."
+              step="any"
+            />
+            <Unwrap
+              visible={Boolean(errors["transaction-to-amount"])}
+              negativeOffset="6px"
+            >
+              <Text size={11} color="var(--text-color-error)">
+                {errors["transaction-to-amount"]}
+              </Text>
+            </Unwrap>
+          </Flex>
         </Flex>
 
         <Flex w100 column gap={6}>
@@ -302,20 +426,13 @@ export const TransactionTransferForm: React.FC<Props> = ({
           </Unwrap>
         </Flex>
 
-        <Flex column gap={8}>
-          <Unwrap visible={Boolean(message)} negativeOffset="6px">
-            <Text size={11} color="var(--text-color-error)">
-              {message}
-            </Text>
-          </Unwrap>
-          <Flex column gap={12}>
-            <Button type="submit" theme="primary" disabled={isLoading}>
-              {isLoading && loadingData.current?.submitting && (
-                <Spinner size={16} />
-              )}
-              <Text uppercase>{mode === "create" ? "Create" : "Update"}</Text>
-            </Button>
-          </Flex>
+        <Flex column gap={12}>
+          <Button type="submit" theme="primary" disabled={isLoading}>
+            {isLoading && loadingData.current?.submitting && (
+              <Spinner size={16} />
+            )}
+            <Text uppercase>{mode === "create" ? "Create" : "Update"}</Text>
+          </Button>
         </Flex>
       </Flex>
     </form>

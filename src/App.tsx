@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { Flex, Offset, Scrollable, Text } from "@components";
+import { Flex, Offset, Scrollable, Text, Toasts } from "@components";
 import {
   AccountsPage,
   CategoriesPage,
@@ -58,9 +58,10 @@ function App() {
         style={{
           position: "fixed",
           left: "0",
-          top: "o",
+          top: "0",
           boxShadow: "var(--box-shadow-default)",
           background: "var(--soft-background-color)",
+          zIndex: "1",
         }}
       >
         <Flex column gap={2} justifyCenter>
@@ -73,6 +74,7 @@ function App() {
         </Flex>
       </Offset>
       <RouterProvider router={router} />
+      <Toasts />
     </Scrollable>
   );
 }

@@ -6,6 +6,7 @@ export enum Paths {
   ACCOUNTS,
   CATEGORIES,
   TRANSACTIONS,
+  SETTINGS,
 }
 
 export type PathListItem = {
