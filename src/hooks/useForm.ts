@@ -1,4 +1,4 @@
-import { FormFields, UseFormErrors, UseFormFields, UseFormOptions, UseFormValidators } from "@models";
+import { FormFields, UseFormErrors, UseFormFields, UseFormOptions, UseFormOptionsBeforeSubmit, UseFormValidators } from "@models";
 import { getValidatorsForField } from "@utils";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
@@ -18,7 +18,14 @@ export const useForm = <Fields extends UseFormFields>(
       console.error('There is not such a registered input !!!', field)
       return ''
     }
-    return formRef.current?.[field]?.value
+
+    switch (formRef.current?.[field].type) {
+      case 'checkbox':
+        return formRef.current?.[field]?.checked
+      default: {
+        return formRef.current?.[field]?.value
+      }
+    }
   }
 
   const getValues = (): { [K in keyof Fields]: Fields[K] } => {
@@ -30,9 +37,17 @@ export const useForm = <Fields extends UseFormFields>(
     }, {} as { [K in keyof Fields]: Fields[K] })
   }
 
-  const setValue = (field: keyof Fields, value: string) => {
+  const setValue = (field: keyof Fields, value: string | boolean | number) => {
     if (formRef.current) {
-      formRef.current[field].value = value
+      switch (formRef.current?.[field].type) {
+        case 'checkbox':
+          formRef.current[field].checked = value
+          break
+        default: {
+          formRef.current[field].value = value
+          break
+        }
+      }
 
       const handler = (e: unknown) => onChangeForm(e as React.ChangeEvent<HTMLFormElement & FormFields<Fields>>)
 
@@ -45,8 +60,8 @@ export const useForm = <Fields extends UseFormFields>(
   }
 
   const onChangeForm = (e: React.ChangeEvent<HTMLFormElement & FormFields<Fields>>) => {
-    if (options?.updateOnChange?.value) {
-      options?.updateOnChange.callback(e, getValues())
+    if (typeof options?.updateOnChange === 'function') {
+      options?.updateOnChange(e, getValues())
     }
 
     if (Object.keys(errors).length) {
@@ -58,9 +73,19 @@ export const useForm = <Fields extends UseFormFields>(
   };
 
   const onValidate = (e: React.ChangeEvent<HTMLFormElement>): boolean => {
-    const keys = Object.keys(e.target.elements).filter(key => !/\d+/.test(key)) as (keyof Fields)[]
+    let beforeSubmitData: ReturnType<UseFormOptionsBeforeSubmit<Fields>> | undefined
 
-    if (keys.length !== Object.keys(fields).length) {
+    if (typeof options?.beforeSubmit === 'function') {
+      beforeSubmitData = options?.beforeSubmit({
+        values: getValues()
+      })
+    }
+
+    const notValidateFields = beforeSubmitData?.notValidateFields || options?.notValidateFields || []
+
+    const keys = Object.keys(e.target.elements).filter(key => !/\d+/.test(key) && !notValidateFields.includes(key as keyof Fields)) as (keyof Fields)[]
+
+    if ((keys.length + (notValidateFields?.length || 0)) !== Object.keys(fields).length) {
       console.error('Every field must be registered !!!')
       return false
     }
@@ -73,7 +98,7 @@ export const useForm = <Fields extends UseFormFields>(
 
       if (validators) {
         breakPoint: for (const validator of validators) {
-          const mayBeError = validator(value)
+          const mayBeError = validator(value, formRef.current as HTMLFormElement)
           if (mayBeError) {
             isWithoutError = false
             setErrors(prev => ({
@@ -110,8 +135,18 @@ export const useForm = <Fields extends UseFormFields>(
     if (formRef.current) {
       Object.keys(fields).forEach(key => {
         if (formRef.current?.[key]) {
-          formRef.current[key].value = fields?.[key as keyof Fields]
+          switch (formRef.current?.[key].type) {
+            case 'checkbox':
+              formRef.current[key].checked = fields?.[key as keyof Fields]
+              break
+            default: {
+              formRef.current[key].value = fields?.[key as keyof Fields]
+              break
+            }
+          }
           formRef?.current[key].dispatchEvent(new Event('change'))
+        } else {
+          console.error('EFFECT. Every field must be registered !!!')
         }
       })
 

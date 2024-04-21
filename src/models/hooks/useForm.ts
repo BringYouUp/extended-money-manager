@@ -16,17 +16,26 @@ export type UseFormFieldsKeys =
   'transaction-to-account-id' |
   'transaction-amount' |
   'transaction-date' |
-  'transaction-type'
+  'transaction-type' |
+  'is-create-transaction-after-change-account' |
+  'transaction-to-amount'
 
 export type UseFormFields = {
   [keyof in UseFormFieldsKeys]?: unknown
 }
 
 export type UseFormOptions<Fields extends UseFormFields> = {
-  updateOnChange?: {
-    value: boolean,
-    callback: (e: React.ChangeEvent<HTMLFormElement>, values: { [K in keyof Fields]: Fields[K] }) => void
-  },
+  updateOnChange?: UseFormOptionsUpdateOnChange<Fields>,
+  notValidateFields?: (keyof Fields)[]
+  beforeSubmit?: UseFormOptionsBeforeSubmit<Fields>
+}
+
+export type UseFormOptionsUpdateOnChange<Fields extends UseFormFields> = (e: React.ChangeEvent<HTMLFormElement & FormFields<Fields>>, values: { [K in keyof Fields]: Fields[K] }) => void
+
+export type UseFormOptionsBeforeSubmit<Fields extends UseFormFields> = (arg: {
+  values: { [K in keyof Fields]: Fields[K] };
+}) => {
+  notValidateFields: (keyof Fields)[]
 }
 
 export type UseFormErrors<Fields extends UseFormFields> = {
@@ -37,7 +46,7 @@ export type UseFormValues<Fields extends UseFormFields> = {
   [K in keyof Fields]?: string
 }
 
-export type UseFormValidator = (value: string) => undefined | { error: string }
+export type UseFormValidator = (value: string, formNode: HTMLFormElement & FormFields<UseFormFields>) => undefined | { error: string }
 
 export type UseFormValidators<Fields extends UseFormFields> = {
   [K in keyof Fields]?: UseFormValidator[]

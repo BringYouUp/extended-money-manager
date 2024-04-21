@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react"
 
-export const useModal = (initialState: boolean = false): [boolean, () => void, () => void] => {
+export const useOpen = (initialState: boolean = false): [boolean, () => void, () => void] => {
   const [isVisible, setIsVisible] = useState<boolean>(initialState)
 
   const onOpen = useCallback(() => setIsVisible(true), [])

@@ -10,6 +10,8 @@ export type AccountFormFormFields = {
   "account-amount": number;
   "account-color": string;
   "account-currency": StoreAccountsAccountCurrencies | "";
+  "is-create-transaction-after-change-account": boolean;
+  "transaction-category-id": string;
 }
 
 export type CategoryFormFormFields = {
@@ -35,7 +37,8 @@ export type TransactionTransferFormFormFields = {
   "transaction-to-account-id": string;
   "transaction-amount": number;
   "transaction-date": string;
-  "transaction-type": StoreTransactionsTransactionType | "",
+  "transaction-type": "transfer",
+  "transaction-to-amount": number;
 }
 
 export type TransactionFormProps = {
