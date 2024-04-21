@@ -1,4 +1,4 @@
-import { StoreAccountsAccountCurrencies, StoreCategoriesCategoryTypes, StoreTransactionsTransactionType, UseFormFields, UseFormValidator } from "@models"
+import { FormFields, StoreAccountsAccountCurrencies, StoreCategoriesCategoryTypes, StoreTransactionsTransactionType, UseFormFields, UseFormValidator } from "@models"
 
 export const required: UseFormValidator = (value: string = "") => {
   if (!value) {
@@ -42,8 +42,7 @@ export const maxLength = (maxLength: number): UseFormValidator => (value: string
 
 export const accountAmount = (value: string = "") => {
   if (
-    !/^[1-9](\d+)?(\.([1-9]{1,2})|(\d[1-9]))?$/.test(value) &&    // 1.23 || 1,23 || 1,03
-    !/^0\.\d[1-9]?$/.test(value)    // 0.23 || 0,01
+    !/^[0-9]\d*?((\.|,)([1-9]\d?|\d[0-9]?))?$/.test(value)   // 1.23 || 1,23 || 1,03
   ) {
     return {
       error: `Please, enter valid number`
@@ -86,20 +85,34 @@ export const transactionType = (value: string) => {
   }
 }
 
+export const transactionCategoryId: UseFormValidator = (value: string = "", formNode: HTMLFormElement & FormFields<UseFormFields>) => {
+
+  if (formNode) {
+    if (formNode['is-create-transaction-after-change-account']?.checked) {
+      return required(value, formNode)
+    }
+  } else {
+    return required(value, formNode)
+  }
+}
+
 export const getValidatorsForField = (field: keyof UseFormFields): UseFormValidator[] => {
   switch (field) {
     case 'email': return [required, noOnlyWhitespace, email]
     case 'password': return [required, noOnlyWhitespace, minLength(6), maxLength(40)]
     case 'account-name':
     case 'category-name':
-    case 'transaction-description':
       return [required, noOnlyWhitespace, minLength(3), maxLength(30)]
+    case 'transaction-description':
+      return []
     case 'account-amount':
     case 'transaction-amount':
+    case 'transaction-to-amount':
       return [required, noOnlyWhitespace, accountAmount]
+    case 'transaction-category-id':
+      return [transactionCategoryId]
     case 'account-color':
     case 'category-color':
-    case 'transaction-category-id':
     case 'transaction-account-id':
     case 'transaction-to-account-id':
     case 'transaction-date':
@@ -113,6 +126,8 @@ export const getValidatorsForField = (field: keyof UseFormFields): UseFormValida
       return [required, categoryType]
     case 'transaction-type':
       return [required, transactionType]
+    case 'is-create-transaction-after-change-account':
+      return []
     default:
       console.error('THERE is NOT SUCH a FIELD')
       return []
