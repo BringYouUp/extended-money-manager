@@ -32,7 +32,10 @@ export const SignUpPage: React.FC = () => {
 
   return (
     <Scrollable overlay full stableGutter>
-      <Offset style={{ height: "100vh", minHeight: "480px" }} padding={[16]}>
+      <Offset
+        style={{ height: "100vh", minHeight: "480px", minWidth: "332px" }}
+        padding={[16]}
+      >
         <Flex column full center>
           <Container full background="var(--soft-background-color)">
             <Flex full center>

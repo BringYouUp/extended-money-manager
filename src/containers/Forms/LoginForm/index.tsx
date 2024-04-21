@@ -1,28 +1,29 @@
 import {
-  signInWithProvider,
   userResetPassword,
   userSignInWithEmailAndPassword,
 } from "@async-actions";
 import {
   Button,
   Flex,
-  Icon,
   Input,
   Label,
+  ProviderButtons,
   Spinner,
   Text,
   Unwrap,
 } from "@components";
 import { PATHS } from "@consts";
-import { useAppDispatch, useAppSelector, useForm, useLoading } from "@hooks";
+import { useAppDispatch, useForm, useLoading } from "@hooks";
 import { SignUpInFormFields } from "@models";
 import { useNavigate } from "react-router-dom";
+import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 export const LoginForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const message = useAppSelector((state) => state.user.error.message);
 
+  const navigate = useNavigate();
+
+  useStoreErrorObserver("user");
   const { errors, onChangeForm, onSubmitForm, getValues, formRef } =
     useForm<SignUpInFormFields>({ email: "", password: "" });
 
@@ -52,11 +53,6 @@ export const LoginForm: React.FC = () => {
     navigate(PATHS.SIGN_UP);
   };
 
-  const onSignInWithProvider = (provider: "google" | "github") => {
-    startLoading({ provider });
-    dispatch(signInWithProvider({ provider })).finally(() => endLoading());
-  };
-
   const actionManager = (type: string) => () => {
     if (isLoading) return;
     switch (type) {
@@ -66,10 +62,6 @@ export const LoginForm: React.FC = () => {
         return onSuccessSubmit();
       case "onNavigateToSignUp":
         return onNavigateToSignUp();
-      case "onSignInWithGoogle":
-        return onSignInWithProvider("google");
-      case "onSignInWithGithub":
-        return onSignInWithProvider("github");
     }
   };
 
@@ -127,11 +119,6 @@ export const LoginForm: React.FC = () => {
           </Unwrap>
         </Flex>
         <Flex column gap={8}>
-          <Unwrap visible={Boolean(message)} negativeOffset="6px">
-            <Text size={11} color="var(--text-color-error)">
-              {message}
-            </Text>
-          </Unwrap>
           <Flex column gap={12}>
             <Button type="submit" theme="primary" disabled={isLoading}>
               {isLoading && loadingData.current?.submitting && (
@@ -144,7 +131,7 @@ export const LoginForm: React.FC = () => {
               theme="outline"
               disabled={isLoading}
             >
-              No account?
+              <Text uppercase>No account?</Text>
             </Button>
           </Flex>
         </Flex>
@@ -153,32 +140,7 @@ export const LoginForm: React.FC = () => {
             Or
           </Text>
           <Flex center gap={12} column>
-            <Button
-              theme="outline"
-              type="button"
-              onClick={actionManager("onSignInWithGoogle")}
-              disabled={isLoading}
-            >
-              {isLoading && loadingData.current?.provider === "google" ? (
-                <Spinner size={16} />
-              ) : (
-                <Icon name="google" size={16} />
-              )}
-              Continue with Google
-            </Button>
-            <Button
-              theme="outline"
-              type="button"
-              onClick={actionManager("onSignInWithGithub")}
-              disabled={isLoading}
-            >
-              {isLoading && loadingData.current?.provider === "github" ? (
-                <Spinner size={16} />
-              ) : (
-                <Icon name="github" size={16} />
-              )}
-              Continue with Github
-            </Button>
+            <ProviderButtons />
           </Flex>
         </Flex>
       </Flex>

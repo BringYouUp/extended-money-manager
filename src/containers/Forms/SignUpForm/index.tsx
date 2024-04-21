@@ -1,27 +1,25 @@
-import {
-  signInWithProvider,
-  userSignUpWithEmailAndPassword,
-} from "@async-actions";
+import { userSignUpWithEmailAndPassword } from "@async-actions";
 import {
   Button,
   Flex,
-  Icon,
   Input,
   Label,
+  ProviderButtons,
   Spinner,
   Text,
   Unwrap,
 } from "@components";
 import { PATHS } from "@consts";
-import { useAppDispatch, useAppSelector, useForm, useLoading } from "@hooks";
+import { useAppDispatch, useForm, useLoading } from "@hooks";
 import { SignUpInFormFields } from "@models";
 import { useNavigate } from "react-router-dom";
+import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 export const SignUpForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const message = useAppSelector((state) => state.user.error.message);
+  useStoreErrorObserver("user");
 
   const { errors, onChangeForm, onSubmitForm, getValues, formRef } =
     useForm<SignUpInFormFields>({ email: "", password: "" });
@@ -44,11 +42,6 @@ export const SignUpForm: React.FC = () => {
     navigate(PATHS.LOGIN);
   };
 
-  const onSignInWithProvider = (provider: "google" | "github") => {
-    startLoading({ provider });
-    dispatch(signInWithProvider({ provider })).finally(() => endLoading());
-  };
-
   const actionManager = (type: string) => () => {
     if (isLoading) return;
 
@@ -57,10 +50,6 @@ export const SignUpForm: React.FC = () => {
         return onSuccessSubmit();
       case "onNavigateToLogin":
         return onNavigateToLogin();
-      case "onSignInWithGoogle":
-        return onSignInWithProvider("google");
-      case "onSignInWithGithub":
-        return onSignInWithProvider("github");
     }
   };
 
@@ -104,59 +93,27 @@ export const SignUpForm: React.FC = () => {
             </Text>
           </Unwrap>
         </Flex>
-        <Flex column gap={8}>
-          <Unwrap visible={Boolean(message)} negativeOffset="6px">
-            <Text size={11} color="var(--text-color-error)">
-              {message}
-            </Text>
-          </Unwrap>
-          <Flex column gap={12}>
-            <Button type="submit" theme="primary" disabled={isLoading}>
-              {isLoading && loadingData.current?.submitting && (
-                <Spinner size={16} />
-              )}
-              <Text uppercase>Register</Text>
-            </Button>
-            <Button
-              onClick={actionManager("onNavigateToLogin")}
-              theme="outline"
-              disabled={isLoading}
-            >
-              Do you have an account?
-            </Button>
-          </Flex>
+        <Flex column gap={12}>
+          <Button type="submit" theme="primary" disabled={isLoading}>
+            {isLoading && loadingData.current?.submitting && (
+              <Spinner size={16} />
+            )}
+            <Text uppercase>Register</Text>
+          </Button>
+          <Button
+            onClick={actionManager("onNavigateToLogin")}
+            theme="outline"
+            disabled={isLoading}
+          >
+            <Text uppercase>Have an account?</Text>
+          </Button>
         </Flex>
         <Flex column gap={16}>
           <Text as="h3" weight={400} block center uppercase>
             Or
           </Text>
           <Flex center gap={12} column>
-            <Button
-              theme="outline"
-              type="button"
-              onClick={actionManager("onSignInWithGoogle")}
-              disabled={isLoading}
-            >
-              {isLoading && loadingData.current?.provider === "google" ? (
-                <Spinner size={16} />
-              ) : (
-                <Icon name="google" size={16} />
-              )}
-              Continue with Google
-            </Button>
-            <Button
-              theme="outline"
-              type="button"
-              onClick={actionManager("onSignInWithGithub")}
-              disabled={isLoading}
-            >
-              {isLoading && loadingData.current?.provider === "github" ? (
-                <Spinner size={16} />
-              ) : (
-                <Icon name="github" size={16} />
-              )}
-              Continue with Github
-            </Button>
+            <ProviderButtons />
           </Flex>
         </Flex>
       </Flex>

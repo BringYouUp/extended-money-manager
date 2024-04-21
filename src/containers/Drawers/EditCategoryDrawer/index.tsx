@@ -50,10 +50,10 @@ export const EditCategoryDrawer: React.FC<Props> = ({
   return (
     <Drawer side="right" isOpened={Boolean(is)} onClose={onClose}>
       <Container h100 background="var(--soft-background-color)" width="300px">
-        <Offset full padding={[16]}>
-          <Flex full column gap={16}>
+        <Offset full padding={[24, 16]}>
+          <Flex full column gap={24}>
             <Flex justifyBetween alignCenter>
-              <Text as="h3">
+              <Text as="h3" uppercase>
                 {mode === "create" ? "Create category" : "Edit category"}
               </Text>
               <Button theme="transparent" rounded onClick={onClose}>

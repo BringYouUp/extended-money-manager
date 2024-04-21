@@ -7,6 +7,7 @@ import {
   Icon,
   Input,
   Label,
+  Offset,
   Select,
   SelectOption,
   Spinner,
@@ -16,11 +17,11 @@ import {
 import { CATEGORIES_ICONS } from "@consts";
 import {
   useAppDispatch,
-  useAppSelector,
   useForm,
   useForceUpdate,
   useLoading,
   useUID,
+  useToast,
 } from "@hooks";
 import {
   CategoryFormFormFields,
@@ -31,6 +32,7 @@ import {
   StoreCategoryIcon,
 } from "@models";
 import { ChangeEvent } from "react";
+import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 type Props = (
   | {
@@ -53,10 +55,11 @@ export const CategoryForm: React.FC<Props> = ({
   setValues,
 }: Props) => {
   const dispatch = useAppDispatch();
-  const message = useAppSelector((state) => state.categories.error.message);
 
+  useStoreErrorObserver("categories");
   const uid = useUID();
   const forceUpdate = useForceUpdate();
+  const { createToast } = useToast();
 
   const { isLoading, startLoading, endLoading, loadingData } =
     useLoading(false);
@@ -79,10 +82,7 @@ export const CategoryForm: React.FC<Props> = ({
       "category-currency": mode === "edit" ? data.currency : "",
     },
     {
-      updateOnChange: {
-        value: true,
-        callback: (_, values) => setValues(values),
-      },
+      updateOnChange: (_, values) => setValues(values),
     }
   );
   const onSuccessSubmit = () => {
@@ -105,7 +105,10 @@ export const CategoryForm: React.FC<Props> = ({
           uid,
         })
       )
-        .then(() => onClose())
+        .then(() => {
+          onClose();
+          createToast("category created", "success");
+        })
         .finally(() => endLoading());
     }
 
@@ -126,7 +129,10 @@ export const CategoryForm: React.FC<Props> = ({
           uid,
         })
       )
-        .then(() => onClose())
+        .then(() => {
+          onClose();
+          createToast("category updated", "success");
+        })
         .finally(() => endLoading());
     }
   };
@@ -237,6 +243,8 @@ export const CategoryForm: React.FC<Props> = ({
               items={[
                 { name: "$", value: "$" },
                 { name: "€", value: "€" },
+                { name: "₽", value: "₽" },
+                { name: "zł", value: "zł" },
               ]}
               parseItem={(item) => item.name}
               selectedCallback={(currency) =>
@@ -285,24 +293,26 @@ export const CategoryForm: React.FC<Props> = ({
           <Label htmlFor="category-color">Icon</Label>
           <Input hidden id="category-icon" name="category-icon" />
           <FormGroup error={Boolean(errors["category-icon"])}>
-            <Flex gap={6} wrap>
-              {CATEGORIES_ICONS.map((icon) => {
-                const isIconActive = getValue("category-icon") === icon;
+            <Offset w100 padding={[8]}>
+              <Flex gap={16} wrap justifyBetween>
+                {CATEGORIES_ICONS.map((icon) => {
+                  const isIconActive = getValue("category-icon") === icon;
 
-                return (
-                  <Button
-                    key={icon}
-                    type="button"
-                    active={isIconActive}
-                    theme="transparent"
-                    rounded
-                    onClick={() => actionManager("onSetIcon")(icon)}
-                  >
-                    <Icon name={icon} size={16} />
-                  </Button>
-                );
-              })}
-            </Flex>
+                  return (
+                    <Button
+                      key={icon}
+                      type="button"
+                      active={isIconActive}
+                      theme="transparent"
+                      rounded
+                      onClick={() => actionManager("onSetIcon")(icon)}
+                    >
+                      <Icon name={icon} size={16} />
+                    </Button>
+                  );
+                })}
+              </Flex>
+            </Offset>
           </FormGroup>
           <Unwrap
             visible={Boolean(errors["category-icon"])}
@@ -315,11 +325,6 @@ export const CategoryForm: React.FC<Props> = ({
         </Flex>
 
         <Flex column gap={8}>
-          <Unwrap visible={Boolean(message)} negativeOffset="6px">
-            <Text size={11} color="var(--text-color-error)">
-              {message}
-            </Text>
-          </Unwrap>
           <Flex column gap={12}>
             <Button type="submit" theme="primary" disabled={isLoading}>
               {isLoading && loadingData.current?.submitting && (

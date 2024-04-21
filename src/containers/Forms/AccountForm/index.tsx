@@ -1,6 +1,11 @@
-import { accountsAddAccount, accountsEditAccount } from "@async-actions";
+import {
+  accountsAddAccount,
+  accountsEditAccount,
+  transactionsAddTransaction,
+} from "@async-actions";
 import {
   Button,
+  Category,
   ColorPicker,
   Flex,
   Input,
@@ -9,6 +14,7 @@ import {
   SelectOption,
   Spinner,
   Text,
+  Toggle,
   Unwrap,
 } from "@components";
 
@@ -17,6 +23,7 @@ import {
   useAppSelector,
   useForm,
   useLoading,
+  useToast,
   useUID,
 } from "@hooks";
 import {
@@ -24,8 +31,12 @@ import {
   FormFields,
   StoreAccountsAccount,
   StoreAccountsAccountCurrencies,
+  StoreCategoriesCategory,
 } from "@models";
-import { ChangeEvent } from "react";
+import { CATEGORY_SELECTOR } from "@selectors";
+import { getActualFormatDate } from "@utils";
+import { ChangeEvent, useMemo } from "react";
+import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 type Edit = {
   mode: "edit";
@@ -44,10 +55,14 @@ type Props = {
 
 export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
   const dispatch = useAppDispatch();
-  const message = useAppSelector((state) => state.accounts.error.message);
+
+  const categories = useAppSelector(
+    CATEGORY_SELECTOR.visibleCategoriesSelector
+  );
 
   const uid = useUID();
-
+  useStoreErrorObserver("accounts");
+  const { createToast } = useToast();
   const { isLoading, startLoading, endLoading, loadingData } =
     useLoading(false);
 
@@ -65,16 +80,52 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
       "account-amount": mode === "edit" ? data.amount : 0,
       "account-name": mode === "edit" ? data.name : "",
       "account-currency": mode === "edit" ? data.currency : "$",
+      "is-create-transaction-after-change-account": true,
+      "transaction-category-id": "",
     },
     {
-      updateOnChange: {
-        value: true,
-        callback: (_, values) => {
-          setValues(values);
-        },
-      },
+      updateOnChange: (_, values) => setValues(values),
+      notValidateFields: mode === "edit" ? [] : ["transaction-category-id"],
+      beforeSubmit: ({ values }) => ({
+        notValidateFields:
+          mode === "edit" &&
+          values["is-create-transaction-after-change-account"] &&
+          +values["account-amount"] !== data.amount
+            ? []
+            : ["transaction-category-id"],
+      }),
     }
   );
+
+  const onCreateAdditionalTransaction = ({
+    accountId,
+    categoryId,
+  }: {
+    accountId: string;
+    categoryId: string;
+  }) => {
+    const values = getValues();
+
+    if (mode === "edit") {
+      dispatch(
+        transactionsAddTransaction({
+          transaction: {
+            description: "",
+            categoryId,
+            accountId,
+            amount: Math.abs(data.amount - +values["account-amount"]),
+            date: getActualFormatDate().split("T")[0],
+            type:
+              data.amount < +values["account-amount"] ? "income" : "withdraw",
+            toAccountId: "",
+            deleted: false,
+          },
+          uid,
+          withoutModyfingAccount: true,
+        })
+      );
+    }
+  };
 
   const onSuccessSubmit = () => {
     const values = getValues();
@@ -97,8 +148,14 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           uid: uid,
         })
       )
-        .then(() => onClose())
-        .finally(() => endLoading());
+        .then(() => {
+          onClose();
+          createToast("account created", "success");
+        })
+        .finally(() => {
+          endLoading();
+          onClose();
+        });
     }
 
     if (mode === "edit") {
@@ -117,8 +174,24 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           uid,
         })
       )
-        .then(() => onClose())
-        .finally(() => endLoading());
+        .then((res) => {
+          if (
+            mode === "edit" &&
+            values["is-create-transaction-after-change-account"] &&
+            +values["account-amount"] !== data.amount
+          ) {
+            onCreateAdditionalTransaction({
+              accountId: res.meta.arg.account.id,
+              categoryId: values["transaction-category-id"],
+            });
+          }
+          onClose();
+          createToast("account updated", "success");
+        })
+        .finally(() => {
+          endLoading();
+          onClose();
+        });
     }
   };
 
@@ -137,6 +210,12 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           );
       }
     };
+
+  const appropriateCategories: StoreCategoriesCategory[] = useMemo(() => {
+    return categories.filter((category) => category.type === "income");
+  }, [categories]);
+
+  console.log(`→ getValues()`, getValues());
 
   return (
     <form
@@ -164,6 +243,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
             </Text>
           </Unwrap>
         </Flex>
+
         <Flex w100 column gap={6}>
           <Flex style={{ flex: 1 }} w100 column gap={6}>
             <Label htmlFor="account-amount">Amount </Label>
@@ -173,6 +253,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
               type="number"
               placeholder="Enter amount..."
               error={Boolean(errors["account-amount"])}
+              step="any"
             />
             <Unwrap
               visible={Boolean(errors["account-amount"])}
@@ -199,6 +280,8 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
               items={[
                 { name: "$", value: "$" },
                 { name: "€", value: "€" },
+                { name: "₽", value: "₽" },
+                { name: "zł", value: "zł" },
               ]}
               parseItem={(item) => item.name}
               selectedCallback={(currency) =>
@@ -243,20 +326,112 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           </Unwrap>
         </Flex>
 
-        <Flex column gap={8}>
-          <Unwrap visible={Boolean(message)} negativeOffset="6px">
+        {/* // */}
+
+        <Flex
+          style={{
+            display:
+              mode === "edit" && +getValue("account-amount") !== data.amount
+                ? "flex"
+                : "none",
+          }}
+          w100
+          column
+          gap={6}
+        >
+          <Label htmlFor="is-create-transaction-after-change-account">
+            Create transaction?
+          </Label>
+          <Toggle
+            data={{
+              checked: {
+                label: "Yes",
+              },
+              unchecked: {
+                label: "No",
+              },
+            }}
+            id="is-create-transaction-after-change-account"
+            name="is-create-transaction-after-change-account"
+          />
+          <Unwrap
+            visible={Boolean(
+              errors["is-create-transaction-after-change-account"]
+            )}
+            negativeOffset="6px"
+          >
             <Text size={11} color="var(--text-color-error)">
-              {message}
+              {errors["is-create-transaction-after-change-account"]}
             </Text>
           </Unwrap>
-          <Flex column gap={12}>
-            <Button type="submit" theme="primary" disabled={isLoading}>
-              {isLoading && loadingData.current?.submitting && (
-                <Spinner size={16} />
+        </Flex>
+
+        <Flex
+          style={{
+            display:
+              mode === "edit" &&
+              getValue("is-create-transaction-after-change-account") &&
+              +getValue("account-amount") !== data.amount
+                ? "flex"
+                : "none",
+          }}
+          w100
+          column
+          gap={6}
+        >
+          <Flex style={{ flex: 1 }} w100 column gap={6}>
+            <Label htmlFor="transaction-category-id">Category</Label>
+            <Select<StoreCategoriesCategory>
+              placeholder="Select category..."
+              className="flex flex-column flex-gap-8"
+              mode="single"
+              name="transaction-category-id"
+              error={Boolean(errors["transaction-category-id"])}
+              items={appropriateCategories}
+              parseItem={(item) => item.name}
+              selectedCallback={(account) =>
+                getValue("transaction-category-id") === account.id
+              }
+              onChange={(e) => {
+                setValue("transaction-category-id", e.id);
+              }}
+              Wrapper={({ children }) => (
+                <Flex
+                  style={{ width: "264px", padding: "6px 12px 6px 16px" }}
+                  column
+                  gap={8}
+                >
+                  {children}
+                </Flex>
               )}
-              <Text uppercase>{mode === "create" ? "Create" : "Update"}</Text>
-            </Button>
+              Component={({ onClick, selected, data }) => (
+                <Category
+                  style={{ width: "100%" }}
+                  data={data}
+                  onClick={() => onClick(data)}
+                  selected={selected}
+                />
+              )}
+            />
+
+            <Unwrap
+              visible={Boolean(errors["transaction-category-id"])}
+              negativeOffset="6px"
+            >
+              <Text size={11} color="var(--text-color-error)">
+                {errors["transaction-category-id"]}
+              </Text>
+            </Unwrap>
           </Flex>
+        </Flex>
+
+        <Flex column gap={12}>
+          <Button type="submit" theme="primary" disabled={isLoading}>
+            {isLoading && loadingData.current?.submitting && (
+              <Spinner size={16} />
+            )}
+            <Text uppercase>{mode === "create" ? "Create" : "Update"}</Text>
+          </Button>
         </Flex>
       </Flex>
     </form>
