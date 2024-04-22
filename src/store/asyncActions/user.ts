@@ -62,10 +62,7 @@ export const userSignUpWithEmailAndPassword = createAsyncThunk<unknown, { email:
           dispatch(transactionsSetTransactions(authData.user.uid))
           resolve(fulfillWithValue(authData))
         })
-        .catch(err => {
-          console.log(`→ error`, err);
-          reject(rejectWithValue(getStoreErrorFormat(err)))
-        })
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
@@ -96,10 +93,7 @@ export const userLogOut = createAsyncThunk<unknown, void>(
     return new Promise((resolve, reject) => {
       signOut(auth)
         .then(data => resolve(fulfillWithValue(data)))
-        .catch(err => {
-          console.log(`→ error`, err);
-          reject(rejectWithValue(getStoreErrorFormat(err)))
-        })
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
@@ -127,10 +121,7 @@ export const signInWithProvider = createAsyncThunk<unknown, { provider: 'google'
           dispatch(transactionsSetTransactions(authData.user.uid))
           resolve(fulfillWithValue(authData))
         })
-        .catch(err => {
-          console.log(`→ error`, err);
-          reject(rejectWithValue(getStoreErrorFormat(err)))
-        })
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
@@ -140,14 +131,8 @@ export const userResetPassword = createAsyncThunk<unknown, { email: string }>(
   ({ email }, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
       sendPasswordResetEmail(auth, email)
-        .then(data => {
-          console.log(`→ sendPasswordResetEmail data`, data);
-          resolve(fulfillWithValue(data))
-        })
-        .catch(err => {
-          console.log(`→ error`, err);
-          reject(rejectWithValue(getStoreErrorFormat(err)))
-        })
+        .then(data => resolve(fulfillWithValue(data)))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
@@ -164,10 +149,7 @@ export const signInAutomatically = createAsyncThunk<unknown, User>(
           dispatch(transactionsSetTransactions(data.uid))
           resolve(fulfillWithValue(getStoreUserFormat(data)))
         })
-        .catch(err => {
-          console.log(`→ error`, err);
-          reject(rejectWithValue(getStoreErrorFormat(err)))
-        })
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )

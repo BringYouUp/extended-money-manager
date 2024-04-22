@@ -86,9 +86,8 @@ export const transactionType = (value: string) => {
 }
 
 export const transactionCategoryId: UseFormValidator = (value: string = "", formNode: HTMLFormElement & FormFields<UseFormFields>) => {
-
-  if (formNode) {
-    if (formNode['is-create-transaction-after-change-account']?.checked) {
+  if (formNode?.['is-create-transaction-after-change-account']) {
+    if (formNode['is-create-transaction-after-change-account'].checked) {
       return required(value, formNode)
     }
   } else {

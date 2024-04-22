@@ -62,7 +62,7 @@ export const Sidebar: React.FC = () => {
                 </Button>
                 {SIDEBAR_PATHS.map((path) => {
                   return (
-                    <NavLink to={path}>
+                    <NavLink key={path} to={path}>
                       <Button
                         active={location.pathname === path}
                         theme="transparent"
