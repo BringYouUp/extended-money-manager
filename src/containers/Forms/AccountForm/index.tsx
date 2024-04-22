@@ -149,13 +149,10 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
         })
       )
         .then(() => {
-          onClose();
+          onClose(true);
           createToast("account created", "success");
         })
-        .finally(() => {
-          endLoading();
-          onClose();
-        });
+        .finally(() => endLoading());
     }
 
     if (mode === "edit") {
@@ -185,13 +182,10 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
               categoryId: values["transaction-category-id"],
             });
           }
-          onClose();
+          onClose(true);
           createToast("account updated", "success");
         })
-        .finally(() => {
-          endLoading();
-          onClose();
-        });
+        .finally(() => endLoading());
     }
   };
 
@@ -214,8 +208,6 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
   const appropriateCategories: StoreCategoriesCategory[] = useMemo(() => {
     return categories.filter((category) => category.type === "income");
   }, [categories]);
-
-  console.log(`→ getValues()`, getValues());
 
   return (
     <form

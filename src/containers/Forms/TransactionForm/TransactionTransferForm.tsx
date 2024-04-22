@@ -35,6 +35,7 @@ import { PLATFORM_CURRENCIES_CODE_MAP } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 type Props = TransactionFormProps & {
+  isFormChanged: React.MutableRefObject<boolean>;
   onClose: (...args: unknown[]) => void;
 };
 
@@ -42,6 +43,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
   data,
   initialValues,
   mode,
+  isFormChanged,
   onClose,
 }: Props) => {
   const dispatch = useAppDispatch();
@@ -129,6 +131,9 @@ export const TransactionTransferForm: React.FC<Props> = ({
       [K in keyof TransactionTransferFormFormFields]: TransactionTransferFormFormFields[K];
     }
   ): void {
+    if (e.target.nodeName !== "FORM" && isFormChanged !== null) {
+      isFormChanged.current = true;
+    }
     if (e.target.name === "transaction-amount" && e.target.value) {
       const [fromAccount, toAccount] = fromToAccount;
 
@@ -173,7 +178,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
         })
       )
         .then(() => {
-          onClose();
+          onClose(true);
           createToast("transaction created", "success");
         })
         .finally(() => endLoading());
@@ -199,7 +204,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
         })
       )
         .then(() => {
-          onClose();
+          onClose(true);
           createToast("transaction updated", "success");
         })
         .finally(() => endLoading());

@@ -5,14 +5,17 @@ import {
   Drawer,
   Flex,
   Icon,
+  Modal,
+  ModalWrapper,
   Offset,
   Scrollable,
   Spinner,
   Text,
 } from "@components";
 import { TransactionForm } from "@containers";
-import { useAppDispatch, useLoading, useToast, useUID } from "@hooks";
+import { useAppDispatch, useLoading, useOpen, useToast, useUID } from "@hooks";
 import { StoreTransactionsTransaction } from "@models";
+import { useRef } from "react";
 
 type Props = {
   is: boolean;
@@ -41,6 +44,18 @@ export const EditTransactionDrawer: React.FC<Props> = ({
   const uid = useUID();
   const { createToast } = useToast();
   const { isLoading, startLoading, endLoading } = useLoading();
+  const isFormChanged = useRef<boolean>(false);
+
+  const [
+    isOpenedConfirmDeleteModal,
+    onOpenConfirmDeleteModal,
+    onCloseConfirmDeleteModal,
+  ] = useOpen();
+
+  const onCloseHandler = () => {
+    onClose();
+    isFormChanged.current = false;
+  };
 
   const onDeleteTransaction = () => {
     if (mode === "edit" && !data.deleted) {
@@ -55,54 +70,135 @@ export const EditTransactionDrawer: React.FC<Props> = ({
         })
       )
         .then(() => {
-          onClose();
+          onCloseHandler();
           createToast("transaction deleted", "success");
         })
         .finally(() => endLoading());
     }
   };
 
+  const [isOpenedConfirmModal, onOpenConfirmModal, onCloseConfirmModal] =
+    useOpen();
+
+  const onTryToClose = (forceClose: boolean = false) => {
+    if (!forceClose) {
+      if (isFormChanged.current) {
+        return onOpenConfirmModal();
+      } else {
+        onCloseHandler();
+      }
+    } else {
+      onCloseHandler();
+    }
+  };
+
+  const onConfirmClose = () => {
+    if (isOpenedConfirmModal) {
+      onCloseConfirmModal();
+    }
+
+    onCloseHandler();
+  };
+
   return (
-    <Drawer side="right" isOpened={Boolean(is)} onClose={onClose}>
-      <Container h100 background="var(--soft-background-color)" width="300px">
-        <Offset full padding={[24, 16]}>
-          <Flex full column gap={24}>
-            <Flex justifyBetween alignCenter>
+    <>
+      <Drawer
+        side="right"
+        isOpened={Boolean(is)}
+        onClose={() => onTryToClose(false)}
+      >
+        <Container h100 background="var(--soft-background-color)" width="300px">
+          <Offset full padding={[24, 16]}>
+            <Flex full column gap={24}>
+              <Flex justifyBetween alignCenter>
+                <Text as="h3" uppercase>
+                  {mode === "create"
+                    ? "Create transaction"
+                    : "Edit transaction"}
+                </Text>
+                <Button
+                  theme="transparent"
+                  rounded
+                  onClick={() => onTryToClose(false)}
+                >
+                  <Icon name="close" />
+                </Button>
+              </Flex>
+
+              <Scrollable full overlay>
+                <Flex column gap={8} full justifyBetween>
+                  <TransactionForm
+                    onClose={(isForceClose) =>
+                      onTryToClose(isForceClose as boolean)
+                    }
+                    mode={mode}
+                    data={mode === "edit" ? data : (undefined as never)}
+                    initialValues={
+                      mode === "create" ? initialValues : (undefined as never)
+                    }
+                    isFormChanged={isFormChanged}
+                  />
+                  {mode === "edit" && !data.deleted && (
+                    <Button onClick={onOpenConfirmDeleteModal} theme="outline">
+                      <Flex w100 gap={6} center>
+                        <Text uppercase>Delete</Text>
+                        {isLoading ? (
+                          <Spinner size={14} />
+                        ) : (
+                          <Icon name="trash" />
+                        )}
+                      </Flex>
+                    </Button>
+                  )}
+                </Flex>
+              </Scrollable>
+            </Flex>
+          </Offset>
+        </Container>
+      </Drawer>
+      <Modal
+        isOpened={isOpenedConfirmDeleteModal}
+        onClose={onCloseConfirmDeleteModal}
+      >
+        <ModalWrapper>
+          <Flex column gap={24}>
+            <Flex column gap={12}>
               <Text as="h3" uppercase>
-                {mode === "create" ? "Create transaction" : "Edit transaction"}
+                Confirm
               </Text>
-              <Button theme="transparent" rounded onClick={onClose}>
-                <Icon name="close" />
+              <Text>Do you really want to delete account?</Text>
+            </Flex>
+            <Flex gap={16}>
+              <Button onClick={onDeleteTransaction} theme="outline">
+                Yes
+              </Button>
+              <Button onClick={onCloseConfirmDeleteModal} theme="primary">
+                No
               </Button>
             </Flex>
-
-            <Scrollable full overlay>
-              <Flex column gap={8} full>
-                <TransactionForm
-                  onClose={onClose}
-                  mode={mode}
-                  data={mode === "edit" ? data : (undefined as never)}
-                  initialValues={
-                    mode === "create" ? initialValues : (undefined as never)
-                  }
-                />
-                {mode === "edit" && !data.deleted && (
-                  <Button onClick={onDeleteTransaction} theme="outline">
-                    <Flex w100 gap={6} center>
-                      <Text uppercase>Delete</Text>
-                      {isLoading ? (
-                        <Spinner size={14} />
-                      ) : (
-                        <Icon name="trash" />
-                      )}
-                    </Flex>
-                  </Button>
-                )}
-              </Flex>
-            </Scrollable>
           </Flex>
-        </Offset>
-      </Container>
-    </Drawer>
+        </ModalWrapper>
+      </Modal>
+      <Modal isOpened={isOpenedConfirmModal} onClose={onCloseConfirmModal}>
+        <ModalWrapper>
+          <Flex column gap={24}>
+            <Flex column gap={12}>
+              <Text as="h3" uppercase>
+                Confirm
+              </Text>
+              <Text>Do you really want to close drawer</Text>
+            </Flex>
+            <Flex gap={16}>
+              <Button onClick={onConfirmClose} theme="outline">
+                Yes
+              </Button>
+              <Button onClick={onCloseConfirmModal} theme="primary">
+                No
+              </Button>
+            </Flex>
+          </Flex>
+        </ModalWrapper>
+      </Modal>
+    </>
   );
 };

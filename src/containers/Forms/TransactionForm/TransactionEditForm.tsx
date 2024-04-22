@@ -41,6 +41,7 @@ import {
 type Props = TransactionFormProps & {
   onClose: (...args: unknown[]) => void;
   transactionType: Exclude<StoreTransactionsTransactionType, "transfer">;
+  isFormChanged: React.MutableRefObject<boolean>;
 };
 
 export const TransactionEditForm: React.FC<Props> = ({
@@ -48,6 +49,7 @@ export const TransactionEditForm: React.FC<Props> = ({
   initialValues,
   mode,
   transactionType,
+  isFormChanged,
   onClose,
 }: Props) => {
   const dispatch = useAppDispatch();
@@ -87,7 +89,12 @@ export const TransactionEditForm: React.FC<Props> = ({
         mode === "edit" ? data.type : initialValues?.type || "",
     },
     {
-      updateOnChange: () => forceUpdate(),
+      updateOnChange: (e) => {
+        if (e.target.nodeName !== "FORM" && isFormChanged !== null) {
+          isFormChanged.current = true;
+        }
+        forceUpdate();
+      },
     }
   );
 
@@ -114,7 +121,7 @@ export const TransactionEditForm: React.FC<Props> = ({
         })
       )
         .then(() => {
-          onClose();
+          onClose(true);
           createToast("transaction created", "success");
         })
         .finally(() => endLoading());
@@ -138,7 +145,7 @@ export const TransactionEditForm: React.FC<Props> = ({
         })
       )
         .then(() => {
-          onClose();
+          onClose(true);
           createToast("transaction updated", "success");
         })
         .finally(() => endLoading());
@@ -167,7 +174,9 @@ export const TransactionEditForm: React.FC<Props> = ({
 
   useEffect(() => {
     return () => {
-      formRef.current && setValue("transaction-category-id", "");
+      formRef.current &&
+        !getValue("transaction-category-id") &&
+        setValue("transaction-category-id", "");
     };
   }, [transactionType]);
 

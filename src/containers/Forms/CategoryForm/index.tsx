@@ -106,7 +106,7 @@ export const CategoryForm: React.FC<Props> = ({
         })
       )
         .then(() => {
-          onClose();
+          onClose(true);
           createToast("category created", "success");
         })
         .finally(() => endLoading());
@@ -130,7 +130,7 @@ export const CategoryForm: React.FC<Props> = ({
         })
       )
         .then(() => {
-          onClose();
+          onClose(true);
           createToast("category updated", "success");
         })
         .finally(() => endLoading());
