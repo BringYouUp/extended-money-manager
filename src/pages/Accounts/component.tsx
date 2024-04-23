@@ -1,6 +1,6 @@
 import { Offset } from "@components";
 
-const Component: React.FC = () => {
+export const Component: React.FC = () => {
   return <Offset padding={[24]}>Accounts</Offset>;
 };
 

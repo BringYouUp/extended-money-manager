@@ -41,6 +41,11 @@ export const PATHS_LIST: PathListItem[] = [
     name: 'SETTINGS',
     title: ''
   },
+  {
+    path: '*',
+    name: 'ANY',
+    title: ''
+  },
 ];
 
 

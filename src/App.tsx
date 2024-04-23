@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 
 import { Flex, Offset, Scrollable, Text, Toasts } from "@components";
 import {
@@ -42,10 +46,10 @@ const router = createBrowserRouter([
         path: PATHS.TRANSACTIONS,
         element: <TransactionsPage />,
       },
-      // {
-      //   path: PATHS.ACCOUNTS,
-      //   element: <Main />,
-      // },
+      {
+        path: PATHS.ANY,
+        element: <Navigate to={PATHS.ROOT} />,
+      },
     ],
   },
 ]);
