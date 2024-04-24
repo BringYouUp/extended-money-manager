@@ -59,7 +59,7 @@ export const categoryIcon = (value: string = "") => {
 }
 
 export const accountCurrency = (value: string) => {
-  const acceptedValues: StoreAccountsAccountCurrencies[] = ['$', '€']
+  const acceptedValues: StoreAccountsAccountCurrencies[] = ['$', '€', '₽', 'zł']
   if (!acceptedValues.includes(value as StoreAccountsAccountCurrencies)) {
     return {
       error: 'Please, choose currency'
@@ -103,7 +103,7 @@ export const getValidatorsForField = (field: keyof UseFormFields): UseFormValida
     case 'category-name':
       return [required, noOnlyWhitespace, minLength(3), maxLength(30)]
     case 'transaction-description':
-      return []
+      return [maxLength(50)]
     case 'account-amount':
     case 'transaction-amount':
     case 'transaction-to-amount':

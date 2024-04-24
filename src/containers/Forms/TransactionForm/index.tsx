@@ -1,3 +1,3 @@
 export * from "./TransactionForm";
-export * from "./TransactionEditForm";
+export * from "./TransactionIncomeWithdrawalForm";
 export * from "./TransactionTransferForm";

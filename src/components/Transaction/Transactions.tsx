@@ -18,7 +18,13 @@ export const Transactions = () => {
 
   if (status === "transactions/transactionsSetTransactions/pending") {
     return new Array(7).fill(null).map((_, index) => {
-      return <Skeleton key={index} className={styles.transaction} />;
+      return (
+        <Skeleton
+          key={index}
+          style={{ height: "77px" }}
+          className={styles.transaction}
+        />
+      );
     });
   }
 

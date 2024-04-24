@@ -27,11 +27,10 @@ import {
   StoreAccountsAccount,
   TransactionTransferFormFormFields,
   TransactionFormProps,
-  StoreAccountsAccountCurrencies,
 } from "@models";
 import { ACCOUNT_SELECTOR, PLATFORM_SELECTOR } from "@selectors";
+import { getConvertedValue } from "@utils";
 import { ChangeEvent, useMemo } from "react";
-import { PLATFORM_CURRENCIES_CODE_MAP } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 type Props = TransactionFormProps & {
@@ -138,17 +137,13 @@ export const TransactionTransferForm: React.FC<Props> = ({
       const [fromAccount, toAccount] = fromToAccount;
 
       if (fromAccount?.currency !== toAccount?.currency) {
-        setValue(
-          "transaction-to-amount",
-          `${(
-            (+values["transaction-amount"] || 0) *
-            currencies[
-              PLATFORM_CURRENCIES_CODE_MAP[
-                toAccount?.currency as StoreAccountsAccountCurrencies
-              ]
-            ]
-          ).toFixed(2)}`
-        );
+        const newValue = getConvertedValue({
+          from: fromAccount?.currency,
+          to: toAccount?.currency,
+          value: values["transaction-amount"],
+          currencies,
+        });
+        setValue("transaction-to-amount", `${newValue}`);
       } else {
         setValue("transaction-to-amount", values["transaction-amount"]);
       }
@@ -247,7 +242,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               name="transaction-account-id"
               error={Boolean(errors["transaction-account-id"])}
               items={accounts}
-              parseItem={(item) => item.name}
+              parseItem={(item) => `${item.name}, ${item.currency}`}
               selectedCallback={(account) =>
                 getValue("transaction-account-id") === account.id
               }
@@ -296,7 +291,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               items={accounts.filter(
                 (item) => item.id !== getValue("transaction-account-id")
               )}
-              parseItem={(item) => item.name}
+              parseItem={(item) => `${item.name}, ${item.currency}`}
               selectedCallback={(account) =>
                 getValue("transaction-to-account-id") === account.id
               }

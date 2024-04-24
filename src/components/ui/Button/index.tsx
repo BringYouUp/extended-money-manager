@@ -60,6 +60,7 @@ export const Button: React.FC<Props> = ({
         },
         className
       )}
+      disabled={disabled}
       type={type}
       onClick={onClick}
     >

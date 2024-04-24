@@ -58,6 +58,10 @@ export const EditTransactionDrawer: React.FC<Props> = ({
   };
 
   const onDeleteTransaction = () => {
+    if (isOpenedConfirmDeleteModal) {
+      onCloseConfirmDeleteModal();
+    }
+
     if (mode === "edit" && !data.deleted) {
       startLoading();
       dispatch(
@@ -166,7 +170,7 @@ export const EditTransactionDrawer: React.FC<Props> = ({
               <Text as="h3" uppercase>
                 Confirm
               </Text>
-              <Text>Do you really want to delete account?</Text>
+              <Text>Do you really want to delete transaction?</Text>
             </Flex>
             <Flex gap={16}>
               <Button onClick={onDeleteTransaction} theme="outline">

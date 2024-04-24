@@ -1,4 +1,8 @@
-import { Flex, Icon, Text } from "@components";
+import {
+  Flex,
+  TransactionIncomeWithdrawal,
+  TransactionTransfer,
+} from "@components";
 
 import { StoreTransactionsTransaction } from "@models";
 
@@ -17,33 +21,8 @@ type Props = {
   noClick?: boolean;
 };
 
-const TransactionTransferDescription = ({ data }: Pick<Props, "data">) => {
-  const accounts = useAppSelector(ACCOUNT_SELECTOR.allAccountsSelector);
-  const account = accounts.find((account) => account.id === data.accountId);
-  const toAccount = accounts.find((account) => account.id === data.toAccountId);
-
-  return (
-    <>
-      {account?.currency !== toAccount?.currency ? (
-        <>
-          {data.toAmount}
-          {toAccount?.currency}{" "}
-          <Text color="var(--text-color-white-50)" size={12}>
-            ({data.amount}
-            {account?.currency})
-          </Text>
-        </>
-      ) : (
-        <>
-          {data.toAmount}
-          {toAccount?.currency}{" "}
-        </>
-      )}
-    </>
-  );
-};
-
 export const Transaction: React.FC<Props> = ({ noClick, data, style }) => {
+  const accounts = useAppSelector(ACCOUNT_SELECTOR.allAccountsSelector);
   const categories = useAppSelector(
     CATEGORY_SELECTOR.visibleCategoriesSelector
   );
@@ -58,6 +37,10 @@ export const Transaction: React.FC<Props> = ({ noClick, data, style }) => {
     return categories.find((category) => category.id === data.categoryId);
   }, [data, categories]);
 
+  const account = useMemo(() => {
+    return accounts.find((account) => account.id === data.accountId);
+  }, [data, accounts]);
+
   return (
     <>
       <Flex
@@ -70,33 +53,16 @@ export const Transaction: React.FC<Props> = ({ noClick, data, style }) => {
         alignCenter
         onClick={onOpenHandler}
       >
-        <Flex gap={6} className={styles["transaction-container"]} alignCenter>
-          <Icon fill="var(--text-color-white-90)" size={20} name={data.type} />
+        <Flex gap={8} className={styles["transaction-container"]}>
+          {(data.type === "income" || data.type === "withdraw") && (
+            <TransactionIncomeWithdrawal
+              account={account}
+              category={category}
+              data={data}
+            />
+          )}
 
-          <Flex flex1 gap={12} alignFlexEnd>
-            <Text ellipsed>
-              <Text
-                weight={700}
-                color="var(--text-color-white-90)"
-                className={cn(styles.label)}
-              >
-                {data.type === "withdraw"
-                  ? "-"
-                  : data.type === "income"
-                  ? "+"
-                  : ""}
-                {data.type !== "transfer" ? (
-                  data.amount
-                ) : data.amount === data.toAmount ? (
-                  data.amount
-                ) : (
-                  <TransactionTransferDescription data={data} />
-                )}
-                {category?.currency}
-              </Text>{" "}
-              {data.description}
-            </Text>
-          </Flex>
+          {data.type === "transfer" && <TransactionTransfer data={data} />}
         </Flex>
       </Flex>
       <EditTransactionDrawer

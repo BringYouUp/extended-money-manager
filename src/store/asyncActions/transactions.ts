@@ -51,12 +51,12 @@ export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTran
             return getDoc(docToAccountRef)
           }
           case 'withdraw': {
-            accountData.amount -= transaction.amount
+            accountData.amount -= (transaction.toAmount || transaction.amount)
             return
           }
           case 'income': {
             if (!withoutModyfingAccount) {
-              accountData.amount += transaction.amount
+              accountData.amount += (transaction.toAmount || transaction.amount)
             }
             return
           }
@@ -126,17 +126,17 @@ export const transactionsEditTransaction = createAsyncThunk<Partial<StoreTransac
             }
             case 'withdraw': {
               if (transaction.deleted) {
-                accountData.amount += transactionData.amount
+                accountData.amount += (transactionData.toAmount || transactionData.amount)
               } else {
-                accountData.amount -= transaction.amount - transactionData.amount
+                accountData.amount -= (transaction.toAmount || transaction.amount) - (transactionData.toAmount || transactionData.amount)
               }
               return
             }
             case 'income': {
               if (transaction.deleted) {
-                accountData.amount -= transactionData.amount
+                accountData.amount -= (transactionData.toAmount || transactionData.amount)
               } else {
-                accountData.amount += transaction.amount - transactionData.amount
+                accountData.amount += (transaction.toAmount || transaction.amount) - (transactionData.toAmount || transactionData.amount)
               }
               return
             }

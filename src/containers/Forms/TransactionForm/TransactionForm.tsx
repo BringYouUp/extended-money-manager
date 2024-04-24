@@ -1,5 +1,8 @@
 import { Flex, Label, Select, SelectOption } from "@components";
-import { TransactionEditForm, TransactionTransferForm } from "@containers";
+import {
+  TransactionIncomeWithdrawalForm,
+  TransactionTransferForm,
+} from "@containers";
 
 import {
   StoreTransactionsTransactionType,
@@ -61,7 +64,7 @@ export const TransactionForm: React.FC<Props> = ({
         </Flex>
       </Flex>
       {(transactionType === "income" || transactionType === "withdraw") && (
-        <TransactionEditForm
+        <TransactionIncomeWithdrawalForm
           mode={mode}
           onClose={onClose}
           initialValues={
