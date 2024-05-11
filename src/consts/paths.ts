@@ -1,4 +1,4 @@
-import { PathListItem, TPaths } from "../models/index";
+import { PathListItem, TPaths } from "@models";
 
 export const PATHS_LIST: PathListItem[] = [
   {
@@ -19,6 +19,31 @@ export const PATHS_LIST: PathListItem[] = [
   {
     path: '/',
     name: 'ROOT',
+    title: ''
+  },
+  {
+    path: '/accounts',
+    name: 'ACCOUNTS',
+    title: ''
+  },
+  {
+    path: '/categories',
+    name: 'CATEGORIES',
+    title: ''
+  },
+  {
+    path: '/transactions',
+    name: 'TRANSACTIONS',
+    title: ''
+  },
+  {
+    path: '/settings',
+    name: 'SETTINGS',
+    title: ''
+  },
+  {
+    path: '*',
+    name: 'ANY',
     title: ''
   },
 ];

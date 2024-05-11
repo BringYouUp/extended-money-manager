@@ -1,0 +1,341 @@
+:root {
+  --range-background: -webkit-linear-gradient(
+    left,
+    hsla(
+      0,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      10,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      20,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      30,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      40,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      50,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      60,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      70,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      80,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      90,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      100,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      110,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      120,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      130,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      140,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      150,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      160,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      170,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      180,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      190,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      200,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      210,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      220,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      230,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      240,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      250,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      260,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      270,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      280,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      290,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      300,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      310,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      320,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      330,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      340,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      350,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    ),
+    hsla(
+      360,
+      var(--default-saturation-for-background),
+      var(--default-lightness-for-background),
+      1
+    )
+  );
+
+  --slider-thumb-size: calc(var(--input-height) - 4px - 4px);
+  --slider-runnable-track-height: calc(var(--input-height) - 4px - 4px);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  margin: calc(
+      (var(--slider-thumb-size) - var(--slider-runnable-track-height)) / 2
+    )
+    0;
+  width: 100%;
+}
+input[type="range"]:focus {
+  border: none;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: var(--slider-runnable-track-height);
+  cursor: pointer;
+  background: var(--range-background);
+  border-radius: var(--border-radius-default);
+  border: 1px solid var(--primary-color-10);
+}
+input[type="range"]::-webkit-slider-thumb {
+  --slider-thumb-background-color: hsl(
+    var(--hue),
+    var(--default-saturation-for-background),
+    var(--default-lightness-for-background)
+  );
+  border: 1px solid var(--primary-color-10);
+  /* box-shadow: inset 0 0 0 calc(var(--slider-thumb-size) / 4) white; */
+  /* background: var(--slider-thumb-background-color); */
+  background-color: var(--soft-background-color);
+  height: var(--slider-thumb-size);
+  width: var(--slider-thumb-size);
+  border-radius: var(--border-radius-default);
+  cursor: pointer;
+  -webkit-appearance: none;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+input[type="range"]:focus::-webkit-slider-runnable-track {
+  background: var(--range-background);
+}
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: var(--box-shadow-default);
+  background: var(--range-background);
+  border-radius: var(--border-radius-default);
+  border: 1px solid var(--primary-color-10);
+}
+input[type="range"]::-moz-range-thumb {
+  box-shadow: var(--box-shadow-default);
+  border: 1px solid var(--primary-color-10);
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  border-width: 16px 0;
+  color: transparent;
+}
+input[type="range"]::-ms-fill-lower {
+  background: var(--range-background);
+  border: 1px solid var(--primary-color-10);
+  border-radius: 2.6px;
+  box-shadow: var(--box-shadow-default);
+}
+input[type="range"]::-ms-fill-upper {
+  background: var(--range-background);
+  border: 1px solid var(--primary-color-10);
+  border-radius: 2.6px;
+  box-shadow: var(--box-shadow-default);
+}
+input[type="range"]::-ms-thumb {
+  box-shadow: var(--box-shadow-default);
+  border: 1px solid var(--primary-color-10);
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+input[type="range"]:focus::-ms-fill-lower {
+  background: var(--range-background);
+}
+input[type="range"]:focus::-ms-fill-upper {
+  background: var(--range-background);
+}
+
+.container {
+  background-color: var(--soft-background-color);
+  border: none;
+  padding: 4px;
+  font-size: inherit;
+  border-radius: var(--border-radius-default);
+  width: 100%;
+  border: 1px solid var(--primary-color-10);
+  transition: outline var(--transition-quick);
+  height: var(--input-height);
+}
+
+.container.error {
+  border: 1px solid var(--text-color-error);
+}

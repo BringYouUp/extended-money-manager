@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-family);
   color-scheme: light dark;
   color: var(--text-color);
   /* background-color: #242424; */
@@ -7,6 +7,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.3px;
 }
 
 html,
@@ -179,4 +180,28 @@ select {
 *:after,
 *:before {
   box-sizing: border-box;
+}
+
+hr {
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--border-radius-default);
+}
+
+::-webkit-scrollbar-track {
+  border-radius: var(--border-radius-default);
+  visibility: hidden;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: var(--border-radius-default);
+  background-color: var(--hoverScrollBarBackgroundColor, red);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: rgba(0, 0, 0, 0);
 }

@@ -1,0 +1,15 @@
+import { collection, doc } from "firebase/firestore";
+import { db } from '../../../config/firebase'
+
+export const getRef = {
+  user: (uid: string) => doc(db, "users", uid),
+  accounts: (uid: string) => collection(db, "users", uid, "accounts"),
+  account: (uid: string, accountId: string) => doc(db, "users", uid, "accounts", accountId),
+  categories: (uid: string) => collection(db, "users", uid, "categories"),
+  accountsEdit: (uid: string, id: string) => doc(db, "users", uid, "accounts", id),
+  categoriesEdit: (uid: string, id: string) => doc(db, "users", uid, "categories", id),
+  transactions: (uid: string) => collection(db, "users", uid, "transactions"),
+  transactionsEdit: (uid: string, id: string) => doc(db, "users", uid, "transactions", id),
+  platform: () => collection(db, "platform"),
+  platformCurrency: () => doc(db, "platform", "currency"),
+}

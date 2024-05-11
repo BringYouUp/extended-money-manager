@@ -1,3 +1,5 @@
+import { StoreError } from "@models";
+
 export type StoreUserUser = {
   email: string;
   displayName: string;
@@ -7,18 +9,7 @@ export type StoreUserUser = {
   photoURL: string;
 }
 
-export type StoreUserError = {
-  message: string,
-  code: "auth/invalid-credential" | "unknown" | "auth/missing-email" | "auth/too-many-requests"
-}
-
 export type StoreUser = {
-  user: {
-    user: StoreUserUser,
-    error: StoreUserError,
-  }
-}
-
-export enum StoreUserAuthErrors {
-  ALREADY_USE = 'auth/email-already-in-use'
+  user: StoreUserUser,
+  error: StoreError,
 }

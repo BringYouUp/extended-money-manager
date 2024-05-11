@@ -1,6 +1,6 @@
+import { cn } from "@utils";
 import styles from "./index.module.css";
 
-import { cn } from "../../../utils";
 import { ReactNode } from "react";
 
 type Props = {
@@ -10,7 +10,12 @@ type Props = {
   children?: ReactNode;
 };
 
-const Label: React.FC<Props> = ({ htmlFor, style, className, children }) => {
+export const Label: React.FC<Props> = ({
+  htmlFor,
+  style,
+  className,
+  children,
+}) => {
   return (
     <label
       htmlFor={htmlFor}
@@ -21,5 +26,3 @@ const Label: React.FC<Props> = ({ htmlFor, style, className, children }) => {
     </label>
   );
 };
-
-export default Label;

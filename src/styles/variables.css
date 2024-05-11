@@ -1,5 +1,5 @@
 :root {
-  --bg: red;
+  --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --text-color: black;
   --text-color-90: rgba(0, 0, 0, 0.9);
   --text-color-80: rgba(0, 0, 0, 0.8);
@@ -13,7 +13,11 @@
   --text-color-white: white;
   --text-color-white-90: rgb(255, 255, 255, 0.9);
   --text-color-white-80: rgb(255, 255, 255, 0.8);
+  --text-color-white-70: rgb(255, 255, 255, 0.7);
+  --text-color-white-50: rgb(255, 255, 255, 0.5);
   --text-color-error: rgb(255, 79, 79);
+  --text-color-success: rgb(0, 211, 32);
+  --text-color-warning: rgb(255, 193, 107);
   --primary-color: rgb(18, 18, 18);
   --primary-color-90: rgba(18, 18, 18, 0.9);
   --primary-color-80: rgba(18, 18, 18, 0.8);
@@ -32,11 +36,38 @@
   --transition-default: 0.2s;
   --transition-quick: 0.1s;
   --border-radius-default: 1px;
+  --border-radius-x2: 2px;
+  --border-radius-x3: 3px;
 
   --box-shadow-default: 0px 9px 24px -3px rgba(0, 0, 0, 0.16),
     0px 4px 8px -1px rgba(0, 0, 0, 0.08);
+  --box-shadow-soft: 0px 9px 24px -3px rgba(0, 0, 0, 0.1),
+    0px 4px 8px -1px rgba(0, 0, 0, 0.04);
   --background-color: rgb(255, 255, 255);
-  --soft-background-color: rgb(248, 248, 248);
+  --border-color-default: var(--primary-color-50);
+  --border-color-soft: var(--primary-color-20);
+  --soft-background-color-rgb: 248;
+  --soft-background-color: rgb(
+    var(--soft-background-color-rgb),
+    var(--soft-background-color-rgb),
+    var(--soft-background-color-rgb)
+  );
+
+  --form-field-height: 34px;
+  --input-height: var(--form-field-height);
+  --button-height: var(--form-field-height);
+  --default-saturation-for-background: 10%;
+  --default-lightness-for-background: 40%;
+  --scrollbar-size: 4px;
+
+  --transaction-list-width: 250px;
+
+  --zIndex-drawer: 1;
+  --zIndex-toast: 2;
+
+  --padding-default: 8px;
+  --padding-x3: 24px;
+  --padding-x4: 32px;
 }
 
 .light-theme {

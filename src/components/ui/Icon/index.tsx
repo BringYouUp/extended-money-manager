@@ -1,4 +1,4 @@
-import { cn } from "../../../utils";
+import { cn } from "@utils";
 import styles from "./index.module.css";
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
   className?: string;
 };
 
-const Icon: React.FC<Props> = ({
+export const Icon: React.FC<Props> = ({
   size = 14,
   name,
   fill,
@@ -19,11 +19,12 @@ const Icon: React.FC<Props> = ({
 }) => {
   return (
     <svg
+      width={size}
+      height={size}
       style={
         {
-          "--fill": fill || "var(--text-color)",
-          width: `${size}px`,
-          height: `${size}px`,
+          "--fill": fill || "currentColor",
+          "--icon-size": `${size}px` || "24px",
           ...style,
         } as React.CSSProperties
       }
@@ -35,5 +36,3 @@ const Icon: React.FC<Props> = ({
     </svg>
   );
 };
-
-export default Icon;

@@ -1,6 +1,5 @@
+import { cn } from "@utils";
 import styles from "./index.module.css";
-
-import { cn } from "../../../utils";
 
 type Props = {
   size: number;
@@ -9,7 +8,7 @@ type Props = {
   children?: never;
 };
 
-const Spinner: React.FC<Props> = ({ size, color }) => {
+export const Spinner: React.FC<Props> = ({ size, color }) => {
   return (
     <div
       style={
@@ -22,5 +21,3 @@ const Spinner: React.FC<Props> = ({ size, color }) => {
     />
   );
 };
-
-export default Spinner;

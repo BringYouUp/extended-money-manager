@@ -1,6 +1,6 @@
+import { cn } from "@utils";
 import styles from "./index.module.css";
 
-import { cn } from "../../../utils";
 import { ReactNode } from "react";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
   children?: ReactNode;
 };
 
-const Unwrap: React.FC<Props> = ({
+export const Unwrap: React.FC<Props> = ({
   visible,
   negativeOffset,
   style,
@@ -33,5 +33,3 @@ const Unwrap: React.FC<Props> = ({
     </div>
   );
 };
-
-export default Unwrap;

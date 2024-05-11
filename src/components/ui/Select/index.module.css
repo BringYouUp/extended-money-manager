@@ -1,0 +1,34 @@
+.select {
+  background-color: var(--soft-background-color);
+  border: none;
+  padding: 4px 10px;
+  font-size: inherit;
+  border-radius: var(--border-radius-default);
+  width: 100%;
+  border: 1px solid var(--primary-color-10);
+  transition: outline var(--transition-quick);
+  height: var(--input-height);
+  cursor: pointer;
+  user-select: none;
+}
+
+.select:hover {
+  border: 1px solid var(--primary-color-20);
+}
+
+.select:active,
+.select:focus {
+  border: 1px solid var(--primary-color-30);
+}
+
+.select .placeholder {
+  color: var(--primary-color-30);
+}
+
+.preview {
+  line-height: 24px;
+}
+
+.select.error {
+  border: 1px solid var(--text-color-error);
+}

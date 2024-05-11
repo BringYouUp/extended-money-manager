@@ -1,13 +1,13 @@
+import { cn } from "@utils";
 import styles from "./index.module.css";
 
-import { cn } from "../../../utils";
 import { ReactNode } from "react";
 
 type Props = {
   full?: boolean;
-  fullW?: boolean;
-  fullH?: boolean;
-  width?: string;
+  w100?: boolean;
+  h100?: boolean;
+  width?: `${string}${"px"}`;
   height?: string;
   background?: string;
   className?: string;
@@ -16,10 +16,10 @@ type Props = {
   children?: ReactNode;
 };
 
-const Container: React.FC<Props> = ({
-  full = false,
-  fullW = false,
-  fullH = false,
+export const Container: React.FC<Props> = ({
+  full,
+  w100,
+  h100,
   width,
   height,
   background,
@@ -38,11 +38,11 @@ const Container: React.FC<Props> = ({
         } as React.CSSProperties
       }
       className={cn(
-        styles.flex,
+        styles.container,
         {
-          full: full,
-          ["full-w"]: fullW,
-          ["full-h"]: fullH,
+          full,
+          w100,
+          h100,
           [styles.background]: background,
           [styles.width]: width,
           [styles.height]: height,
@@ -54,5 +54,3 @@ const Container: React.FC<Props> = ({
     </div>
   );
 };
-
-export default Container;

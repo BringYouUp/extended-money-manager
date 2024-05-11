@@ -1,15 +1,18 @@
+import { cn } from "@utils";
 import styles from "./index.module.css";
 
-import { cn } from "../../../utils";
 import { ReactNode } from "react";
 
 type Props = {
   size?: number;
+  secondary?: boolean;
   weight?: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
   color?: string;
   block?: boolean;
   uppercase?: boolean;
   center?: boolean;
+  right?: boolean;
+  ellipsed?: boolean;
   clickable?: boolean;
   className?: string;
   style?: React.CSSProperties;
@@ -18,7 +21,7 @@ type Props = {
   onClick?: React.MouseEventHandler<HTMLSpanElement>;
 };
 
-const Text: React.FC<Props> = ({
+export const Text: React.FC<Props> = ({
   as: Wrapper = "span",
   size,
   color,
@@ -26,9 +29,12 @@ const Text: React.FC<Props> = ({
   uppercase,
   clickable,
   center,
+  right,
+  ellipsed,
   weight,
   style,
   className,
+  secondary,
   onClick,
   children,
 }) => {
@@ -47,11 +53,14 @@ const Text: React.FC<Props> = ({
         {
           [styles.block]: block,
           [styles.center]: center,
+          [styles.right]: right,
           [styles.uppercase]: uppercase,
           [styles.weight]: weight,
           [styles.color]: color,
           [styles.size]: size,
           [styles.clickable]: clickable,
+          [styles.ellipsed]: ellipsed,
+          [styles.secondary]: secondary,
         },
         className
       )}
@@ -61,5 +70,3 @@ const Text: React.FC<Props> = ({
     </Wrapper>
   );
 };
-
-export default Text;

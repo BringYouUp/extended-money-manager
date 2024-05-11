@@ -4,7 +4,7 @@ type useLoadingDataType = {
   [key: string]: any
 }
 
-const useLoading = (initialState: boolean = false, initialData: useLoadingDataType = {}) => {
+export const useLoading = (initialState: boolean = false, initialData: useLoadingDataType = {}) => {
   const loadingData = useRef<useLoadingDataType>();
 
   const [loading, setLoading] = useState<boolean>(() => {
@@ -28,5 +28,3 @@ const useLoading = (initialState: boolean = false, initialData: useLoadingDataTy
 
   return { isLoading: loading, startLoading, endLoading, loadingData }
 };
-
-export default useLoading;

@@ -1,98 +1,155 @@
+import { getRef, getStoreErrorFormat, getStoreUserFormat } from '@utils';
+import { getDoc, setDoc } from 'firebase/firestore';
+import { GotDoc, StoreUserUser } from '@models';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { auth, googleProvider, githubProvider } from '../../../config/firebase'
 
-import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
-import { USER_SLICES } from '../slices/slices';
-import { AppDispatch } from '..';
-import { getStoreUserErrorFormat, getStoreUserFormat } from '../../utils';
+import { User, UserCredential, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 
-export const userSignUpWithEmailAndPassword = (email: string, password: string) => (dispatch: AppDispatch) => {
-  return new Promise((resolve, reject) => {
-    dispatch(USER_SLICES.clearError())
+import { accountsSetAccounts, categoriesSetCategories, platformSetPlatform, transactionsSetTransactions } from '@async-actions';
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(data => {
-        console.log(`→ userSignUpWithEmailAndPassword data`, data);
+export const userSetUser = createAsyncThunk<StoreUserUser, { uid: string, user: User }>(
+  'user/userSetUser',
+  ({ uid, user }, { rejectWithValue, fulfillWithValue }) => {
+    return new Promise((resolve, reject) => {
+      const docRef = getRef.user(uid)
 
-        dispatch(USER_SLICES.setUser(getStoreUserFormat(data.user)))
-        resolve(data)
-      })
-      .catch(err => {
-        console.log(`→ error`, err);
-        dispatch(USER_SLICES.setError(getStoreUserErrorFormat(err)))
-        reject(err)
-      })
-  })
-}
+      const createProfileSnap = () => {
+        const profile = getStoreUserFormat(user)
+        return Promise.all<[unknown, StoreUserUser]>([
+          setDoc(getRef.user(uid), { profile }, { merge: true }),
+          profile
+        ])
+      }
 
-export const userSignInWithEmailAndPassword = (email: string, password: string) => (dispatch: AppDispatch) => {
-  return new Promise((resolve, reject) => {
-    dispatch(USER_SLICES.clearError())
+      getDoc(docRef)
+        .then(docSnap => {
+          if (docSnap.exists()) {
+            const data = docSnap.data() as GotDoc
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(data => {
-        console.log(`→ signInWithEmailAndPassword data`, data);
+            if (data.profile) {
+              resolve(fulfillWithValue(data.profile))
+              return
+            } else {
+              return createProfileSnap()
+            }
+          } else {
+            return createProfileSnap()
+          }
+        })
+        .then(data => {
+          if (data?.[1]) {
+            resolve(fulfillWithValue(data?.[1]))
+          }
+        })
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
+    })
+  }
+)
 
-        dispatch(USER_SLICES.setUser(getStoreUserFormat(data.user)))
-        resolve(data)
-      })
-      .catch(err => {
-        console.log(`→ error`, err);
-        dispatch(USER_SLICES.setError(getStoreUserErrorFormat(err)))
-        reject(err)
-      })
-  })
-}
+export const userSignUpWithEmailAndPassword = createAsyncThunk<unknown, { email: string, password: string }>(
+  'user/signUpWithEmailAndPassword',
+  ({ email, password }, { dispatch, rejectWithValue, fulfillWithValue }) => {
+    return new Promise((resolve, reject) => {
+      let authData: UserCredential
 
-export const userLogOut = () => (dispatch: AppDispatch) => {
-  return new Promise((resolve, reject) => {
-    signOut(auth)
-      .then(data => {
-        dispatch(USER_SLICES.clearUser())
-        resolve(data)
-      })
-      .catch(err => {
-        console.log(`→ error`, err);
-        dispatch(USER_SLICES.setError(getStoreUserErrorFormat(err)))
-        reject(err)
-      })
-  })
-}
+      dispatch(platformSetPlatform(null))
+        .then(() => createUserWithEmailAndPassword(auth, email, password))
+        .then(data => {
+          authData = data
+          dispatch(accountsSetAccounts(authData.user.uid))
+          dispatch(categoriesSetCategories(authData.user.uid))
+          dispatch(transactionsSetTransactions(authData.user.uid))
+          resolve(fulfillWithValue(authData))
+        })
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
+    })
+  }
+)
 
-export const userResetPassword = (email: string) => (dispatch: AppDispatch) => {
-  return new Promise((resolve, reject) => {
-    sendPasswordResetEmail(auth, email)
-      .then(data => {
-        console.log(`→ sendPasswordResetEmail data`, data);
-        dispatch(USER_SLICES.clearError())
-        resolve(data)
-      })
-      .catch(err => {
-        console.log(`→ error`, err);
-        dispatch(USER_SLICES.setError(getStoreUserErrorFormat(err)))
-        reject(err)
-      })
-  })
-}
+export const userSignInWithEmailAndPassword = createAsyncThunk<unknown, { email: string, password: string }>(
+  'user/signInWithEmailAndPassword',
+  ({ email, password }, { dispatch, rejectWithValue, fulfillWithValue }) => {
+    return new Promise((resolve, reject) => {
+      let authData: UserCredential
 
-export const signInWithProvider = (provider: 'google' | 'github') => (dispatch: AppDispatch) => {
-  return new Promise((resolve, reject) => {
-    const providers = {
-      google: googleProvider,
-      github: githubProvider
-    }
+      dispatch(platformSetPlatform(null))
+        .then(() => signInWithEmailAndPassword(auth, email, password))
+        .then(data => {
+          authData = data
+          dispatch(accountsSetAccounts(authData.user.uid))
+          dispatch(categoriesSetCategories(authData.user.uid))
+          dispatch(transactionsSetTransactions(authData.user.uid))
+          resolve(fulfillWithValue(authData))
+        })
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
+    })
+  }
+)
 
-    signInWithPopup(auth, providers[provider])
-      .then(data => {
-        console.log(`→ signInWithProvider data`, data);
+export const userLogOut = createAsyncThunk<unknown, void>(
+  'user/logOut',
+  (_, { rejectWithValue, fulfillWithValue }) => {
+    return new Promise((resolve, reject) => {
+      signOut(auth)
+        .then(data => resolve(fulfillWithValue(data)))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
+    })
+  }
+)
 
-        dispatch(USER_SLICES.setUser(getStoreUserFormat(data.user)))
-        resolve(data)
-      })
-      .catch(err => {
-        console.log(`→ error`, err);
-        dispatch(USER_SLICES.setError(getStoreUserErrorFormat(err)))
-        reject(err)
-      })
-  })
-}
+export const signInWithProvider = createAsyncThunk<unknown, { provider: 'google' | 'github' }>(
+  'users/signInWithProvider',
+  ({ provider }, { dispatch, rejectWithValue, fulfillWithValue }) => {
+    return new Promise((resolve, reject) => {
+      const providers = {
+        google: googleProvider,
+        github: githubProvider
+      }
 
+      let authData: UserCredential
+
+      dispatch(platformSetPlatform(null))
+        .then(() => signInWithPopup(auth, providers[provider]))
+        .then(data => {
+          authData = data
+          dispatch(userSetUser({ uid: authData.user.uid, user: authData.user }))
+        })
+        .then(() => {
+          dispatch(accountsSetAccounts(authData.user.uid))
+          dispatch(categoriesSetCategories(authData.user.uid))
+          dispatch(transactionsSetTransactions(authData.user.uid))
+          resolve(fulfillWithValue(authData))
+        })
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
+    })
+  }
+)
+
+export const userResetPassword = createAsyncThunk<unknown, { email: string }>(
+  'user/resetPassword',
+  ({ email }, { rejectWithValue, fulfillWithValue }) => {
+    return new Promise((resolve, reject) => {
+      sendPasswordResetEmail(auth, email)
+        .then(data => resolve(fulfillWithValue(data)))
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
+    })
+  }
+)
+
+export const signInAutomatically = createAsyncThunk<unknown, User>(
+  'user/signInAutomatically',
+  (data, { dispatch, rejectWithValue, fulfillWithValue }) => {
+    return new Promise((resolve, reject) => {
+      dispatch(platformSetPlatform(null))
+        .then(() => dispatch(userSetUser({ uid: data.uid, user: data })))
+        .then(() => {
+          dispatch(accountsSetAccounts(data.uid))
+          dispatch(categoriesSetCategories(data.uid))
+          dispatch(transactionsSetTransactions(data.uid))
+          resolve(fulfillWithValue(getStoreUserFormat(data)))
+        })
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
+    })
+  }
+)

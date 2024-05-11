@@ -1,19 +1,23 @@
+import { cn } from "@utils";
 import styles from "./index.module.css";
 
-import { cn } from "../../../utils";
 import { ReactNode } from "react";
 
 enum Themes {
   primary = "primary",
   outline = "outline",
+  option = "option",
   transparent = "transparent",
 }
 
 type Props = {
-  fullW?: boolean;
   disabled?: boolean;
+  rounded?: boolean;
+  centered?: boolean;
+  active?: boolean;
   theme: keyof typeof Themes;
   type?: "button" | "reset" | "submit" | undefined;
+  role?: "warning" | "success" | "error";
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   width?: string;
   className?: string;
@@ -21,14 +25,17 @@ type Props = {
   children?: ReactNode;
 };
 
-const Button: React.FC<Props> = ({
-  fullW,
+export const Button: React.FC<Props> = ({
   disabled,
+  rounded,
+  role,
   type,
   onClick,
   width,
+  active,
   style,
   theme,
+  centered = true,
   className = "",
   children,
 }) => {
@@ -43,15 +50,17 @@ const Button: React.FC<Props> = ({
       className={cn(
         styles.button,
         {
-          ["full-w"]: fullW,
           [styles.width]: width,
-          [styles.disabled]: disabled,
-          [styles.primary]: theme === Themes.primary,
-          [styles.outline]: theme === Themes.outline,
-          [styles.transparent]: theme === Themes.transparent,
+          disabled,
+          [styles.rounded]: rounded,
+          [styles[theme]]: theme,
+          [styles[role || ""]]: role,
+          [styles.active]: active,
+          [styles.centered]: centered,
         },
         className
       )}
+      disabled={disabled}
       type={type}
       onClick={onClick}
     >
@@ -59,5 +68,3 @@ const Button: React.FC<Props> = ({
     </button>
   );
 };
-
-export default Button;

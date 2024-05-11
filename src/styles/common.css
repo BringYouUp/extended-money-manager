@@ -2,6 +2,8 @@ body {
   height: 100vh;
   width: 100vw;
   font-size: 14px;
+  background-color: var(--soft-background-color);
+  color: var(--text-color);
 }
 
 #root {
@@ -9,15 +11,49 @@ body {
   width: 100%;
 }
 
+#layers {
+  position: relative;
+  z-index: 1;
+}
+
 .full {
   width: 100%;
   height: 100%;
 }
 
-.full-w {
+.w100 {
   width: 100%;
 }
 
-.full-h {
+.h100 {
   height: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-gap-8 {
+  gap: 8px;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  user-select: none;
+}
+
+.containerBlock {
+  padding: var(--padding-x3) var(--padding-x3);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.containerBlock + .containerBlock {
+  border-top: 1px solid var(--border-color-soft);
 }

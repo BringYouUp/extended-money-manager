@@ -1,35 +1,31 @@
 import {
+  userResetPassword,
+  userSignInWithEmailAndPassword,
+} from "@async-actions";
+import {
   Button,
   Flex,
-  Icon,
   Input,
   Label,
+  ProviderButtons,
   Spinner,
   Text,
   Unwrap,
-} from "../../../components";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useForm,
-  useLoading,
-} from "../../../hooks";
-import {
-  signInWithProvider,
-  userResetPassword,
-  userSignInWithEmailAndPassword,
-} from "../../../store/asyncActions";
-import { PATHS } from "../../../consts";
+} from "@components";
+import { PATHS } from "@consts";
+import { useAppDispatch, useForm, useLoading } from "@hooks";
+import { SignUpInFormFields } from "@models";
 import { useNavigate } from "react-router-dom";
+import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
-const LoginForm: React.FC = () => {
+export const LoginForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const message = useAppSelector((state) => state.user.error.message);
 
-  const { errors, onChangeForm, onSubmitForm, getValues, formRef } = useForm<
-    "email" | "password"
-  >(["email", "password"]);
+  const navigate = useNavigate();
+
+  useStoreErrorObserver("user");
+  const { errors, onChangeForm, onSubmitForm, getValues, formRef } =
+    useForm<SignUpInFormFields>({ email: "", password: "" });
 
   const { isLoading, startLoading, endLoading, loadingData } =
     useLoading(false);
@@ -37,10 +33,10 @@ const LoginForm: React.FC = () => {
   const onSuccessSubmit = () => {
     if (isLoading) return;
 
-    const [email, password] = getValues();
+    const { email, password } = getValues();
     startLoading({ submitting: true });
 
-    dispatch(userSignInWithEmailAndPassword(email, password)).finally(() =>
+    dispatch(userSignInWithEmailAndPassword({ email, password })).finally(() =>
       endLoading()
     );
   };
@@ -48,21 +44,13 @@ const LoginForm: React.FC = () => {
   const onForgotPassword = () => {
     startLoading({ forgot: true });
 
-    const [email] = getValues();
+    const { email } = getValues();
 
-    dispatch(userResetPassword(email)).finally(() => endLoading());
+    dispatch(userResetPassword({ email })).finally(() => endLoading());
   };
 
   const onNavigateToSignUp = () => {
     navigate(PATHS.SIGN_UP);
-  };
-
-  const onSignInWithGoogle = () => {
-    dispatch(signInWithProvider("google"));
-  };
-
-  const onSignInWithGithub = () => {
-    dispatch(signInWithProvider("github"));
   };
 
   const actionManager = (type: string) => () => {
@@ -74,32 +62,34 @@ const LoginForm: React.FC = () => {
         return onSuccessSubmit();
       case "onNavigateToSignUp":
         return onNavigateToSignUp();
-      case "onSignInWithGoogle":
-        return onSignInWithGoogle();
-      case "onSignInWithGithub":
-        return onSignInWithGithub();
     }
   };
 
   return (
     <form
+      autoComplete="off"
       ref={formRef}
       onChange={onChangeForm}
       onSubmit={onSubmitForm(actionManager("onSuccessSubmit"))}
-      className="full-w"
+      className="w100"
     >
-      <Flex fullW column gap={20}>
-        <Flex fullW column gap={6}>
+      <Flex w100 column gap={20}>
+        <Flex w100 column gap={6}>
           <Label htmlFor="email">Email</Label>
-          <Input id="email" name="email" placeholder="Enter email..." />
+          <Input
+            id="email"
+            name="email"
+            placeholder="Enter email..."
+            error={Boolean(errors.email)}
+          />
           <Unwrap visible={Boolean(errors.email)} negativeOffset="6px">
             <Text size={11} color="var(--text-color-error)">
               {errors.email}
             </Text>
           </Unwrap>
         </Flex>
-        <Flex fullW column gap={6}>
-          <Flex fullW justifyBetween alignCenter>
+        <Flex w100 column gap={6}>
+          <Flex w100 justifyBetween alignCenter>
             <Label htmlFor="password">Password</Label>
             <Text
               size={10}
@@ -120,6 +110,7 @@ const LoginForm: React.FC = () => {
             name="password"
             type="password"
             placeholder="Enter password..."
+            error={Boolean(errors.password)}
           />
           <Unwrap visible={Boolean(errors.password)} negativeOffset="6px">
             <Text size={11} color="var(--text-color-error)">
@@ -128,11 +119,6 @@ const LoginForm: React.FC = () => {
           </Unwrap>
         </Flex>
         <Flex column gap={8}>
-          <Unwrap visible={Boolean(message)} negativeOffset="6px">
-            <Text size={11} color="var(--text-color-error)">
-              {message}
-            </Text>
-          </Unwrap>
           <Flex column gap={12}>
             <Button type="submit" theme="primary" disabled={isLoading}>
               {isLoading && loadingData.current?.submitting && (
@@ -145,7 +131,7 @@ const LoginForm: React.FC = () => {
               theme="outline"
               disabled={isLoading}
             >
-              No account?
+              <Text uppercase>No account?</Text>
             </Button>
           </Flex>
         </Flex>
@@ -154,29 +140,10 @@ const LoginForm: React.FC = () => {
             Or
           </Text>
           <Flex center gap={12} column>
-            <Button
-              theme="outline"
-              type="button"
-              onClick={actionManager("onSignInWithGoogle")}
-              disabled={isLoading && loadingData.current?.submitting}
-            >
-              <Icon name="google" size={16} />
-              Continue with Google
-            </Button>
-            <Button
-              theme="outline"
-              type="button"
-              onClick={actionManager("onSignInWithGithub")}
-              disabled={isLoading && loadingData.current?.submitting}
-            >
-              <Icon name="github" size={16} />
-              Continue with Github
-            </Button>
+            <ProviderButtons />
           </Flex>
         </Flex>
       </Flex>
     </form>
   );
 };
-
-export default LoginForm;

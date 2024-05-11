@@ -1,0 +1,57 @@
+.toast {
+  background-color: var(--toast-bg-color-fallback);
+  padding: 12px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1),
+    0px 4px 8px -1px rgba(0, 0, 0, 0.04);
+  border-radius: var(--border-radius-default);
+  position: relative;
+  color: var(--toast-text-color-fallback);
+  z-index: 1;
+}
+
+.close {
+  opacity: 0;
+  transition: opacity var(--transition-default);
+}
+
+.toast:hover .close {
+  opacity: 1;
+}
+
+.success {
+  color: hsl(var(--toast-success-hue) 97% 3%);
+  background-color: hsl(var(--toast-success-hue) 98% 99%);
+}
+
+.error,
+.success,
+.warning {
+  background-color: var(--background-color);
+}
+
+.error:after,
+.success:after,
+.warning:after {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0.05;
+}
+
+.error:after {
+  background-color: var(--text-color-error);
+}
+
+.success:after {
+  background-color: var(--text-color-success);
+}
+
+.warning:after {
+  background-color: var(--text-color-warning);
+}
+
+.description {
+  margin-bottom: 8px;
+}

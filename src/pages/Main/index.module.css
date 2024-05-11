@@ -1,0 +1,62 @@
+.container {
+  scroll-snap-type: x mandatory;
+  padding: 0 var(--padding-x3) var(--padding-x3);
+  scroll-padding: var(--padding-x3);
+}
+
+.containerGradient::before,
+.containerGradient::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--padding-x3);
+  height: 100%;
+  z-index: 1;
+}
+
+.containerGradient::before {
+  left: 0;
+  background: linear-gradient(
+    270deg,
+    rgba(
+        var(--soft-background-color-rgb),
+        var(--soft-background-color-rgb),
+        var(--soft-background-color-rgb),
+        0
+      )
+      0%,
+    rgba(
+        var(--soft-background-color-rgb),
+        var(--soft-background-color-rgb),
+        var(--soft-background-color-rgb),
+        0.9
+      )
+      100%
+  );
+}
+
+.containerGradient::after {
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(
+        var(--soft-background-color-rgb),
+        var(--soft-background-color-rgb),
+        var(--soft-background-color-rgb),
+        0
+      )
+      0%,
+    rgba(
+        var(--soft-background-color-rgb),
+        var(--soft-background-color-rgb),
+        var(--soft-background-color-rgb),
+        0.9
+      )
+      100%
+  );
+}
+
+.containerGradient {
+  position: relative;
+}

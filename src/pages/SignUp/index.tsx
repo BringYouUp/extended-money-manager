@@ -1,14 +1,16 @@
-import { Container, Flex, Offset, Spinner, Text } from "../../components";
-import { SignUpForm } from "../../containers";
-import {
-  useAppSelector,
-  useAuthListening,
-  useAuthNavigating,
-} from "../../hooks";
-
+import { useAppSelector, useAuthListening, useAuthNavigating } from "@hooks";
 import styles from "./index.module.css";
+import { SignUpForm } from "@containers";
+import {
+  Container,
+  Flex,
+  Offset,
+  Scrollable,
+  Spinner,
+  Text,
+} from "@components";
 
-export const Component: React.FC = () => {
+export const SignUpPage: React.FC = () => {
   const isAuthLoading = useAuthListening();
 
   const { navigateToPlatform } = useAuthNavigating();
@@ -29,27 +31,34 @@ export const Component: React.FC = () => {
   }
 
   return (
-    <Flex column full center>
-      <Container full background="var(--soft-background-color)">
-        <Flex full center>
-          <Container width="300px">
-            <Container
-              fullW
-              background="var(--background-color)"
-              className={styles.container}
-            >
-              <Offset padding={[24, 16]}>
-                <Flex fullW column gap={24}>
-                  <Text uppercase as="h2" weight={400}>
-                    Sign up
-                  </Text>
-                  <SignUpForm />
-                </Flex>
-              </Offset>
-            </Container>
+    <Scrollable overlay full stableGutter>
+      <Offset
+        style={{ height: "100vh", minHeight: "480px", minWidth: "332px" }}
+        padding={[16]}
+      >
+        <Flex column full center>
+          <Container full background="var(--soft-background-color)">
+            <Flex full center>
+              <Container width="300px">
+                <Container
+                  w100
+                  background="var(--background-color)"
+                  className={styles.container}
+                >
+                  <Offset padding={[24, 16]}>
+                    <Flex w100 column gap={24}>
+                      <Text uppercase as="h2" weight={500}>
+                        Sign up
+                      </Text>
+                      <SignUpForm />
+                    </Flex>
+                  </Offset>
+                </Container>
+              </Container>
+            </Flex>
           </Container>
         </Flex>
-      </Container>
-    </Flex>
+      </Offset>
+    </Scrollable>
   );
 };

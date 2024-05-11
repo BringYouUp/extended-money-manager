@@ -1,8 +1,6 @@
 
-import { auth } from '../../config/firebase'
+import { db, auth } from '../../config/firebase'
 
 export const useFirebase = () => {
-  return { auth, user: auth.currentUser }
+  return { auth, db, user: auth.currentUser }
 }
-
-export default useFirebase

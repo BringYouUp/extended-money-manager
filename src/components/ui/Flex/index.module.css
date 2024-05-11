@@ -6,11 +6,6 @@
   flex-direction: column;
 }
 
-.full {
-  width: 100%;
-  height: 100%;
-}
-
 .center {
   align-items: center;
   justify-content: center;
@@ -26,4 +21,28 @@
 
 .alignCenter {
   align-items: center;
+}
+
+.justifyFlexEnd {
+  justify-content: flex-end;
+}
+
+.alignFlexEnd {
+  align-items: flex-end;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+.columnReverse {
+  flex-direction: column-reverse;
 }

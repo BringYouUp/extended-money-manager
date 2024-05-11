@@ -1,33 +1,49 @@
+import { cn } from "@utils";
 import styles from "./index.module.css";
 
-import { cn } from "../../../utils";
-import { ReactNode } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 
 type Props = {
   column?: boolean;
+  columnReverse?: boolean;
   full?: boolean;
-  fullW?: boolean;
-  fullH?: boolean;
+  w100?: boolean;
+  h100?: boolean;
   center?: boolean;
   justifyBetween?: boolean;
+  justifyFlexEnd?: boolean;
+  justifyCenter?: boolean;
+  alignFlexEnd?: boolean;
   alignCenter?: boolean;
-  className?: string;
   gap?: string | number;
+  wrap?: boolean;
+  flex1?: boolean;
+  className?: string;
   style?: React.CSSProperties;
+  onClick?: MouseEventHandler<HTMLDivElement>;
   children?: ReactNode;
 };
 
-const Flex: React.FC<Props> = ({
+export const Flex: React.FC<Props> = ({
   column,
+  columnReverse,
   full,
-  fullW,
-  fullH,
+  w100,
+  h100,
+  flex1,
   center,
   justifyBetween,
+  justifyCenter,
+  justifyFlexEnd,
+  alignFlexEnd,
   alignCenter,
   gap,
+  wrap,
+  onClick,
   style,
+  className,
   children,
+  ...rest
 }) => {
   return (
     <div
@@ -37,20 +53,30 @@ const Flex: React.FC<Props> = ({
           ...style,
         } as React.CSSProperties
       }
-      className={cn(styles.flex, {
-        [styles.column]: column,
-        full,
-        ["full-w"]: fullW,
-        ["full-h"]: fullH,
-        [styles.center]: center,
-        [styles.gap]: gap,
-        [styles.justifyBetween]: justifyBetween,
-        [styles.alignCenter]: alignCenter,
-      })}
+      className={cn(
+        styles.flex,
+        {
+          [styles.column]: column,
+          full,
+          w100,
+          h100,
+          [styles.flex1]: flex1,
+          [styles.center]: center,
+          [styles.gap]: gap,
+          [styles.justifyBetween]: justifyBetween,
+          [styles.alignCenter]: alignCenter,
+          [styles.justifyFlexEnd]: justifyFlexEnd,
+          [styles.alignFlexEnd]: alignFlexEnd,
+          [styles.justifyCenter]: justifyCenter,
+          [styles.columnReverse]: columnReverse,
+          [styles.wrap]: wrap,
+        },
+        className
+      )}
+      onClick={onClick}
+      {...rest}
     >
       {children}
     </div>
   );
 };
-
-export default Flex;

@@ -6,12 +6,12 @@ const cn = (...classes: CnArgument[]) => {
     if (!!currentItem && typeof currentItem === "object" && currentItem.constructor === Object) {
       Object.keys(currentItem).forEach(className => {
         if (currentItem[className as keyof CnArgumentObject]) {
-          allClasses += ` ${className}`
+          allClasses += `${allClasses && ' '}${className}`
         }
       })
       return allClasses
     } else if (typeof currentItem === 'string') {
-      return `${allClasses} ${currentItem}`
+      return `${allClasses ? allClasses + ' ' : ''}${currentItem}`
     }
 
     return allClasses

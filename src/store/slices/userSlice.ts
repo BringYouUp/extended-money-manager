@@ -1,5 +1,6 @@
+import { StoreError, StoreUserUser } from '@models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { StoreUserError, StoreUserUser } from '../../models'
+import { userSetUser, userLogOut } from '@async-actions'
 
 const initialState = {
   user: {
@@ -20,28 +21,34 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, payload: PayloadAction<StoreUserUser>) => {
-      state.user = payload.payload
-      state.error = initialState.error
-    },
-    clearUser: (state) => {
+    clear: (state) => {
       state.user = initialState.user
-    },
-    setError: (state, payload: PayloadAction<StoreUserError>) => {
-      state.error = payload.payload
-    },
-    clearError: (state) => {
-      state.error = initialState.error
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(userSetUser.fulfilled, (state, { payload }: PayloadAction<StoreUserUser>) => {
+        state.user = payload
+      })
+      .addCase(userLogOut.fulfilled, (state) => {
+        state.user = initialState.user
+      })
+      .addMatcher(
+        ({ type }) => type.startsWith('user/') && type.endsWith('pending'),
+        (state) => {
+          state.error = initialState.error
+        }
+      )
+      .addMatcher(
+        ({ type }) => type.startsWith('user/') && type.endsWith('rejected'),
+        (state, { payload }: PayloadAction<StoreError>) => {
+          state.error = payload
+        }
+      );
   }
 })
 
 
-export const {
-  setUser,
-  clearUser,
-  setError,
-  clearError,
-} = userSlice.actions;
+export const { clear } = userSlice.actions;
 
 export default userSlice.reducer;

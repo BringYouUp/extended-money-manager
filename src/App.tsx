@@ -1,26 +1,54 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 
-import { PATHS } from "./consts/paths.js";
-import { Root } from "./containers";
-import * as PAGES from "./pages";
-import { Flex, Offset, Text } from "./components/index.js";
+import { Flex, Offset, Scrollable, Text, Toasts } from "@components";
+import {
+  AccountsPage,
+  CategoriesPage,
+  LoginPage,
+  MainPage,
+  SignUpPage,
+  TransactionsPage,
+} from "@pages";
+import { PATHS } from "@consts";
+import { Root } from "@containers";
 
 const router = createBrowserRouter([
   {
+    path: PATHS.LOGIN,
+    element: <LoginPage />,
+  },
+  {
+    path: PATHS.SIGN_UP,
+    element: <SignUpPage />,
+  },
+  {
     path: PATHS.ROOT,
     element: <Root />,
+
     children: [
       {
-        path: PATHS.LOGIN,
-        element: <PAGES.LoginPage />,
+        index: true,
+        element: <MainPage />,
       },
       {
-        path: PATHS.SIGN_UP,
-        element: <PAGES.SignUp />,
+        path: PATHS.ACCOUNTS,
+        element: <AccountsPage />,
       },
       {
-        path: PATHS.ROOT,
-        element: <PAGES.Main />,
+        path: PATHS.CATEGORIES,
+        element: <CategoriesPage />,
+      },
+      {
+        path: PATHS.TRANSACTIONS,
+        element: <TransactionsPage />,
+      },
+      {
+        path: PATHS.ANY,
+        element: <Navigate to={PATHS.ROOT} />,
       },
     ],
   },
@@ -28,25 +56,30 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <Scrollable hidden full>
       <Offset
         padding={[4]}
         style={{
           position: "fixed",
           left: "0",
-          top: "o",
+          bottom: "0",
           boxShadow: "var(--box-shadow-default)",
           background: "var(--soft-background-color)",
+          zIndex: "1",
         }}
       >
-        <Flex alignCenter>
+        <Flex column gap={2} justifyCenter>
+          <Text size={8} uppercase>
+            Version {__APP_VERSION__}
+          </Text>
           <Text size={8} uppercase>
             Last build at - {__LAST_BUILD_AT__}
           </Text>
         </Flex>
       </Offset>
       <RouterProvider router={router} />
-    </>
+      <Toasts />
+    </Scrollable>
   );
 }
 
