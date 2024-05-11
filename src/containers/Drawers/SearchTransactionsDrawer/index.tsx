@@ -8,11 +8,10 @@ import {
   ModalWrapper,
   Offset,
   Scrollable,
-  Spinner,
   Text,
 } from "@components";
-import { useAppDispatch, useLoading, useOpen, useToast, useUID } from "@hooks";
-import { StoreTransactionsTransaction } from "@models";
+import { useOpen } from "@hooks";
+// import { StoreTransactionsTransaction } from "@models";
 import { useRef } from "react";
 
 type Props = {
@@ -24,15 +23,14 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
   is,
   onClose,
 }: Props) => {
-  const dispatch = useAppDispatch();
-
-  const { createToast } = useToast();
-  const { isLoading, startLoading, endLoading } = useLoading();
+  // const dispatch = useAppDispatch();
+  // const { createToast } = useToast();
+  // const { isLoading, startLoading, endLoading } = useLoading();
   const isFormChanged = useRef<boolean>(false);
 
   const [
     isOpenedConfirmDeleteModal,
-    onOpenConfirmDeleteModal,
+    // onOpenConfirmDeleteModal,
     onCloseConfirmDeleteModal,
   ] = useOpen();
 

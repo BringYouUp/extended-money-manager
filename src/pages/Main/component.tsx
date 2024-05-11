@@ -22,7 +22,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import { cn } from "@utils";
 import { useEffect } from "react";
-import { Timestamp } from "firebase/firestore";
 
 export const Component: React.FC = () => {
   const navigate = useNavigate();
