@@ -10,15 +10,34 @@ import { useAppSelector } from "@hooks";
 import styles from "./index.module.css";
 import { TRANSACTION_SELECTOR } from "@selectors";
 
-export const Transactions = () => {
+type Props = {
+  withAdd: boolean;
+} & (
+  | {
+      count: number;
+      all?: never;
+    }
+  | {
+      all: boolean;
+      count?: never;
+    }
+);
+
+export const Transactions = ({ count, all, withAdd }: Props) => {
   const transactions = useAppSelector(
     TRANSACTION_SELECTOR.visibleCategoriesSelector
   );
   const status = useAppSelector((state) => state.transactions.status);
 
   if (status === "transactions/transactionsSetTransactions/pending") {
-    return new Array(7).fill(null).map((_, index) => {
-      return <Skeleton key={index} className={styles.transaction} />;
+    return new Array(count).fill(null).map((_, index) => {
+      return (
+        <Skeleton
+          key={index}
+          style={{ height: "77px" }}
+          className={styles.transaction}
+        />
+      );
     });
   }
 
@@ -33,10 +52,10 @@ export const Transactions = () => {
 
   return (
     <>
-      {transactions.map((transaction) => (
+      {transactions.slice(0, all ? Infinity : count).map((transaction) => (
         <Transaction key={transaction.id} data={transaction} />
       ))}
-      <TransactionEmpty />
+      {withAdd ? <TransactionEmpty /> : null}
     </>
   );
 };

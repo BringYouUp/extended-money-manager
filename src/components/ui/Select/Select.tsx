@@ -103,15 +103,21 @@ export function Select<T extends object>({
       >
         <Scrollable style={{ maxHeight: "500px" }} overlay hiddenX>
           <Wrapper>
-            {items.map((item, index) => (
-              <Component
-                key={("id" in item ? item!.id : index) as Key}
-                data={item}
-                onClick={() => onClick(item)}
-                selected={selectedCallback(item)}
-                parseItem={parseItem}
-              />
-            ))}
+            {items.length ? (
+              items.map((item, index) => (
+                <Component
+                  key={("id" in item ? item!.id : index) as Key}
+                  data={item}
+                  onClick={() => onClick(item)}
+                  selected={selectedCallback(item)}
+                  parseItem={parseItem}
+                />
+              ))
+            ) : (
+              <Text onClick={onClose} clickable>
+                No data
+              </Text>
+            )}
           </Wrapper>
         </Scrollable>
       </Dropdown>

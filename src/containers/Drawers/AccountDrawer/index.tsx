@@ -5,6 +5,8 @@ import {
   Drawer,
   Flex,
   Icon,
+  Modal,
+  ModalWrapper,
   Offset,
   Scrollable,
   Spinner,
@@ -47,13 +49,19 @@ export const AccountDrawer: React.FC<Props> = ({
     onCloseTransactionDrawer,
   ] = useOpen();
 
+  const [
+    isOpenedConfirmDeleteModal,
+    onOpenConfirmDeleteModal,
+    onCloseConfirmDeleteModal,
+  ] = useOpen();
+
   const transactionDrawerTypeRef = useRef<StoreTransactionsTransactionType>();
 
-  // const onShowTransactions = () => {
-  //   console.log("→ show");
-  // };
-
   const onUpdatedeleteStatus = (newDeleteStatus: boolean) => () => {
+    if (isOpenedConfirmDeleteModal) {
+      onCloseConfirmDeleteModal();
+    }
+
     startLoading();
     dispatch(
       accountsEditAccount({
@@ -66,7 +74,7 @@ export const AccountDrawer: React.FC<Props> = ({
     )
       .then(() => {
         onClose();
-        createToast("account updated", "success");
+        createToast("account deleted", "success");
       })
       .finally(() => endLoading());
   };
@@ -165,13 +173,12 @@ export const AccountDrawer: React.FC<Props> = ({
                   </Flex>
                   {!data.deleted ? (
                     <Button
-                      role="error"
-                      centered={false}
-                      onClick={onUpdatedeleteStatus(true)}
+                      onClick={onOpenConfirmDeleteModal}
                       theme="outline"
                       disabled={isLoading}
+                      role="error"
                     >
-                      <Flex w100 gap={6} alignCenter justifyBetween>
+                      <Flex gap={6} alignCenter>
                         <Text uppercase weight={500}>
                           Delete
                         </Text>
@@ -223,6 +230,29 @@ export const AccountDrawer: React.FC<Props> = ({
           accountId: data.id,
         }}
       />
+      <Modal
+        isOpened={isOpenedConfirmDeleteModal}
+        onClose={onCloseConfirmDeleteModal}
+      >
+        <ModalWrapper>
+          <Flex column gap={24}>
+            <Flex column gap={12}>
+              <Text as="h3" uppercase>
+                Confirm
+              </Text>
+              <Text>Do you really want to delete account?</Text>
+            </Flex>
+            <Flex gap={16}>
+              <Button onClick={onUpdatedeleteStatus(true)} theme="outline">
+                Yes
+              </Button>
+              <Button onClick={onCloseConfirmDeleteModal} theme="primary">
+                No
+              </Button>
+            </Flex>
+          </Flex>
+        </ModalWrapper>
+      </Modal>
     </>
   );
 };

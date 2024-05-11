@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { getActualFormatDate, getRef, getStoreErrorFormat } from '@utils';
+import { getActualFirestoreFormatDate, getRef, getStoreErrorFormat } from '@utils';
 import { getDocs, setDoc } from 'firebase/firestore';
 import { Currencies, StorePlatformPlatform } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { currency } from '@shared';
+import { currency } from 'src/shared/utils';
 
 export const platformSetUpdatePlatformCurrency = createAsyncThunk<Currencies, null>(
   'platform/platformSetUpdatePlatformCurrency',
@@ -14,7 +14,7 @@ export const platformSetUpdatePlatformCurrency = createAsyncThunk<Currencies, nu
       let dataToReturn: Currencies
 
       currency.get().then(({ data }) => {
-        dataToReturn = { ...data, updatedAt: getActualFormatDate() }
+        dataToReturn = { ...data, updatedAt: getActualFirestoreFormatDate() }
         return setDoc(docRef, dataToReturn, { merge: true })
       })
         .then(() => resolve(fulfillWithValue(dataToReturn)))

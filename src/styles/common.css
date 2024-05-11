@@ -42,7 +42,18 @@ body {
 }
 
 .disabled {
-  /* pointer-events: none; */
+  pointer-events: none;
   opacity: 0.5;
-  cursor: not-allowed;
+  user-select: none;
+}
+
+.containerBlock {
+  padding: var(--padding-x3) var(--padding-x3);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.containerBlock + .containerBlock {
+  border-top: 1px solid var(--border-color-soft);
 }

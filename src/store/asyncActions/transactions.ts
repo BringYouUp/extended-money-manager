@@ -1,5 +1,5 @@
 import { getRef, getStoreErrorFormat } from '@utils';
-import { addDoc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { addDoc, getDoc, getDocs, limitToLast, orderBy, query, setDoc, where } from 'firebase/firestore';
 import { OmittedStoreFields, StoreAccountsAccount, StoreTransactionsTransaction, StoreTransactionsTransactions } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { accountsEditAccount } from '@async-actions';
@@ -10,7 +10,8 @@ export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTra
     return new Promise((resolve, reject) => {
       const docRef = getRef.transactions(uid)
 
-      getDocs(docRef)
+      getDocs(query(docRef, where('createdAt', "<", new Date())))
+        // getDocs(query(docRef))
         .then(docSnap => {
           if (docSnap.size) {
             const data: StoreTransactionsTransactions = []
@@ -51,12 +52,12 @@ export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTran
             return getDoc(docToAccountRef)
           }
           case 'withdraw': {
-            accountData.amount -= transaction.amount
+            accountData.amount -= (transaction.toAmount || transaction.amount)
             return
           }
           case 'income': {
             if (!withoutModyfingAccount) {
-              accountData.amount += transaction.amount
+              accountData.amount += (transaction.toAmount || transaction.amount)
             }
             return
           }
@@ -126,17 +127,17 @@ export const transactionsEditTransaction = createAsyncThunk<Partial<StoreTransac
             }
             case 'withdraw': {
               if (transaction.deleted) {
-                accountData.amount += transactionData.amount
+                accountData.amount += (transactionData.toAmount || transactionData.amount)
               } else {
-                accountData.amount -= transaction.amount - transactionData.amount
+                accountData.amount -= (transaction.toAmount || transaction.amount) - (transactionData.toAmount || transactionData.amount)
               }
               return
             }
             case 'income': {
               if (transaction.deleted) {
-                accountData.amount -= transactionData.amount
+                accountData.amount -= (transactionData.toAmount || transactionData.amount)
               } else {
-                accountData.amount += transaction.amount - transactionData.amount
+                accountData.amount += (transaction.toAmount || transaction.amount) - (transactionData.toAmount || transactionData.amount)
               }
               return
             }

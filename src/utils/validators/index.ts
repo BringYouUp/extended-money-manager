@@ -1,4 +1,5 @@
 import { FormFields, StoreAccountsAccountCurrencies, StoreCategoriesCategoryTypes, StoreTransactionsTransactionType, UseFormFields, UseFormValidator } from "@models"
+import { PLATFORM_CURRENCIES_LIST } from "src/consts/store"
 
 export const required: UseFormValidator = (value: string = "") => {
   if (!value) {
@@ -42,6 +43,7 @@ export const maxLength = (maxLength: number): UseFormValidator => (value: string
 
 export const accountAmount = (value: string = "") => {
   if (
+    !(+value) ||
     !/^[0-9]\d*?((\.|,)([1-9]\d?|\d[0-9]?))?$/.test(value)   // 1.23 || 1,23 || 1,03
   ) {
     return {
@@ -59,7 +61,7 @@ export const categoryIcon = (value: string = "") => {
 }
 
 export const accountCurrency = (value: string) => {
-  const acceptedValues: StoreAccountsAccountCurrencies[] = ['$', '€']
+  const acceptedValues: StoreAccountsAccountCurrencies[] = PLATFORM_CURRENCIES_LIST.map(item => item.value)
   if (!acceptedValues.includes(value as StoreAccountsAccountCurrencies)) {
     return {
       error: 'Please, choose currency'
@@ -86,9 +88,8 @@ export const transactionType = (value: string) => {
 }
 
 export const transactionCategoryId: UseFormValidator = (value: string = "", formNode: HTMLFormElement & FormFields<UseFormFields>) => {
-
-  if (formNode) {
-    if (formNode['is-create-transaction-after-change-account']?.checked) {
+  if (formNode?.['is-create-transaction-after-change-account']) {
+    if (formNode['is-create-transaction-after-change-account'].checked) {
       return required(value, formNode)
     }
   } else {
@@ -104,7 +105,7 @@ export const getValidatorsForField = (field: keyof UseFormFields): UseFormValida
     case 'category-name':
       return [required, noOnlyWhitespace, minLength(3), maxLength(30)]
     case 'transaction-description':
-      return []
+      return [maxLength(50)]
     case 'account-amount':
     case 'transaction-amount':
     case 'transaction-to-amount':

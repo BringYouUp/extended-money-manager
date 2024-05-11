@@ -29,6 +29,7 @@ export type TransactionFormFormFields = {
   "transaction-amount": number;
   "transaction-date": string;
   "transaction-type": StoreTransactionsTransactionType | "",
+  "transaction-to-amount": number;
 }
 
 export type TransactionTransferFormFormFields = {

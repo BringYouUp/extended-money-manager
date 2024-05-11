@@ -27,14 +27,14 @@ import {
   StoreAccountsAccount,
   TransactionTransferFormFormFields,
   TransactionFormProps,
-  StoreAccountsAccountCurrencies,
 } from "@models";
 import { ACCOUNT_SELECTOR, PLATFORM_SELECTOR } from "@selectors";
+import { getActualFirestoreFormatDate, getConvertedValue } from "@utils";
 import { ChangeEvent, useMemo } from "react";
-import { PLATFORM_CURRENCIES_CODE_MAP } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 type Props = TransactionFormProps & {
+  isFormChanged: React.MutableRefObject<boolean>;
   onClose: (...args: unknown[]) => void;
 };
 
@@ -42,6 +42,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
   data,
   initialValues,
   mode,
+  isFormChanged,
   onClose,
 }: Props) => {
   const dispatch = useAppDispatch();
@@ -101,12 +102,16 @@ export const TransactionTransferForm: React.FC<Props> = ({
       case "edit":
         fromAccount = data.accountId
           ? accounts.find((account) => account.id === data.accountId)
-          : null;
+          : accounts.find(
+              (account) => account.id === getValue("transaction-account-id")
+            );
         break;
       case "create":
         fromAccount = initialValues?.accountId
           ? accounts.find((account) => account.id === initialValues?.accountId)
-          : null;
+          : accounts.find(
+              (account) => account.id === getValue("transaction-account-id")
+            );
         break;
     }
     return [
@@ -129,21 +134,21 @@ export const TransactionTransferForm: React.FC<Props> = ({
       [K in keyof TransactionTransferFormFormFields]: TransactionTransferFormFormFields[K];
     }
   ): void {
+    if (e.target.nodeName !== "FORM" && isFormChanged !== null) {
+      isFormChanged.current = true;
+    }
+
     if (e.target.name === "transaction-amount" && e.target.value) {
       const [fromAccount, toAccount] = fromToAccount;
 
       if (fromAccount?.currency !== toAccount?.currency) {
-        setValue(
-          "transaction-to-amount",
-          `${(
-            (+values["transaction-amount"] || 0) *
-            currencies[
-              PLATFORM_CURRENCIES_CODE_MAP[
-                toAccount?.currency as StoreAccountsAccountCurrencies
-              ]
-            ]
-          ).toFixed(2)}`
-        );
+        const newValue = getConvertedValue({
+          from: fromAccount?.currency,
+          to: toAccount?.currency,
+          value: values["transaction-amount"],
+          currencies,
+        });
+        setValue("transaction-to-amount", `${newValue}`);
       } else {
         setValue("transaction-to-amount", values["transaction-amount"]);
       }
@@ -162,7 +167,9 @@ export const TransactionTransferForm: React.FC<Props> = ({
             categoryId: "",
             accountId: values["transaction-account-id"],
             amount: +values["transaction-amount"],
-            date: values["transaction-date"],
+            date: getActualFirestoreFormatDate(
+              values["transaction-date"]
+            ) as unknown as string,
             type: "transfer",
             toAccountId: values["transaction-to-account-id"],
             deleted: false,
@@ -173,7 +180,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
         })
       )
         .then(() => {
-          onClose();
+          onClose(true);
           createToast("transaction created", "success");
         })
         .finally(() => endLoading());
@@ -199,7 +206,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
         })
       )
         .then(() => {
-          onClose();
+          onClose(true);
           createToast("transaction updated", "success");
         })
         .finally(() => endLoading());
@@ -222,6 +229,25 @@ export const TransactionTransferForm: React.FC<Props> = ({
       }
     };
 
+  const appropriateAccounts: StoreAccountsAccount[] = useMemo(() => {
+    return accounts.filter((account) => {
+      switch (mode) {
+        case "create":
+          return (
+            !account.deleted ||
+            initialValues?.accountId === account.id ||
+            initialValues?.toAccountId === account.id
+          );
+        case "edit":
+          return (
+            !account.deleted ||
+            data.accountId === account.id ||
+            data.toAccountId === account.id
+          );
+      }
+    });
+  }, [mode]);
+
   return (
     <form
       autoComplete="off"
@@ -241,8 +267,15 @@ export const TransactionTransferForm: React.FC<Props> = ({
               mode="single"
               name="transaction-account-id"
               error={Boolean(errors["transaction-account-id"])}
-              items={accounts}
-              parseItem={(item) => item.name}
+              items={appropriateAccounts.filter(
+                (item) => item.id !== getValue("transaction-to-account-id")
+              )}
+              parseItem={(item) => {
+                if (item.deleted) {
+                  return `${item.name}, ${item.currency} (Deleted)`;
+                }
+                return `${item.name}, ${item.currency}`;
+              }}
               selectedCallback={(account) =>
                 getValue("transaction-account-id") === account.id
               }
@@ -251,7 +284,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               }}
               Wrapper={({ children }) => (
                 <Flex
-                  style={{ width: "264px", padding: "6px 12px 6px 16px" }}
+                  style={{ width: "264px", padding: "12px" }}
                   column
                   gap={8}
                 >
@@ -288,10 +321,15 @@ export const TransactionTransferForm: React.FC<Props> = ({
               mode="single"
               name="transaction-to-account-id"
               error={Boolean(errors["transaction-to-account-id"])}
-              items={accounts.filter(
+              items={appropriateAccounts.filter(
                 (item) => item.id !== getValue("transaction-account-id")
               )}
-              parseItem={(item) => item.name}
+              parseItem={(item) => {
+                if (item.deleted) {
+                  return `${item.name}, ${item.currency} (Deleted)`;
+                }
+                return `${item.name}, ${item.currency}`;
+              }}
               selectedCallback={(account) =>
                 getValue("transaction-to-account-id") === account.id
               }
@@ -300,7 +338,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               }}
               Wrapper={({ children }) => (
                 <Flex
-                  style={{ width: "264px", padding: "6px 12px 6px 16px" }}
+                  style={{ width: "264px", padding: "12px" }}
                   column
                   gap={8}
                 >
@@ -339,7 +377,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               error={Boolean(errors["transaction-amount"])}
               id="transaction-amount"
               name="transaction-amount"
-              placeholder="Enter transaction amount..."
+              placeholder="Enter amount"
               step="any"
             />
             <Unwrap
@@ -373,7 +411,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               error={Boolean(errors["transaction-to-amount"])}
               id="transaction-to-amount"
               name="transaction-to-amount"
-              placeholder="Enter transaction amount..."
+              placeholder="Enter amount"
               step="any"
             />
             <Unwrap

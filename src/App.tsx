@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 
 import { Flex, Offset, Scrollable, Text, Toasts } from "@components";
 import {
@@ -42,10 +46,10 @@ const router = createBrowserRouter([
         path: PATHS.TRANSACTIONS,
         element: <TransactionsPage />,
       },
-      // {
-      //   path: PATHS.ACCOUNTS,
-      //   element: <Main />,
-      // },
+      {
+        path: PATHS.ANY,
+        element: <Navigate to={PATHS.ROOT} />,
+      },
     ],
   },
 ]);
@@ -58,7 +62,7 @@ function App() {
         style={{
           position: "fixed",
           left: "0",
-          top: "0",
+          bottom: "0",
           boxShadow: "var(--box-shadow-default)",
           background: "var(--soft-background-color)",
           zIndex: "1",

@@ -39,7 +39,7 @@ const Wrap: React.FC<Props> = ({
     }
   }, [isOpened, position]);
 
-  console.log("→ RENDER", position);
+  // console.log("→ RENDER", position);
 
   return (
     <>

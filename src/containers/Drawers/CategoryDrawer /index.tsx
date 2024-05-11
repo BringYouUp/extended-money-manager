@@ -4,6 +4,8 @@ import {
   Drawer,
   Flex,
   Icon,
+  Modal,
+  ModalWrapper,
   Offset,
   Scrollable,
   Spinner,
@@ -43,7 +45,17 @@ export const CategoryDrawer: React.FC<Props> = ({
     onCloseTransactionDrawer,
   ] = useOpen();
 
+  const [
+    isOpenedConfirmDeleteModal,
+    onOpenConfirmDeleteModal,
+    onCloseConfirmDeleteModal,
+  ] = useOpen();
+
   const onUpdatedeleteStatus = (newDeleteStatus: boolean) => () => {
+    if (isOpenedConfirmDeleteModal) {
+      onCloseConfirmDeleteModal();
+    }
+
     startLoading();
     dispatch(
       categoriesEditCategory({
@@ -56,7 +68,7 @@ export const CategoryDrawer: React.FC<Props> = ({
     )
       .then(() => {
         onClose();
-        createToast("category updated", "success");
+        createToast("category deleted", "success");
       })
       .finally(() => endLoading());
   };
@@ -134,13 +146,12 @@ export const CategoryDrawer: React.FC<Props> = ({
                   </Flex>
                   {!data.deleted ? (
                     <Button
-                      role="error"
-                      centered={false}
-                      onClick={onUpdatedeleteStatus(true)}
+                      onClick={onOpenConfirmDeleteModal}
                       theme="outline"
                       disabled={isLoading}
+                      role="error"
                     >
-                      <Flex w100 gap={6} alignCenter justifyBetween>
+                      <Flex gap={6} alignCenter>
                         <Text weight={500} uppercase>
                           Delete
                         </Text>
@@ -192,6 +203,29 @@ export const CategoryDrawer: React.FC<Props> = ({
           categoryId: data.id,
         }}
       />
+      <Modal
+        isOpened={isOpenedConfirmDeleteModal}
+        onClose={onCloseConfirmDeleteModal}
+      >
+        <ModalWrapper>
+          <Flex column gap={24}>
+            <Flex column gap={12}>
+              <Text as="h3" uppercase>
+                Confirm
+              </Text>
+              <Text>Do you really want to delete category?</Text>
+            </Flex>
+            <Flex gap={16}>
+              <Button onClick={onUpdatedeleteStatus(true)} theme="outline">
+                Yes
+              </Button>
+              <Button onClick={onCloseConfirmDeleteModal} theme="primary">
+                No
+              </Button>
+            </Flex>
+          </Flex>
+        </ModalWrapper>
+      </Modal>
     </>
   );
 };

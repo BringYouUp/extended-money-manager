@@ -1,7 +1,7 @@
 .container {
   scroll-snap-type: x mandatory;
-  padding: 0 24px 26px;
-  scroll-padding: 24px;
+  padding: 0 var(--padding-x3) var(--padding-x3);
+  scroll-padding: var(--padding-x3);
 }
 
 .containerGradient::before,
@@ -10,7 +10,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 24px;
+  width: var(--padding-x3);
   height: 100%;
   z-index: 1;
 }

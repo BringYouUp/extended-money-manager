@@ -1,5 +1,8 @@
 import { Flex, Label, Select, SelectOption } from "@components";
-import { TransactionEditForm, TransactionTransferForm } from "@containers";
+import {
+  TransactionIncomeWithdrawalForm,
+  TransactionTransferForm,
+} from "@containers";
 
 import {
   StoreTransactionsTransactionType,
@@ -9,12 +12,14 @@ import { useState } from "react";
 
 type Props = {
   onClose: (...args: unknown[]) => void;
+  isFormChanged: React.MutableRefObject<boolean>;
 } & TransactionFormProps;
 
 export const TransactionForm: React.FC<Props> = ({
   data,
   initialValues,
   mode,
+  isFormChanged,
   onClose,
 }: Props) => {
   const [transactionType, setTransactionType] =
@@ -25,8 +30,6 @@ export const TransactionForm: React.FC<Props> = ({
         return initialValues?.type || null;
       }
     });
-
-  console.log(`→ transactionType`, transactionType);
 
   return (
     <Flex w100 column gap={20}>
@@ -61,7 +64,7 @@ export const TransactionForm: React.FC<Props> = ({
         </Flex>
       </Flex>
       {(transactionType === "income" || transactionType === "withdraw") && (
-        <TransactionEditForm
+        <TransactionIncomeWithdrawalForm
           mode={mode}
           onClose={onClose}
           initialValues={
@@ -69,6 +72,7 @@ export const TransactionForm: React.FC<Props> = ({
           }
           data={mode === "edit" ? data : (undefined as never)}
           transactionType={transactionType}
+          isFormChanged={isFormChanged}
         />
       )}
       {transactionType === "transfer" && (
@@ -79,6 +83,7 @@ export const TransactionForm: React.FC<Props> = ({
             mode === "create" ? initialValues : (undefined as never)
           }
           data={mode === "edit" ? data : (undefined as never)}
+          isFormChanged={isFormChanged}
         />
       )}
     </Flex>

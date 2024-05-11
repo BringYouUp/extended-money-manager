@@ -34,8 +34,9 @@ import {
   StoreCategoriesCategory,
 } from "@models";
 import { CATEGORY_SELECTOR } from "@selectors";
-import { getActualFormatDate } from "@utils";
+import { getActualFirestoreFormatDate } from "@utils";
 import { ChangeEvent, useMemo } from "react";
+import { PLATFORM_CURRENCIES_LIST } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 type Edit = {
@@ -114,7 +115,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
             categoryId,
             accountId,
             amount: Math.abs(data.amount - +values["account-amount"]),
-            date: getActualFormatDate().split("T")[0],
+            date: getActualFirestoreFormatDate() as unknown as string,
             type:
               data.amount < +values["account-amount"] ? "income" : "withdraw",
             toAccountId: "",
@@ -149,13 +150,10 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
         })
       )
         .then(() => {
-          onClose();
+          onClose(true);
           createToast("account created", "success");
         })
-        .finally(() => {
-          endLoading();
-          onClose();
-        });
+        .finally(() => endLoading());
     }
 
     if (mode === "edit") {
@@ -185,13 +183,10 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
               categoryId: values["transaction-category-id"],
             });
           }
-          onClose();
+          onClose(true);
           createToast("account updated", "success");
         })
-        .finally(() => {
-          endLoading();
-          onClose();
-        });
+        .finally(() => endLoading());
     }
   };
 
@@ -214,8 +209,6 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
   const appropriateCategories: StoreCategoriesCategory[] = useMemo(() => {
     return categories.filter((category) => category.type === "income");
   }, [categories]);
-
-  console.log(`→ getValues()`, getValues());
 
   return (
     <form
@@ -277,12 +270,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
               placeholder="Select currency..."
               name="account-currency"
               error={Boolean(errors["account-currency"])}
-              items={[
-                { name: "$", value: "$" },
-                { name: "€", value: "€" },
-                { name: "₽", value: "₽" },
-                { name: "zł", value: "zł" },
-              ]}
+              items={PLATFORM_CURRENCIES_LIST}
               parseItem={(item) => item.name}
               selectedCallback={(currency) =>
                 getValue("account-currency") === currency.value
@@ -325,8 +313,6 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
             </Text>
           </Unwrap>
         </Flex>
-
-        {/* // */}
 
         <Flex
           style={{
@@ -388,7 +374,12 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
               name="transaction-category-id"
               error={Boolean(errors["transaction-category-id"])}
               items={appropriateCategories}
-              parseItem={(item) => item.name}
+              parseItem={(item) => {
+                if (item.deleted) {
+                  return `${item.name} (Deleted)`;
+                }
+                return item.name;
+              }}
               selectedCallback={(account) =>
                 getValue("transaction-category-id") === account.id
               }
@@ -397,7 +388,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
               }}
               Wrapper={({ children }) => (
                 <Flex
-                  style={{ width: "264px", padding: "6px 12px 6px 16px" }}
+                  style={{ width: "264px", padding: "12px" }}
                   column
                   gap={8}
                 >
