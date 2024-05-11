@@ -1,5 +1,5 @@
 import { getRef, getStoreErrorFormat } from '@utils';
-import { addDoc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { addDoc, getDoc, getDocs, limitToLast, orderBy, query, setDoc, where } from 'firebase/firestore';
 import { OmittedStoreFields, StoreAccountsAccount, StoreTransactionsTransaction, StoreTransactionsTransactions } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { accountsEditAccount } from '@async-actions';
@@ -10,7 +10,8 @@ export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTra
     return new Promise((resolve, reject) => {
       const docRef = getRef.transactions(uid)
 
-      getDocs(docRef)
+      getDocs(query(docRef, where('createdAt', "<", new Date())))
+        // getDocs(query(docRef))
         .then(docSnap => {
           if (docSnap.size) {
             const data: StoreTransactionsTransactions = []

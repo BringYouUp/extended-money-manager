@@ -15,10 +15,11 @@ type Props = {
   name: string;
   error?: boolean;
   hidden?: boolean;
-  defaultValue?: string;
   style?: React.CSSProperties;
   className?: string;
   children?: never;
+  checked?: boolean;
+  defaultValue?: boolean;
 };
 
 export const Toggle: React.FC<Props> = ({
@@ -29,7 +30,7 @@ export const Toggle: React.FC<Props> = ({
   hidden,
   error,
   className,
-  defaultValue,
+  checked,
 }) => {
   return (
     <FormGroup
@@ -48,7 +49,7 @@ export const Toggle: React.FC<Props> = ({
     >
       <label className={cn("flex", "w100", "h100")} htmlFor={name}>
         <input
-          defaultValue={defaultValue}
+          checked={checked}
           type="checkbox"
           className={cn(styles.hidden)}
           name={name}

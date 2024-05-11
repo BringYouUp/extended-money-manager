@@ -8,3 +8,13 @@ export const PLATFORM_CURRENCIES_CODE_MAP: {
   '₽': CurrenciesEnum.RUB,
   'zł': CurrenciesEnum.PLN
 }
+
+export const PLATFORM_CURRENCIES_LIST: {
+  name: StoreAccountsAccountCurrencies;
+  value: StoreAccountsAccountCurrencies;
+}[] = [
+    { name: "$", value: "$" },
+    { name: "€", value: "€" },
+    { name: "₽", value: "₽" },
+    { name: "zł", value: "zł" },
+  ]

@@ -45,6 +45,7 @@
     0px 4px 8px -1px rgba(0, 0, 0, 0.04);
   --background-color: rgb(255, 255, 255);
   --border-color-default: var(--primary-color-50);
+  --border-color-soft: var(--primary-color-20);
   --soft-background-color-rgb: 248;
   --soft-background-color: rgb(
     var(--soft-background-color-rgb),
@@ -59,10 +60,14 @@
   --default-lightness-for-background: 40%;
   --scrollbar-size: 4px;
 
-  --transaction-list-width: 275px;
+  --transaction-list-width: 250px;
 
   --zIndex-drawer: 1;
   --zIndex-toast: 2;
+
+  --padding-default: 8px;
+  --padding-x3: 24px;
+  --padding-x4: 32px;
 }
 
 .light-theme {

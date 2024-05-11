@@ -31,7 +31,7 @@ import {
   StoreTransactionsTransactionType,
   TransactionFormProps,
 } from "@models";
-import { getConvertedValue } from "@utils";
+import { getActualFirestoreFormatDate, getConvertedValue } from "@utils";
 import { ChangeEvent, useEffect, useMemo } from "react";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 import {
@@ -57,11 +57,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
   const dispatch = useAppDispatch();
 
   const accounts = useAppSelector(ACCOUNT_SELECTOR.allAccountsSelector);
-
-  const categories = useAppSelector(
-    CATEGORY_SELECTOR.visibleCategoriesSelector
-  );
-
+  const categories = useAppSelector(CATEGORY_SELECTOR.allCategoriesSelector);
   const currencies = useAppSelector(PLATFORM_SELECTOR.currencies);
 
   const uid = useUID();
@@ -123,6 +119,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
     if (e.target.nodeName !== "FORM" && isFormChanged !== null) {
       isFormChanged.current = true;
     }
+
     if (e.target.name === "transaction-amount" && e.target.value) {
       const [fromCategory, toAccount] = fromCategoryToAccount;
 
@@ -153,7 +150,9 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
             categoryId: values["transaction-category-id"],
             accountId: values["transaction-account-id"],
             amount: +values["transaction-amount"],
-            date: values["transaction-date"],
+            date: getActualFirestoreFormatDate(
+              values["transaction-date"]
+            ) as unknown as string,
             type: values[
               "transaction-type"
             ] as StoreTransactionsTransactionType,
@@ -216,8 +215,32 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
     };
 
   const appropriateCategories: StoreCategoriesCategory[] = useMemo(() => {
-    return categories.filter((category) => category.type === transactionType);
-  }, [transactionType]);
+    return categories.filter((category) => {
+      switch (mode) {
+        case "create":
+          return (
+            category.type === transactionType &&
+            (!category.deleted || initialValues?.categoryId === category.id)
+          );
+        case "edit":
+          return (
+            category.type === transactionType &&
+            (!category.deleted || data.categoryId === category.id)
+          );
+      }
+    });
+  }, [mode, transactionType]);
+
+  const appropriateAccounts: StoreAccountsAccount[] = useMemo(() => {
+    return accounts.filter((account) => {
+      switch (mode) {
+        case "create":
+          return !account.deleted || initialValues?.accountId === account.id;
+        case "edit":
+          return !account.deleted || data.accountId === account.id;
+      }
+    });
+  }, [mode, transactionType]);
 
   useEffect(() => {
     return () => {
@@ -239,14 +262,18 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
       case "edit":
         fromCategory = data.categoryId
           ? categories.find((category) => category.id === data.categoryId)
-          : null;
+          : categories.find(
+              (category) => category.id === getValue("transaction-category-id")
+            );
         break;
       case "create":
         fromCategory = initialValues?.categoryId
           ? categories.find(
               (category) => category.id === initialValues?.categoryId
             )
-          : null;
+          : categories.find(
+              (category) => category.id === getValue("transaction-category-id")
+            );
         break;
     }
     return [
@@ -282,7 +309,12 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
               name="transaction-category-id"
               error={Boolean(errors["transaction-category-id"])}
               items={appropriateCategories}
-              parseItem={(item) => `${item.name}, ${item.currency}`}
+              parseItem={(item) => {
+                if (item.deleted) {
+                  return `${item.name}, ${item.currency} (Deleted)`;
+                }
+                return `${item.name}, ${item.currency}`;
+              }}
               selectedCallback={(account) =>
                 getValue("transaction-category-id") === account.id
               }
@@ -291,7 +323,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
               }}
               Wrapper={({ children }) => (
                 <Flex
-                  style={{ width: "264px", padding: "6px 12px 6px 16px" }}
+                  style={{ width: "264px", padding: "12px" }}
                   column
                   gap={8}
                 >
@@ -328,8 +360,13 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
               mode="single"
               name="transaction-account-id"
               error={Boolean(errors["transaction-account-id"])}
-              items={accounts}
-              parseItem={(item) => `${item.name}, ${item.currency}`}
+              items={appropriateAccounts}
+              parseItem={(item) => {
+                if (item.deleted) {
+                  return `${item.name}, ${item.currency} (Deleted)`;
+                }
+                return `${item.name}, ${item.currency}`;
+              }}
               selectedCallback={(account) =>
                 getValue("transaction-account-id") === account.id
               }
@@ -338,7 +375,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
               }}
               Wrapper={({ children }) => (
                 <Flex
-                  style={{ width: "264px", padding: "6px 12px 6px 16px" }}
+                  style={{ width: "264px", padding: "12px" }}
                   column
                   gap={8}
                 >
@@ -379,7 +416,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
               error={Boolean(errors["transaction-amount"])}
               id="transaction-amount"
               name="transaction-amount"
-              placeholder="Enter transaction amount..."
+              placeholder="Enter amount"
               step="any"
             />
             <Unwrap
@@ -416,7 +453,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
               error={Boolean(errors["transaction-to-amount"])}
               id="transaction-to-amount"
               name="transaction-to-amount"
-              placeholder="Enter transaction amount..."
+              placeholder="Enter amount"
               step="any"
             />
             <Unwrap

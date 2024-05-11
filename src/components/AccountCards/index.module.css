@@ -24,13 +24,22 @@
   background: black;
 }
 
+.account.selected {
+  opacity: 0.5;
+}
+
 .account.deleted {
-  opacity: 0.33;
+  opacity: 0.15;
   filter: saturate(0);
 }
 
-.account.selected {
-  opacity: 0.33;
+.account.selected:hover {
+  transform: revert;
+}
+
+.account.selected:active {
+  pointer-events: none;
+  transform: revert;
 }
 
 .container {

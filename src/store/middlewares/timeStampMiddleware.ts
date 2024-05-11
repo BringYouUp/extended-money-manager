@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 import { Action, Middleware, Dispatch, UnknownAction } from "@reduxjs/toolkit";
-import { getActualFormatDate } from "@utils";
+import { getActualFirestoreFormatDate } from "@utils";
 
 const dic = {
   "accounts/accountsEditAccount/pending": "account",
@@ -19,13 +19,13 @@ export const timeStampMiddleware: Middleware<unknown, unknown, Dispatch<UnknownA
       switch (action.type) {
         case 'accounts/accountsEditAccount/pending':
         case 'categories/categoriesEditCategory/pending':
-          action.meta.arg[dic[action.type]].updatedAt = getActualFormatDate()
+          action.meta.arg[dic[action.type]].updatedAt = getActualFirestoreFormatDate()
           break
         case 'accounts/accountsAddAccount/pending':
         case 'categories/categoriesAddCategory/pending':
         case 'transactions/transactionsAddTransaction/pending':
-          action.meta.arg[dic[action.type]].createdAt = getActualFormatDate()
-          action.meta.arg[dic[action.type]].updatedAt = getActualFormatDate()
+          action.meta.arg[dic[action.type]].createdAt = getActualFirestoreFormatDate()
+          action.meta.arg[dic[action.type]].updatedAt = getActualFirestoreFormatDate()
           break
       }
       return (next(action))

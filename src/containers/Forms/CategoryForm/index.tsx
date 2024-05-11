@@ -32,6 +32,7 @@ import {
   StoreCategoryIcon,
 } from "@models";
 import { ChangeEvent } from "react";
+import { PLATFORM_CURRENCIES_LIST } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 type Props = (
@@ -240,12 +241,7 @@ export const CategoryForm: React.FC<Props> = ({
               placeholder="Select currency..."
               name="category-currency"
               error={Boolean(errors["category-currency"])}
-              items={[
-                { name: "$", value: "$" },
-                { name: "€", value: "€" },
-                { name: "₽", value: "₽" },
-                { name: "zł", value: "zł" },
-              ]}
+              items={PLATFORM_CURRENCIES_LIST}
               parseItem={(item) => item.name}
               selectedCallback={(currency) =>
                 getValue("category-currency") === currency.value

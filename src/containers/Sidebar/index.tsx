@@ -48,7 +48,7 @@ export const Sidebar: React.FC = () => {
         onClose();
       }
     };
-  }, [location.pathname]);
+  }, [isOpened, location.pathname]);
 
   return (
     <>
@@ -90,7 +90,7 @@ export const Sidebar: React.FC = () => {
               </Flex>
               {SIDEBAR_PATHS.map((path) => {
                 return (
-                  <NavLink to={path}>
+                  <NavLink key={path} to={path}>
                     <Button
                       centered={false}
                       style={{ width: "100%" }}

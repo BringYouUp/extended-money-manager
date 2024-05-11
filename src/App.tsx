@@ -62,7 +62,7 @@ function App() {
         style={{
           position: "fixed",
           left: "0",
-          top: "0",
+          bottom: "0",
           boxShadow: "var(--box-shadow-default)",
           background: "var(--soft-background-color)",
           zIndex: "1",

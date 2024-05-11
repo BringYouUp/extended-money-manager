@@ -6,7 +6,6 @@ import {
   Flex,
   Grid,
   Icon,
-  Offset,
   Scrollable,
   Text,
   Transactions,
@@ -22,6 +21,8 @@ import {
 } from "@containers";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@utils";
+import { useEffect } from "react";
+import { Timestamp } from "firebase/firestore";
 
 export const Component: React.FC = () => {
   const navigate = useNavigate();
@@ -50,129 +51,103 @@ export const Component: React.FC = () => {
       navigate(page);
     };
 
-  const onCurrency = () => {
-    return;
-  };
+  useEffect(() => {}, []);
 
   return (
     <>
       <Flex full column>
-        <Offset padding={[24, 0, 24]}>
-          <Flex column gap={16}>
-            <Flex column gap={20}>
-              <Offset padding={[0, 24]}>
-                <Flex alignCenter justifyBetween>
-                  <Text color="var(--text-color-70)" as="h2" uppercase>
-                    <Flex alignCenter gap={10}>
-                      <Icon size={24} name="bank-card" />
-                      Accounts
-                      <Button
-                        theme="transparent"
-                        rounded
-                        onClick={onOpenEditAccountDrawer}
-                      >
-                        <Icon
-                          name="plus"
-                          size={24}
-                          fill="var(--text-color-40)"
-                        />
-                      </Button>
-                    </Flex>
-                  </Text>
-                  <Text onClick={onNavigate("accounts")} clickable secondary>
-                    See all
-                  </Text>
-                </Flex>
-              </Offset>
-              <Flex center className={styles.containerGradient}>
-                <Scrollable
-                  none
-                  scroll
-                  style={{ display: "flex" }}
-                  className={cn(styles.container, "w100")}
-                >
-                  <Flex gap={12}>
-                    <AccountCards />
-                  </Flex>
-                </Scrollable>
-              </Flex>
-            </Flex>
-
-            <Flex column gap={20}>
-              <Offset padding={[0, 24]}>
-                <Flex alignCenter justifyBetween>
-                  <Text color="var(--text-color-70)" as="h2" uppercase>
-                    <Flex alignCenter gap={10}>
-                      <Icon size={24} name="category" />
-                      Categories
-                      <Button
-                        theme="transparent"
-                        rounded
-                        onClick={onOpenCategoryDrawer}
-                      >
-                        <Icon
-                          name="plus"
-                          size={24}
-                          fill="var(--text-color-40)"
-                        />
-                      </Button>
-                    </Flex>
-                  </Text>
-                  <Text onClick={onNavigate("categories")} clickable secondary>
-                    See all
-                  </Text>
-                </Flex>
-              </Offset>
-              <Flex className={styles.containerGradient}>
-                <Flex wrap gap={12} className={styles.container}>
-                  <Categories />
-                </Flex>
-              </Flex>
-            </Flex>
-
-            <Flex column gap={20}>
-              <Offset padding={[0, 24]}>
-                <Flex alignCenter justifyBetween>
-                  <Text color="var(--text-color-70)" as="h2" uppercase>
-                    <Flex alignCenter gap={10}>
-                      <Icon size={24} name="list" />
-                      Transactions
-                      <Button
-                        theme="transparent"
-                        rounded
-                        onClick={onOpenTransactionDrawer}
-                      >
-                        <Icon
-                          name="plus"
-                          size={24}
-                          fill="var(--text-color-40)"
-                        />
-                      </Button>
-                    </Flex>
-                  </Text>
-                  <Text
-                    onClick={onNavigate("transactions")}
-                    clickable
-                    secondary
+        <Flex column gap={0}>
+          <Flex className={cn("containerBlock")}>
+            <Flex alignCenter justifyBetween>
+              <Text color="var(--text-color-70)" as="h2" uppercase>
+                <Flex alignCenter gap={10}>
+                  <Icon size={24} name="bank-card" />
+                  Accounts
+                  <Button
+                    theme="transparent"
+                    rounded
+                    onClick={onOpenEditAccountDrawer}
                   >
-                    See all
-                  </Text>
+                    <Icon name="plus" size={24} fill="var(--text-color-40)" />
+                  </Button>
                 </Flex>
-              </Offset>
-              <Flex className={styles.containerGradient}>
-                <Grid.Wrap
-                  templateColumns="repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)"
-                  gap={12}
-                  className={cn(styles.container, "w100")}
-                >
-                  <Transactions />
-                </Grid.Wrap>
+              </Text>
+              <Text onClick={onNavigate("accounts")} clickable secondary>
+                See all
+              </Text>
+            </Flex>
+
+            <Flex center className={styles.containerGradient}>
+              <Scrollable
+                none
+                scroll
+                style={{ display: "flex" }}
+                className={cn(styles.container, "w100")}
+              >
+                <Flex gap={12}>
+                  <AccountCards />
+                </Flex>
+              </Scrollable>
+            </Flex>
+          </Flex>
+
+          <Flex className={cn("containerBlock")}>
+            <Flex alignCenter justifyBetween>
+              <Text color="var(--text-color-70)" as="h2" uppercase>
+                <Flex alignCenter gap={10}>
+                  <Icon size={24} name="category" />
+                  Categories
+                  <Button
+                    theme="transparent"
+                    rounded
+                    onClick={onOpenCategoryDrawer}
+                  >
+                    <Icon name="plus" size={24} fill="var(--text-color-40)" />
+                  </Button>
+                </Flex>
+              </Text>
+              <Text onClick={onNavigate("categories")} clickable secondary>
+                See all
+              </Text>
+            </Flex>
+
+            <Flex>
+              <Flex wrap gap={12}>
+                <Categories />
               </Flex>
             </Flex>
           </Flex>
-          <button onClick={onLogout}>logout</button>
-          <button onClick={onCurrency}>currency</button>
-        </Offset>
+
+          <Flex className={cn("containerBlock")}>
+            <Flex alignCenter justifyBetween>
+              <Text color="var(--text-color-70)" as="h2" uppercase>
+                <Flex alignCenter gap={10}>
+                  <Icon size={24} name="list" />
+                  Transactions
+                  <Button
+                    theme="transparent"
+                    rounded
+                    onClick={onOpenTransactionDrawer}
+                  >
+                    <Icon name="plus" size={24} fill="var(--text-color-40)" />
+                  </Button>
+                </Flex>
+              </Text>
+              <Text onClick={onNavigate("transactions")} clickable secondary>
+                See all
+              </Text>
+            </Flex>
+
+            <Grid.Wrap
+              templateColumns="repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)"
+              gap={12}
+              className={cn("w100")}
+            >
+              <Transactions withAdd={true} count={7} />
+            </Grid.Wrap>
+          </Flex>
+        </Flex>
+        <button onClick={onLogout}>logout</button>
       </Flex>
       <EditAccountDrawer
         mode="create"
