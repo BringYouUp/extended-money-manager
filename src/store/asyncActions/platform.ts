@@ -14,7 +14,7 @@ export const platformSetUpdatePlatformCurrency = createAsyncThunk<Currencies, nu
       let dataToReturn: Currencies
 
       currency.get().then(({ data }) => {
-        dataToReturn = { ...data, updatedAt: getActualFirestoreFormatDate() }
+        dataToReturn = { ...data, updatedAt: getActualFirestoreFormatDate() as unknown as string }
         return setDoc(docRef, dataToReturn, { merge: true })
       })
         .then(() => resolve(fulfillWithValue(dataToReturn)))
