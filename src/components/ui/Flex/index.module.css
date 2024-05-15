@@ -46,3 +46,7 @@
 .columnReverse {
   flex-direction: column-reverse;
 }
+
+.alignStart {
+  align-items: flex-start;
+}

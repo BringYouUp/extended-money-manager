@@ -8,7 +8,7 @@ export const getActualFirestoreFormatDate = (date?: string): Timestamp => {
 
 export const toSerializeActualFirestoreFormatDate = <T extends {
   updatedAt: Timestamp | string,
-  createdAt: Timestamp | string,
+  createdAt?: Timestamp | string,
   date?: Timestamp | string,
 }>(data: T) => {
   if (data.date instanceof Timestamp) {
@@ -26,7 +26,7 @@ export const toSerializeActualFirestoreFormatDate = <T extends {
 
 export const getStoreErrorFormat = (err: FirebaseError): StoreError => {
   return {
-    code: err.code,
+    code: err?.code,
     message: err.message.replace('Firebase: Error ', '').replace(/(\(|\)\.)/g, '')
   }
 }

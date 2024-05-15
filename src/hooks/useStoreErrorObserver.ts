@@ -7,8 +7,8 @@ export const useStoreErrorObserver = (key: Exclude<keyof RootState, 'toast'>) =>
   const { createToast } = useToast();
 
   useEffect(() => {
-    if (error.code) {
+    if (error && error.code) {
       createToast(error.code, "error", error.message);
     }
-  }, [error.code]);
+  }, [error?.code]);
 };

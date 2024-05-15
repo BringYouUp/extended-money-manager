@@ -17,10 +17,8 @@ export type StoreTransactionsTransaction = {
   toAmount?: number
 }
 
-export type StoreTransactionsTransactions = StoreTransactionsTransaction[]
-
 export type StoreTransactions = {
-  transactions: StoreTransactionsTransactions,
+  transactions: StoreTransactionsTransaction[],
   error: StoreError,
   status: null | string
 }

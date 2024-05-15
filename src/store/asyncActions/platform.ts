@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { getActualFirestoreFormatDate, getRef, getStoreErrorFormat } from '@utils';
+import { getActualFirestoreFormatDate, getRef, getStoreErrorFormat, toSerializeActualFirestoreFormatDate } from '@utils';
 import { getDocs, setDoc } from 'firebase/firestore';
 import { Currencies, StorePlatformPlatform } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
@@ -41,7 +41,9 @@ export const platformSetPlatform = createAsyncThunk<StorePlatformPlatform, null>
 
             if (doc.id === 'currency') {
               if (docData.updatedAt) {
-                const getDay = (data: string) => data.split('T')[0].match(/\d*$/g)?.[0]
+                const getDay = (data: string): string => data.split('T')[0].match(/\d*$/g)?.[0] || '';
+
+                toSerializeActualFirestoreFormatDate<Currencies>(docData as Currencies)
                 const isNeedUpdateCurrency = getDay(docData.updatedAt) !== getDay(new Date().toISOString())
 
                 if (isNeedUpdateCurrency) {

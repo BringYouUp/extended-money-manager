@@ -1,20 +1,48 @@
-import { getRef, getStoreErrorFormat } from '@utils';
-import { addDoc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
-import { OmittedStoreFields, StoreAccountsAccount, StoreTransactionsTransaction, StoreTransactionsTransactions } from '@models';
+import { generateTransactionsQuery, getRef, getStoreErrorFormat } from '@utils';
+import { addDoc, getDoc, getDocs, query, setDoc } from 'firebase/firestore';
+import { OmittedStoreFields, FilterModel, StoreAccountsAccount, StoreTransactionsTransaction } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { accountsEditAccount } from '@async-actions';
 
-export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTransactions, string>(
+export const transactionsGetFilteredTransactions = createAsyncThunk<StoreTransactionsTransaction[], { uid: string, filter: FilterModel }>(
+  'transactions/transactionsGetFilteredTransactions',
+  ({ uid, filter }, { rejectWithValue, fulfillWithValue }) => {
+    return new Promise((resolve, reject) => {
+      const docRef = getRef.transactions(uid)
+
+      const generatedQuery = generateTransactionsQuery(filter)
+      console.log(`→ generatedQuery`, generatedQuery);
+
+      getDocs(query(docRef, ...generatedQuery))
+        .then(docSnap => {
+          if (docSnap.size) {
+            const data: StoreTransactionsTransaction[] = []
+            docSnap.forEach(doc => {
+              data.push({
+                ...doc.data() as StoreTransactionsTransaction,
+                id: doc.id,
+              })
+            })
+            resolve(fulfillWithValue(data))
+          } else {
+            resolve(fulfillWithValue([]))
+          }
+        })
+        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
+    })
+  }
+)
+
+export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTransaction[], string>(
   'transactions/transactionsSetTransactions',
   (uid, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
       const docRef = getRef.transactions(uid)
 
-      getDocs(query(docRef, where('createdAt', "<", new Date())))
-        // getDocs(query(docRef))
+      getDocs(query(docRef))
         .then(docSnap => {
           if (docSnap.size) {
-            const data: StoreTransactionsTransactions = []
+            const data: StoreTransactionsTransaction[] = []
             docSnap.forEach(doc => {
               data.push({
                 ...doc.data() as StoreTransactionsTransaction,
@@ -29,7 +57,6 @@ export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTra
         .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
-
 )
 
 export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTransaction, { transaction: Omit<StoreTransactionsTransaction, OmittedStoreFields>, uid: string, withoutModyfingAccount?: boolean }>(
