@@ -15,6 +15,7 @@ type Props = {
   justifyCenter?: boolean;
   alignFlexEnd?: boolean;
   alignCenter?: boolean;
+  alignStart?: boolean;
   gap?: string | number;
   wrap?: boolean;
   flex1?: boolean;
@@ -36,6 +37,7 @@ export const Flex: React.FC<Props> = ({
   justifyCenter,
   justifyFlexEnd,
   alignFlexEnd,
+  alignStart,
   alignCenter,
   gap,
   wrap,
@@ -65,6 +67,7 @@ export const Flex: React.FC<Props> = ({
           [styles.gap]: gap,
           [styles.justifyBetween]: justifyBetween,
           [styles.alignCenter]: alignCenter,
+          [styles.alignStart]: alignStart,
           [styles.justifyFlexEnd]: justifyFlexEnd,
           [styles.alignFlexEnd]: alignFlexEnd,
           [styles.justifyCenter]: justifyCenter,

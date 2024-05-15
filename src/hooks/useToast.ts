@@ -18,5 +18,6 @@ export const useToast = () => {
     setTimeout(() => dispatch(TOAST_SLICE.removeToast(toast)), 3000)
   }, [])
 
+
   return { createToast }
 };

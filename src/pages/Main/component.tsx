@@ -10,7 +10,7 @@ import {
   Text,
   Transactions,
 } from "@components";
-import { useAppDispatch, useOpen } from "@hooks";
+import { useAppDispatch, useAppSelector, useOpen } from "@hooks";
 
 import styles from "./index.module.css";
 
@@ -22,6 +22,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { cn } from "@utils";
 import { useEffect } from "react";
+import { TRANSACTION_SELECTOR } from "@selectors";
 
 export const Component: React.FC = () => {
   const navigate = useNavigate();
@@ -40,6 +41,10 @@ export const Component: React.FC = () => {
   ] = useOpen();
 
   const dispatch = useAppDispatch();
+
+  const transactions = useAppSelector(
+    TRANSACTION_SELECTOR.visibleTransactionsSelector
+  );
 
   const onLogout = () => {
     dispatch(userLogOut());
@@ -142,7 +147,12 @@ export const Component: React.FC = () => {
               gap={12}
               className={cn("w100")}
             >
-              <Transactions withAdd={true} count={7} />
+              <Transactions
+                transactions={transactions}
+                withAdd={true}
+                countTransactions={7}
+                countPlaceholders={7}
+              />
             </Grid.Wrap>
           </Flex>
         </Flex>

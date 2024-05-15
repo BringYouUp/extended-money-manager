@@ -46,7 +46,7 @@ export const Toast = ({ style, className, data, onClose }: Props) => {
         </Flex>
       </Container>
       <Flex w100 column gap={4}>
-        <Flex alignCenter gap={8} justifyBetween>
+        <Flex alignStart gap={8} justifyBetween>
           <Text uppercase as="h4" weight={500}>
             {data.title}
           </Text>
@@ -56,7 +56,7 @@ export const Toast = ({ style, className, data, onClose }: Props) => {
             rounded
             onClick={onClose}
           >
-            <Icon name="close" />
+            <Icon size={16} name="close" />
           </Button>
         </Flex>
         {data.description && (

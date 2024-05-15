@@ -14,7 +14,7 @@ import {
   SelectOption,
   Spinner,
   Text,
-  Toggle,
+  RadioGroup,
   Unwrap,
 } from "@components";
 
@@ -28,14 +28,13 @@ import {
 } from "@hooks";
 import {
   AccountFormFormFields,
-  FormFields,
   StoreAccountsAccount,
   StoreAccountsAccountCurrencies,
   StoreCategoriesCategory,
 } from "@models";
 import { CATEGORY_SELECTOR } from "@selectors";
 import { getActualFirestoreFormatDate } from "@utils";
-import { ChangeEvent, useMemo } from "react";
+import { useMemo } from "react";
 import { PLATFORM_CURRENCIES_LIST } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
@@ -69,10 +68,10 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
 
   const {
     errors,
-    onChangeForm,
     onSubmitForm,
     getValues,
     getValue,
+    onChangeForm,
     setValue,
     formRef,
   } = useForm<AccountFormFormFields>(
@@ -81,7 +80,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
       "account-amount": mode === "edit" ? data.amount : 0,
       "account-name": mode === "edit" ? data.name : "",
       "account-currency": mode === "edit" ? data.currency : "$",
-      "is-create-transaction-after-change-account": true,
+      "is-create-transaction-after-change-account": "yes",
       "transaction-category-id": "",
     },
     {
@@ -90,7 +89,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
       beforeSubmit: ({ values }) => ({
         notValidateFields:
           mode === "edit" &&
-          values["is-create-transaction-after-change-account"] &&
+          values["is-create-transaction-after-change-account"] === "yes" &&
           +values["account-amount"] !== data.amount
             ? []
             : ["transaction-category-id"],
@@ -175,7 +174,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
         .then((res) => {
           if (
             mode === "edit" &&
-            values["is-create-transaction-after-change-account"] &&
+            values["is-create-transaction-after-change-account"] === "yes" &&
             +values["account-amount"] !== data.amount
           ) {
             onCreateAdditionalTransaction({
@@ -190,21 +189,13 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
     }
   };
 
-  const actionManager =
-    (type: string) =>
-    (...data: unknown[]) => {
-      if (isLoading) return;
-      switch (type) {
-        case "onSuccessSubmit":
-          return onSuccessSubmit();
-        case "onChangeForm":
-          return onChangeForm(
-            data[0] as ChangeEvent<
-              HTMLFormElement & FormFields<AccountFormFormFields>
-            >
-          );
-      }
-    };
+  const actionManager = (type: string) => () => {
+    if (isLoading) return;
+    switch (type) {
+      case "onSuccessSubmit":
+        return onSuccessSubmit();
+    }
+  };
 
   const appropriateCategories: StoreCategoriesCategory[] = useMemo(() => {
     return categories.filter((category) => category.type === "income");
@@ -214,9 +205,9 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
     <form
       autoComplete="off"
       ref={formRef}
-      onChange={actionManager("onChangeForm")}
       onSubmit={onSubmitForm(actionManager("onSuccessSubmit"))}
       className="w100"
+      onChange={onChangeForm}
     >
       <Flex w100 column gap={20}>
         <Flex w100 column gap={6}>
@@ -328,15 +319,17 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           <Label htmlFor="is-create-transaction-after-change-account">
             Create transaction?
           </Label>
-          <Toggle
-            data={{
-              checked: {
+          <RadioGroup
+            data={[
+              {
                 label: "Yes",
+                value: "yes",
               },
-              unchecked: {
+              {
                 label: "No",
+                value: "no",
               },
-            }}
+            ]}
             id="is-create-transaction-after-change-account"
             name="is-create-transaction-after-change-account"
           />
@@ -356,7 +349,8 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           style={{
             display:
               mode === "edit" &&
-              getValue("is-create-transaction-after-change-account") &&
+              getValue("is-create-transaction-after-change-account") ===
+                "yes" &&
               +getValue("account-amount") !== data.amount
                 ? "flex"
                 : "none",

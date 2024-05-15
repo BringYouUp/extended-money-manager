@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { combineReducers } from "redux";
 import * as REDUCERS from './slices/reducers'
 import * as MIDDLEWARES from './middlewares'
@@ -71,7 +70,7 @@ export const store = configureStore({
   preloadedState,
   reducer: rootReducer,
   devTools: true,
-  // @ts-ignore
+  // @ts-expect-error: TODO
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(...(Object.keys(MIDDLEWARES).reduce((acc, middleware) => { return acc.concat(MIDDLEWARES[middleware]) }, []))),
 });
 

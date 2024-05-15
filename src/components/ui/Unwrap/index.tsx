@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 type Props = {
   className?: string;
   visible: boolean;
-  negativeOffset: string;
+  negativeOffset: `${string}px`;
   style?: React.CSSProperties;
   children?: ReactNode;
 };
@@ -16,6 +16,7 @@ export const Unwrap: React.FC<Props> = ({
   negativeOffset,
   style,
   children,
+  className,
 }) => {
   return (
     <div
@@ -25,9 +26,13 @@ export const Unwrap: React.FC<Props> = ({
           ...style,
         } as React.CSSProperties
       }
-      className={cn(styles.unwrap, {
-        [styles.visible]: visible,
-      })}
+      className={cn(
+        styles.unwrap,
+        {
+          [styles.visible]: visible,
+        },
+        className
+      )}
     >
       {children}
     </div>

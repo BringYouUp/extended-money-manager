@@ -32,7 +32,7 @@ import {
   TransactionFormProps,
 } from "@models";
 import { getActualFirestoreFormatDate, getConvertedValue } from "@utils";
-import { ChangeEvent, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 import {
   ACCOUNT_SELECTOR,
@@ -70,8 +70,8 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
 
   const {
     errors,
-    onChangeForm,
     onSubmitForm,
+    onChangeForm,
     getValues,
     getValue,
     formRef,
@@ -198,21 +198,13 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
     }
   };
 
-  const actionManager =
-    (type: string) =>
-    (...data: unknown[]) => {
-      if (isLoading) return;
-      switch (type) {
-        case "onSuccessSubmit":
-          return onSuccessSubmit();
-        case "onChangeForm":
-          return onChangeForm(
-            data[0] as ChangeEvent<
-              HTMLFormElement & FormFields<TransactionFormFormFields>
-            >
-          );
-      }
-    };
+  const actionManager = (type: string) => () => {
+    if (isLoading) return;
+    switch (type) {
+      case "onSuccessSubmit":
+        return onSuccessSubmit();
+    }
+  };
 
   const appropriateCategories: StoreCategoriesCategory[] = useMemo(() => {
     return categories.filter((category) => {
@@ -293,9 +285,9 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
     <form
       autoComplete="off"
       ref={formRef}
-      onChange={actionManager("onChangeForm")}
       onSubmit={onSubmitForm(actionManager("onSuccessSubmit"))}
       className="w100"
+      onChange={onChangeForm}
     >
       <Input hidden name="transaction-type" />
       <Flex w100 column gap={20}>

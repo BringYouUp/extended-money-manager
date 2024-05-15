@@ -125,7 +125,7 @@ export const EditTransactionDrawer: React.FC<Props> = ({
                   rounded
                   onClick={() => onTryToClose(false)}
                 >
-                  <Icon name="close" />
+                  <Icon size={16} name="close" />
                 </Button>
               </Flex>
 

@@ -18,7 +18,10 @@ export type UseFormFieldsKeys =
   'transaction-date' |
   'transaction-type' |
   'is-create-transaction-after-change-account' |
-  'transaction-to-amount'
+  'transaction-to-amount' |
+  'filter-mode' |
+  'AND' |
+  'OR'
 
 export type UseFormFields = {
   [keyof in UseFormFieldsKeys]?: unknown
@@ -27,7 +30,7 @@ export type UseFormFields = {
 export type UseFormOptions<Fields extends UseFormFields> = {
   updateOnChange?: UseFormOptionsUpdateOnChange<Fields>,
   notValidateFields?: (keyof Fields)[]
-  beforeSubmit?: UseFormOptionsBeforeSubmit<Fields>
+  beforeSubmit?: UseFormOptionsBeforeSubmit<Fields>,
 }
 
 export type UseFormOptionsUpdateOnChange<Fields extends UseFormFields> = (e: React.ChangeEvent<HTMLFormElement & FormFields<Fields>>, values: { [K in keyof Fields]: Fields[K] }) => void

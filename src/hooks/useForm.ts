@@ -19,13 +19,20 @@ export const useForm = <Fields extends UseFormFields>(
       return ''
     }
 
-    switch (formRef.current?.[field].type) {
-      case 'checkbox':
-        return formRef.current?.[field]?.checked
-      default: {
-        return formRef.current?.[field]?.value
+    if (formRef.current?.[field][0]) {
+      return formRef.current[field].value
+    } else {
+      switch (formRef.current?.[field]?.type) {
+        case 'checkbox':
+        case 'radio':
+          return formRef.current?.[field]?.checked
+          return ''
+        default: {
+          return formRef.current?.[field]?.value
+        }
       }
     }
+
   }
 
   const getValues = (): { [K in keyof Fields]: Fields[K] } => {
@@ -38,22 +45,40 @@ export const useForm = <Fields extends UseFormFields>(
   }
 
   const setValue = (field: keyof Fields, value: string | boolean | number) => {
+    const handler = (e: unknown) => onChangeForm(e as React.ChangeEvent<HTMLFormElement & FormFields<Fields>>)
+    let ref: Element
     if (formRef.current) {
-      switch (formRef.current?.[field].type) {
-        case 'checkbox':
-          formRef.current[field].checked = value
-          break
-        default: {
-          formRef.current[field].value = value
-          break
-        }
+
+      if (!(field in formRef.current.elements)) {
+        console.error('There is not such a registered input !!!', field)
+        return
       }
 
-      const handler = (e: unknown) => onChangeForm(e as React.ChangeEvent<HTMLFormElement & FormFields<Fields>>)
-
-      formRef.current[field].addEventListener('change', handler)
-      formRef.current[field].dispatchEvent(new Event('change'))
-      formRef.current[field].removeEventListener('change', handler)
+      if (formRef.current?.[field][0]) {
+        formRef.current[field].value = value
+        ref = formRef.current.elements[value as number]
+      } else {
+        switch (formRef.current?.[field]?.type) {
+          case 'checkbox':
+            formRef.current[field].checked = value
+            break
+          case 'radio':
+            debugger
+            break
+          default: {
+            formRef.current[field].value = value
+            break
+          }
+        }
+        ref = formRef.current[field]
+      }
+      if (ref) {
+        ref.addEventListener('change', handler)
+        ref.dispatchEvent(new Event('change'))
+        ref.removeEventListener('change', handler)
+      } else {
+        debugger
+      }
     } else {
       console.error('SET VALUE, Form is not mounted yet !!!', field)
     }
@@ -135,26 +160,11 @@ export const useForm = <Fields extends UseFormFields>(
     if (formRef.current) {
       Object.keys(fields).forEach(key => {
         if (formRef.current?.[key]) {
-          switch (formRef.current?.[key].type) {
-            case 'checkbox':
-              formRef.current[key].checked = fields?.[key as keyof Fields]
-              break
-            default: {
-              formRef.current[key].value = fields?.[key as keyof Fields]
-              break
-            }
-          }
-          formRef?.current[key].dispatchEvent(new Event('change'))
+          setValue(key as keyof Fields, fields[key as keyof Fields] as string | boolean | number)
         } else {
           console.error('EFFECT. Every field must be registered !!!')
         }
       })
-
-      const handler = (e: unknown) => onChangeForm(e as React.ChangeEvent<HTMLFormElement & FormFields<Fields>>)
-
-      formRef.current.addEventListener('change', handler)
-      formRef.current.dispatchEvent(new Event('change'))
-      formRef.current.removeEventListener('change', handler)
     }
   }, [])
 

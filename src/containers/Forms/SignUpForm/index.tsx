@@ -21,7 +21,7 @@ export const SignUpForm: React.FC = () => {
 
   useStoreErrorObserver("user");
 
-  const { errors, onChangeForm, onSubmitForm, getValues, formRef } =
+  const { errors, onSubmitForm, onChangeForm, getValues, formRef } =
     useForm<SignUpInFormFields>({ email: "", password: "" });
 
   const { isLoading, startLoading, endLoading, loadingData } =
@@ -57,9 +57,9 @@ export const SignUpForm: React.FC = () => {
     <form
       autoComplete="off"
       ref={formRef}
-      onChange={onChangeForm}
       onSubmit={onSubmitForm(actionManager("onSuccessSubmit"))}
       className="w100"
+      onChange={onChangeForm}
     >
       <Flex w100 column gap={20}>
         <Flex w100 column gap={6}>
