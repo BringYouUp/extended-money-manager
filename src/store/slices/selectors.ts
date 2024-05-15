@@ -21,11 +21,19 @@ export const CATEGORY_SELECTOR = {
   visibleCategoriesSelector: createDraftSafeSelector(
     (state: RootState) => state.categories,
     (state: StoreCategories) => state.categories.filter(category => !category.deleted)
-  )
+  ),
+  withdrawCategoriesSelector: createDraftSafeSelector(
+    (state: RootState) => state.categories,
+    (state: StoreCategories) => state.categories.filter(category => !category.deleted && category.type === 'withdraw')
+  ),
+  incomeCategoriesSelector: createDraftSafeSelector(
+    (state: RootState) => state.categories,
+    (state: StoreCategories) => state.categories.filter(category => !category.deleted && category.type === 'income')
+  ),
 }
 
 export const TRANSACTION_SELECTOR = {
-  visibleCategoriesSelector: createDraftSafeSelector(
+  visibleTransactionsSelector: createDraftSafeSelector(
     (state: RootState) => state.transactions,
     (state: StoreTransactions) => state.transactions.filter(transaction => !transaction.deleted)
   )

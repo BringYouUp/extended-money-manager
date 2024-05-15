@@ -129,6 +129,10 @@ export const getValidatorsForField = (field: keyof UseFormFields): UseFormValida
       return [required, transactionType]
     case 'is-create-transaction-after-change-account':
       return []
+    case 'filter-mode':
+    case 'AND':
+    case 'OR':
+      return []
     default:
       console.error('THERE is NOT SUCH a FIELD')
       return []

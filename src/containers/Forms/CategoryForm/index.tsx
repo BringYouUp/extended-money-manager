@@ -25,13 +25,11 @@ import {
 } from "@hooks";
 import {
   CategoryFormFormFields,
-  FormFields,
   StoreAccountsAccountCurrencies,
   StoreCategoriesCategory,
   StoreCategoriesCategoryTypes,
   StoreCategoryIcon,
 } from "@models";
-import { ChangeEvent } from "react";
 import { PLATFORM_CURRENCIES_LIST } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
@@ -67,9 +65,9 @@ export const CategoryForm: React.FC<Props> = ({
 
   const {
     errors,
-    onChangeForm,
     onSubmitForm,
     getValues,
+    onChangeForm,
     getValue,
     formRef,
     setValue,
@@ -150,12 +148,6 @@ export const CategoryForm: React.FC<Props> = ({
       switch (type) {
         case "onSuccessSubmit":
           return onSuccessSubmit();
-        case "onChangeForm":
-          return onChangeForm(
-            data[0] as ChangeEvent<
-              HTMLFormElement & FormFields<CategoryFormFormFields>
-            >
-          );
         case "onSetIcon":
           return onSetIcon(data[0] as StoreCategoryIcon);
       }
@@ -165,9 +157,9 @@ export const CategoryForm: React.FC<Props> = ({
     <form
       autoComplete="off"
       ref={formRef}
-      onChange={actionManager("onChangeForm")}
       onSubmit={onSubmitForm(actionManager("onSuccessSubmit"))}
       className="w100"
+      onChange={onChangeForm}
     >
       <Flex w100 column gap={20}>
         <Flex w100 column gap={6}>

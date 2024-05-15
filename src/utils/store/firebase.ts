@@ -1,5 +1,6 @@
-import { collection, doc } from "firebase/firestore";
+import { QueryFieldFilterConstraint, collection, doc, or, where } from "firebase/firestore";
 import { db } from '../../../config/firebase'
+import { FilterModel } from "@models";
 
 export const getRef = {
   user: (uid: string) => doc(db, "users", uid),
@@ -12,4 +13,28 @@ export const getRef = {
   transactionsEdit: (uid: string, id: string) => doc(db, "users", uid, "transactions", id),
   platform: () => collection(db, "platform"),
   platformCurrency: () => doc(db, "platform", "currency"),
+}
+
+export const generateTransactionsQuery = (params: FilterModel): QueryFieldFilterConstraint[] => {
+  let res = []
+
+  if (params["transaction-types"].length) {
+    res.push(where('type', "in", params["transaction-types"]))
+  }
+
+  if (params.accounts.length) {
+    res.push(where('accountId', "in", params.accounts))
+  }
+
+  if (params.categories.length) {
+    res.push(where('categoryId', "in", params.categories))
+  }
+
+  if (res.length && params.mode === 'OR') {
+    res = [or(...res)]
+  }
+
+  console.log(`→ res`, res);
+
+  return res as QueryFieldFilterConstraint[]
 }

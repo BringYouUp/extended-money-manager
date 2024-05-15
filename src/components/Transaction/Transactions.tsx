@@ -8,29 +8,30 @@ import {
 
 import { useAppSelector } from "@hooks";
 import styles from "./index.module.css";
-import { TRANSACTION_SELECTOR } from "@selectors";
+import { StoreTransactionsTransaction } from "@models";
 
 type Props = {
   withAdd: boolean;
-} & (
-  | {
-      count: number;
-      all?: never;
-    }
-  | {
-      all: boolean;
-      count?: never;
-    }
-);
+  transactions: StoreTransactionsTransaction[];
+  countTransactions: number;
+  countPlaceholders: number;
+  isPending?: boolean;
+};
 
-export const Transactions = ({ count, all, withAdd }: Props) => {
-  const transactions = useAppSelector(
-    TRANSACTION_SELECTOR.visibleCategoriesSelector
-  );
+export const Transactions = ({
+  transactions,
+  countTransactions,
+  countPlaceholders,
+  withAdd,
+  isPending,
+}: Props) => {
   const status = useAppSelector((state) => state.transactions.status);
 
-  if (status === "transactions/transactionsSetTransactions/pending") {
-    return new Array(count).fill(null).map((_, index) => {
+  if (
+    isPending ||
+    status === "transactions/transactionsSetTransactions/pending"
+  ) {
+    return new Array(countPlaceholders).fill(null).map((_, index) => {
       return (
         <Skeleton
           key={index}
@@ -52,7 +53,7 @@ export const Transactions = ({ count, all, withAdd }: Props) => {
 
   return (
     <>
-      {transactions.slice(0, all ? Infinity : count).map((transaction) => (
+      {transactions.slice(0, countTransactions).map((transaction) => (
         <Transaction key={transaction.id} data={transaction} />
       ))}
       {withAdd ? <TransactionEmpty /> : null}

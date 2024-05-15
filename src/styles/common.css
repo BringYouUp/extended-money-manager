@@ -57,3 +57,7 @@ body {
 .containerBlock + .containerBlock {
   border-top: 1px solid var(--border-color-soft);
 }
+
+.containerBlock--medium {
+  padding: var(--padding-x1-5) var(--padding-x3);
+}

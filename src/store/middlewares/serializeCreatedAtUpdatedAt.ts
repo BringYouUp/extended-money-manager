@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 
-import { StoreAccountsAccount, StoreCategoriesCategory, StoreTransactionsTransaction } from "@models";
+import { Currencies, StoreAccountsAccount, StoreCategoriesCategory, StoreTransactionsTransaction } from "@models";
 import { Action, Middleware, Dispatch, UnknownAction } from "@reduxjs/toolkit";
 import { toSerializeActualFirestoreFormatDate } from "@utils";
 
@@ -29,6 +29,9 @@ export const serializeCreatedAtUpdatedAt: Middleware<unknown, unknown, Dispatch<
         case 'transactions/transactionsAddTransaction/fulfilled':
         case 'transactions/transactionsEditTransaction/fulfilled':
           toSerializeActualFirestoreFormatDate(action.payload)<StoreTransactionsTransaction>
+          break
+        case 'platform/platformSetUpdatePlatformCurrency/fulfilled':
+          toSerializeActualFirestoreFormatDate(action.payload)<Currencies>
           break
       }
       return (next(action))

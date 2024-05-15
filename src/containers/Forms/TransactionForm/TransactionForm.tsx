@@ -35,7 +35,7 @@ export const TransactionForm: React.FC<Props> = ({
     <Flex w100 column gap={20}>
       <Flex w100 column gap={6}>
         <Flex style={{ flex: 1 }} w100 column gap={6}>
-          <Label htmlFor="transaction-account-id">Type</Label>
+          <Label htmlFor="transaction-account-id">Transaction type</Label>
           <Select<{
             name: Capitalize<StoreTransactionsTransactionType>;
             value: StoreTransactionsTransactionType;

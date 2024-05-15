@@ -10,7 +10,7 @@ export type AccountFormFormFields = {
   "account-amount": number;
   "account-color": string;
   "account-currency": StoreAccountsAccountCurrencies | "";
-  "is-create-transaction-after-change-account": boolean;
+  "is-create-transaction-after-change-account": 'yes' | 'no';
   "transaction-category-id": string;
 }
 
@@ -52,3 +52,9 @@ export type TransactionFormProps = {
     data?: unknown;
     initialValues?: Partial<StoreTransactionsTransaction>;
   }
+
+export type TransactionsFilterForm = {
+  "filter-mode": 'AND' | 'OR',
+  "AND": string,
+  "OR": string,
+}

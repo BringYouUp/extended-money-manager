@@ -1,9 +1,34 @@
-import { Button, Flex, Grid, Icon, Text, Transactions } from "@components";
+import {
+  Button,
+  Flex,
+  Grid,
+  Icon,
+  Spinner,
+  Text,
+  Transactions,
+} from "@components";
 import { EditTransactionDrawer, SearchTransactionsDrawer } from "@containers";
-import { useOpen } from "@hooks";
+import { useLoading, useOpen, useSearchTransactions, useToast } from "@hooks";
+import { FilterModel, StoreTransactionsTransaction } from "@models";
 import { cn } from "@utils";
+import { useEffect, useState } from "react";
+import { TransactionsFilterBadges } from "src/pages/Transactions";
 
 const Component: React.FC = () => {
+  const { isLoading, startLoading, endLoading } = useLoading();
+  const { createToast } = useToast();
+  const {
+    filterTransactionsParams,
+    isFilterEmpty,
+    onUpdateFilterKey,
+    onUpdateFilter,
+    onResetFilter,
+    onFilter,
+  } = useSearchTransactions();
+  const [transactions, setTransactions] = useState<
+    StoreTransactionsTransaction[]
+  >([]);
+
   const [
     isTransactionDrawerOpened,
     onOpenTransactionDrawer,
@@ -15,6 +40,23 @@ const Component: React.FC = () => {
     onOpenSearchTransactionsDrawer,
     onCloseSearchTransactionsDrawer,
   ] = useOpen();
+
+  const onSearch = (data: FilterModel) => {
+    onCloseSearchTransactionsDrawer();
+    onUpdateFilter(data);
+  };
+
+  const onFilterTransactions = () => {
+    startLoading({ filtering: true });
+    onFilter()
+      .then((data) => setTransactions(data))
+      .catch((e) => createToast(e.message, "error"))
+      .finally(() => endLoading());
+  };
+
+  useEffect(() => {
+    onFilterTransactions();
+  }, [filterTransactionsParams]);
 
   return (
     <>
@@ -34,24 +76,48 @@ const Component: React.FC = () => {
             </Flex>
           </Text>
           <Flex gap={16}>
+            {!isFilterEmpty ? (
+              <Button theme="transparent" rounded onClick={onResetFilter}>
+                <Icon size={24} name="trash" />
+              </Button>
+            ) : null}
             <Button
               theme="transparent"
               rounded
               onClick={onOpenSearchTransactionsDrawer}
             >
-              <Icon name="search" size={24} />
+              {isLoading ? (
+                <Spinner size={24} />
+              ) : (
+                <Icon name="search" size={24} />
+              )}
             </Button>
           </Flex>
         </Flex>
       </Flex>
-      <Flex className={cn("containerBlock")}>Hi</Flex>
+      {!isFilterEmpty ? (
+        <Flex className={cn("containerBlock containerBlock--medium")}>
+          <Flex gap={8}>
+            <TransactionsFilterBadges
+              onRemove={onUpdateFilterKey}
+              data={filterTransactionsParams}
+            />
+          </Flex>
+        </Flex>
+      ) : null}
       <Flex className={cn("containerBlock")}>
         <Grid.Wrap
           templateColumns="repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)"
           gap={12}
           className={cn("w100")}
         >
-          <Transactions withAdd={false} all={true} />
+          <Transactions
+            isPending={isLoading}
+            transactions={transactions}
+            withAdd={false}
+            countTransactions={Infinity}
+            countPlaceholders={7}
+          />
         </Grid.Wrap>
       </Flex>
 
@@ -63,6 +129,8 @@ const Component: React.FC = () => {
       <SearchTransactionsDrawer
         is={isSearchTransactionsDrawerOpened}
         onClose={onCloseSearchTransactionsDrawer}
+        onSearch={onSearch}
+        filter={filterTransactionsParams}
       />
     </>
   );

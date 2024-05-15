@@ -106,7 +106,7 @@ export const AccountDrawer: React.FC<Props> = ({
                     </Button>
                   )}
                   <Button theme="transparent" rounded onClick={onClose}>
-                    <Icon name="close" />
+                    <Icon size={16} name="close" />
                   </Button>
                 </Flex>
               </Flex>

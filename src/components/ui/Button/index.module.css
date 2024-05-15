@@ -103,7 +103,6 @@
   padding: 0;
   width: revert;
   min-width: revert;
-  height: revert;
   max-height: revert;
 }
 
@@ -127,6 +126,11 @@
 .transparent.active::before {
   background-color: var(--primary-color-10);
   border: 1px solid var(--primary-color-20);
+}
+
+.transparent.rounded {
+  aspect-ratio: 1;
+  height: fit-content;
 }
 
 .transparent.rounded::before {
