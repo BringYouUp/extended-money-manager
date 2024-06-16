@@ -1,7 +1,5 @@
 import { Flex, Icon, Text } from "@components";
 
-import { OmittedStoreFields, StoreCategoriesCategory } from "@models";
-
 import styles from "./index.module.css";
 import { cn } from "@utils";
 import { useOpen } from "@hooks";
@@ -9,9 +7,7 @@ import { CategoryDrawer } from "@containers";
 import { MouseEvent, MouseEventHandler } from "react";
 
 type Props = {
-  data:
-    | StoreCategoriesCategory
-    | Omit<StoreCategoriesCategory, OmittedStoreFields>;
+  data: Store.Category | Omit<Store.Category, Store.OmittedDateFields>;
   style?: React.CSSProperties;
   noClick?: boolean;
   selected?: boolean;
@@ -82,7 +78,7 @@ export const Category: React.FC<Props> = ({
       <CategoryDrawer
         is={isOpened}
         onClose={onClose}
-        data={data as StoreCategoriesCategory}
+        data={data as Store.Category}
       />
     </>
   );

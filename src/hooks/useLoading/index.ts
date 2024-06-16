@@ -1,11 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useRef, useState } from "react";
 
 type useLoadingDataType = {
   [key: string]: any
 }
 
+export const INITIAL_LOADING_DATA = {}
+
 export const useLoading = (initialState: boolean = false, initialData: useLoadingDataType = {}) => {
-  const loadingData = useRef<useLoadingDataType>();
+  const loadingData = useRef<useLoadingDataType>(INITIAL_LOADING_DATA);
 
   const [loading, setLoading] = useState<boolean>(() => {
     if (initialState) {
@@ -22,7 +26,7 @@ export const useLoading = (initialState: boolean = false, initialData: useLoadin
   };
 
   const endLoading = () => {
-    loadingData.current = {};
+    loadingData.current = INITIAL_LOADING_DATA;
     setLoading(false);
   };
 

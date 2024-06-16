@@ -12,7 +12,6 @@ import {
   Text,
 } from "@components";
 import { EditCategoryDrawer, EditTransactionDrawer } from "@containers";
-import { StoreCategoriesCategory } from "@models";
 import { useAppDispatch, useLoading, useOpen, useToast, useUID } from "@hooks";
 import { Category } from "src/components/Category";
 import { categoriesEditCategory } from "@async-actions";
@@ -20,7 +19,7 @@ import { categoriesEditCategory } from "@async-actions";
 type Props = {
   is: boolean;
   onClose: () => void;
-  data: StoreCategoriesCategory;
+  data: Store.Category;
 };
 
 export const CategoryDrawer: React.FC<Props> = ({
@@ -123,7 +122,7 @@ export const CategoryDrawer: React.FC<Props> = ({
                       centered={false}
                       onClick={onOpenTransactionDrawer}
                       theme="outline"
-                      role={
+                      _role={
                         data.type === "income"
                           ? "success"
                           : data.type === "withdraw"
@@ -149,7 +148,7 @@ export const CategoryDrawer: React.FC<Props> = ({
                       onClick={onOpenConfirmDeleteModal}
                       theme="outline"
                       disabled={isLoading}
-                      role="error"
+                      _role="error"
                     >
                       <Flex gap={6} alignCenter>
                         <Text weight={500} uppercase>
@@ -164,7 +163,7 @@ export const CategoryDrawer: React.FC<Props> = ({
                     </Button>
                   ) : (
                     <Button
-                      role="error"
+                      _role="error"
                       centered={false}
                       onClick={onUpdatedeleteStatus(false)}
                       theme="outline"
@@ -191,7 +190,7 @@ export const CategoryDrawer: React.FC<Props> = ({
       <EditCategoryDrawer
         is={Boolean(isEditCategoryDrawerOpened)}
         mode="edit"
-        data={data as StoreCategoriesCategory}
+        data={data as Store.Category}
         onClose={onCloseEditCategoryDrawer}
       />
       <EditTransactionDrawer

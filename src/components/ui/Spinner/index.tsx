@@ -1,14 +1,14 @@
 import { cn } from "@utils";
 import styles from "./index.module.css";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   size: number;
   color?: string;
   // style?: any,
   children?: never;
-};
+}
 
-export const Spinner: React.FC<Props> = ({ size, color }) => {
+export const Spinner: React.FC<Props> = ({ size, color, ...rest }) => {
   return (
     <div
       style={
@@ -18,6 +18,7 @@ export const Spinner: React.FC<Props> = ({ size, color }) => {
         } as React.CSSProperties
       }
       className={cn(styles.spinner)}
+      {...rest}
     />
   );
 };

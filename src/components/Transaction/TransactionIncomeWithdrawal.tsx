@@ -1,20 +1,12 @@
 import { Flex, Icon, Text } from "@components";
 
-import {
-  StoreAccountsAccount,
-  StoreCategoriesCategory,
-  StoreTransactionsTransaction,
-} from "@models";
-
 import styles from "./index.module.css";
 import { cn } from "@utils";
 
 type Props = {
-  data:
-    | StoreTransactionsTransaction
-    | Omit<StoreTransactionsTransaction, "id" | "createdAt">;
-  category: StoreCategoriesCategory | undefined;
-  account: StoreAccountsAccount | undefined;
+  data: Store.Transaction | Omit<Store.Transaction, "id" | "createdAt">;
+  category: Store.Category | undefined;
+  account: Store.Account | undefined;
 };
 
 export const TransactionIncomeWithdrawal: React.FC<Props> = ({

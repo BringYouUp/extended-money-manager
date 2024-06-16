@@ -1,9 +1,7 @@
 import { cn } from "@utils";
 import styles from "./index.module.css";
 
-import { MouseEventHandler, ReactNode } from "react";
-
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   column?: boolean;
   columnReverse?: boolean;
   full?: boolean;
@@ -21,9 +19,8 @@ type Props = {
   flex1?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  onClick?: MouseEventHandler<HTMLDivElement>;
-  children?: ReactNode;
-};
+  children?: React.ReactNode;
+}
 
 export const Flex: React.FC<Props> = ({
   column,
@@ -41,7 +38,6 @@ export const Flex: React.FC<Props> = ({
   alignCenter,
   gap,
   wrap,
-  onClick,
   style,
   className,
   children,
@@ -51,7 +47,7 @@ export const Flex: React.FC<Props> = ({
     <div
       style={
         {
-          "--flex-gap": gap && `${gap}px`,
+          "--flex-gap": gap ? `${gap}px` : "",
           ...style,
         } as React.CSSProperties
       }
@@ -76,7 +72,6 @@ export const Flex: React.FC<Props> = ({
         },
         className
       )}
-      onClick={onClick}
       {...rest}
     >
       {children}

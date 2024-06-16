@@ -1,8 +1,7 @@
 import { categoriesAddCategory, categoriesEditCategory, categoriesSetCategories } from '@async-actions'
-import { StoreCategories, StoreCategoriesCategory, StoreCategoriesCategories, StoreError } from '@models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-const initialState: StoreCategories = {
+const initialState: Store.CategorySelector = {
   categories: [],
   error: {
     code: '',
@@ -21,15 +20,15 @@ const categories = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(categoriesSetCategories.fulfilled, (state, { payload }: PayloadAction<StoreCategoriesCategories>) => {
+      .addCase(categoriesSetCategories.fulfilled, (state, { payload }: PayloadAction<Store.Category[]>) => {
         state.categories = payload || []
         state.error = initialState.error
       })
-      .addCase(categoriesAddCategory.fulfilled, (state, { payload }: PayloadAction<StoreCategoriesCategory>) => {
+      .addCase(categoriesAddCategory.fulfilled, (state, { payload }: PayloadAction<Store.Category>) => {
         state.categories.push(payload)
         state.error = initialState.error
       })
-      .addCase(categoriesEditCategory.fulfilled, ((state, { payload }: PayloadAction<Partial<StoreCategoriesCategory> & Pick<StoreCategoriesCategory, 'id'>>) => {
+      .addCase(categoriesEditCategory.fulfilled, ((state, { payload }: PayloadAction<Partial<Store.Category> & Pick<Store.Category, 'id'>>) => {
         const index = state.categories.findIndex(category => category.id === payload.id);
 
         state.categories[index] = {
@@ -52,7 +51,7 @@ const categories = createSlice({
       )
       .addMatcher(
         ({ type }) => type.startsWith('categories/') && type.endsWith('rejected'),
-        (state, { payload }: PayloadAction<StoreError>) => {
+        (state, { payload }: PayloadAction<Store.Error>) => {
           state.error = payload
         }
       )

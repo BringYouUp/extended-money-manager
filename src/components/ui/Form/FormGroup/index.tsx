@@ -3,18 +3,19 @@ import styles from "./index.module.css";
 
 import { ReactNode } from "react";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   error?: boolean;
   className?: string;
   style?: React.CSSProperties;
   children?: ReactNode;
-};
+}
 
 export const FormGroup: React.FC<Props> = ({
   error,
   style,
   className,
   children,
+  ...rest
 }) => {
   return (
     <div
@@ -26,6 +27,7 @@ export const FormGroup: React.FC<Props> = ({
         },
         className
       )}
+      {...rest}
     >
       {children}
     </div>

@@ -12,12 +12,6 @@ import {
 } from "@components";
 import { CategoryForm } from "@containers";
 import { SetStateAction, useRef, useState } from "react";
-import {
-  CategoryFormFormFields,
-  StoreCategoriesCategory,
-  StoreCategoriesCategoryTypes,
-  StoreCategoryIcon,
-} from "@models";
 import { useDebounce, useOpen } from "@hooks";
 import { Category } from "src/components/Category";
 
@@ -29,7 +23,7 @@ type Props = {
 } & (
   | {
       mode: "edit";
-      data: StoreCategoriesCategory;
+      data: Store.Category;
     }
   | {
       mode: "create";
@@ -45,8 +39,8 @@ export const EditCategoryDrawer: React.FC<Props> = ({
 }: Props) => {
   const isFormChanged = useRef<boolean>(false);
 
-  const [values, setValues] = useState<CategoryFormFormFields>(
-    {} as CategoryFormFormFields
+  const [values, setValues] = useState<Components.Form.Category>(
+    {} as Components.Form.Category
   );
 
   const setDebouncedValues = useDebounce((values) => {
@@ -55,7 +49,7 @@ export const EditCategoryDrawer: React.FC<Props> = ({
         isFormChanged.current = true;
       }
 
-      return values as CategoryFormFormFields;
+      return values as Components.Form.Category;
     });
   }, 125);
 
@@ -65,7 +59,9 @@ export const EditCategoryDrawer: React.FC<Props> = ({
   const onCloseHandler = () => {
     onClose();
     isFormChanged.current = false;
-    setDebouncedValues(INITIAL_STATE as SetStateAction<CategoryFormFormFields>);
+    setDebouncedValues(
+      INITIAL_STATE as SetStateAction<Components.Form.Category>
+    );
   };
 
   const onTryToClose = (forceClose: boolean = false) => {
@@ -135,9 +131,9 @@ export const EditCategoryDrawer: React.FC<Props> = ({
                             color: values["category-color"] || "",
                             name: values["category-name"] || "",
                             icon: (values["category-icon"] ||
-                              "") as StoreCategoryIcon,
+                              "") as Store.CategoryIcon,
                             type: (values["category-type"] ||
-                              "") as StoreCategoriesCategoryTypes,
+                              "") as Store.CategoryType,
                             deleted: false,
                             currency: "$",
                           }}

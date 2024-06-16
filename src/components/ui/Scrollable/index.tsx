@@ -2,7 +2,7 @@ import { cn } from "@utils";
 import styles from "./index.module.css";
 import { ReactNode } from "react";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   full?: boolean;
   none?: boolean;
   w100?: boolean;
@@ -16,7 +16,7 @@ type Props = {
   className?: string;
   style?: React.CSSProperties;
   children: ReactNode;
-};
+}
 
 export const Scrollable: React.FC<Props> = ({
   hidden,
@@ -32,6 +32,7 @@ export const Scrollable: React.FC<Props> = ({
   style,
   className,
   children,
+  ...rest
 }) => {
   return (
     <div
@@ -52,6 +53,7 @@ export const Scrollable: React.FC<Props> = ({
         },
         className
       )}
+      {...rest}
     >
       {children}
     </div>

@@ -1,6 +1,4 @@
-import { PathListItem, TPaths } from "@models";
-
-export const PATHS_LIST: PathListItem[] = [
+export const PATHS_LIST: Paths.Item[] = [
   {
     path: '/login',
     name: 'LOGIN',
@@ -49,4 +47,4 @@ export const PATHS_LIST: PathListItem[] = [
 ];
 
 
-export const PATHS: TPaths = PATHS_LIST.reduce((res, { path, name }) => ({ ...res, [name]: path }), {} as TPaths);
+export const PATHS: Paths.Map = PATHS_LIST.reduce((res, { path, name }) => ({ ...res, [name]: path }), {} as Paths.Map);

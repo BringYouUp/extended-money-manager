@@ -14,7 +14,6 @@ import {
 } from "@components";
 import { TransactionForm } from "@containers";
 import { useAppDispatch, useLoading, useOpen, useToast, useUID } from "@hooks";
-import { StoreTransactionsTransaction } from "@models";
 import { useRef } from "react";
 
 type Props = {
@@ -23,13 +22,13 @@ type Props = {
 } & (
   | {
       mode: "edit";
-      data: StoreTransactionsTransaction;
+      data: Store.Transaction;
       initialValues?: never;
     }
   | {
       mode: "create";
       data?: never;
-      initialValues?: Partial<StoreTransactionsTransaction>;
+      initialValues?: Partial<Store.Transaction>;
     }
 );
 

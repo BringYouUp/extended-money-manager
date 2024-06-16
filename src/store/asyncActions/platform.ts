@@ -2,16 +2,15 @@
 
 import { getActualFirestoreFormatDate, getRef, getStoreErrorFormat, toSerializeActualFirestoreFormatDate } from '@utils';
 import { getDocs, setDoc } from 'firebase/firestore';
-import { Currencies, StorePlatformPlatform } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { currency } from 'src/shared/utils';
 
-export const platformSetUpdatePlatformCurrency = createAsyncThunk<Currencies, null>(
+export const platformSetUpdatePlatformCurrency = createAsyncThunk<Shared.Currencies.Currencies, null>(
   'platform/platformSetUpdatePlatformCurrency',
   (_, { rejectWithValue, fulfillWithValue, }) => {
     return new Promise((resolve, reject) => {
       const docRef = getRef.platformCurrency()
-      let dataToReturn: Currencies
+      let dataToReturn: Shared.Currencies.Currencies
 
       currency.get().then(({ data }) => {
         dataToReturn = { ...data, updatedAt: getActualFirestoreFormatDate() as unknown as string }
@@ -26,7 +25,7 @@ export const platformSetUpdatePlatformCurrency = createAsyncThunk<Currencies, nu
   }
 )
 
-export const platformSetPlatform = createAsyncThunk<StorePlatformPlatform, null>(
+export const platformSetPlatform = createAsyncThunk<Store.Platform, null>(
   'platform/platformSetPlatform',
   (_, { rejectWithValue, fulfillWithValue, dispatch }) => {
     return new Promise((resolve, reject) => {
@@ -34,16 +33,16 @@ export const platformSetPlatform = createAsyncThunk<StorePlatformPlatform, null>
 
       getDocs(docRef)
         .then(docSnap => {
-          const data: StorePlatformPlatform = {} as StorePlatformPlatform
+          const data: Store.Platform = {} as Store.Platform
 
           docSnap.forEach(async doc => {
-            const docData = doc.data() as StorePlatformPlatform[keyof StorePlatformPlatform]
+            const docData = doc.data() as Store.Platform[keyof Store.Platform]
 
             if (doc.id === 'currency') {
               if (docData.updatedAt) {
                 const getDay = (data: string): string => data.split('T')[0].match(/\d*$/g)?.[0] || '';
 
-                toSerializeActualFirestoreFormatDate<Currencies>(docData as Currencies)
+                toSerializeActualFirestoreFormatDate<Shared.Currencies.Currencies>(docData as Shared.Currencies.Currencies)
                 const isNeedUpdateCurrency = getDay(docData.updatedAt) !== getDay(new Date().toISOString())
 
                 if (isNeedUpdateCurrency) {
@@ -55,7 +54,7 @@ export const platformSetPlatform = createAsyncThunk<StorePlatformPlatform, null>
                   }
                 } else {
                   console.info(`→ NO UPDATE CURRENCY`);
-                  data[doc.id] = docData as Currencies
+                  data[doc.id] = docData as Shared.Currencies.Currencies
                 }
               } else {
                 console.info(`→ SET CURRENCY`);
@@ -70,7 +69,7 @@ export const platformSetPlatform = createAsyncThunk<StorePlatformPlatform, null>
               data[doc.id] = docData
             }
           })
-          resolve(fulfillWithValue(data as StorePlatformPlatform))
+          resolve(fulfillWithValue(data as Store.Platform))
         })
         .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })

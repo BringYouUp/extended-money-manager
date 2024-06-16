@@ -10,27 +10,25 @@ enum Themes {
   transparent = "transparent",
 }
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
   rounded?: boolean;
   centered?: boolean;
   active?: boolean;
   theme: keyof typeof Themes;
   type?: "button" | "reset" | "submit" | undefined;
-  role?: "warning" | "success" | "error";
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  _role?: "warning" | "success" | "error";
   width?: string;
   className?: string;
   style?: React.CSSProperties;
   children?: ReactNode;
-};
+}
 
 export const Button: React.FC<Props> = ({
   disabled,
   rounded,
-  role,
+  _role,
   type,
-  onClick,
   width,
   active,
   style,
@@ -38,6 +36,7 @@ export const Button: React.FC<Props> = ({
   centered = true,
   className = "",
   children,
+  ...rest
 }) => {
   return (
     <button
@@ -54,7 +53,7 @@ export const Button: React.FC<Props> = ({
           disabled,
           [styles.rounded]: rounded,
           [styles[theme]]: theme,
-          [styles[role || ""]]: role,
+          [styles[_role || ""]]: _role,
           [styles.active]: active,
           [styles.centered]: centered,
         },
@@ -62,7 +61,7 @@ export const Button: React.FC<Props> = ({
       )}
       disabled={disabled}
       type={type}
-      onClick={onClick}
+      {...rest}
     >
       {children}
     </button>

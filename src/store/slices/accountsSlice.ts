@@ -1,8 +1,7 @@
 import { accountsAddAccount, accountsEditAccount, accountsSetAccounts } from '@async-actions'
-import { StoreAccounts, StoreAccountsAccount, StoreAccountsAccounts, StoreError } from '@models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-const initialState: StoreAccounts = {
+const initialState: Store.AccountSelector = {
   accounts: [],
   error: {
     code: '',
@@ -21,15 +20,15 @@ const accounts = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(accountsSetAccounts.fulfilled, (state, { payload }: PayloadAction<StoreAccountsAccounts>) => {
+      .addCase(accountsSetAccounts.fulfilled, (state, { payload }: PayloadAction<Store.Account[]>) => {
         state.accounts = payload || []
         state.error = initialState.error
       })
-      .addCase(accountsAddAccount.fulfilled, (state, { payload }: PayloadAction<StoreAccountsAccount>) => {
+      .addCase(accountsAddAccount.fulfilled, (state, { payload }: PayloadAction<Store.Account>) => {
         state.accounts.push(payload)
         state.error = initialState.error
       })
-      .addCase(accountsEditAccount.fulfilled, (state, { payload }: PayloadAction<Partial<StoreAccountsAccount> & Pick<StoreAccountsAccount, 'id'>>) => {
+      .addCase(accountsEditAccount.fulfilled, (state, { payload }: PayloadAction<Partial<Store.Account> & Pick<Store.Account, 'id'>>) => {
         const index = state.accounts.findIndex(account => account.id === payload.id);
 
         state.accounts[index] = {
@@ -52,7 +51,7 @@ const accounts = createSlice({
       )
       .addMatcher(
         ({ type }) => type.startsWith('accounts/') && type.endsWith('rejected'),
-        (state, { payload }: PayloadAction<StoreError>) => {
+        (state, { payload }: PayloadAction<Store.Error>) => {
           state.error = payload
         }
       )

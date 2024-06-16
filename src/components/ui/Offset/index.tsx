@@ -3,7 +3,7 @@ import styles from "./index.module.css";
 
 import { ReactNode } from "react";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   full?: boolean;
   w100?: boolean;
   h100?: boolean;
@@ -12,7 +12,7 @@ type Props = {
   style?: React.CSSProperties;
   className?: string;
   children?: ReactNode;
-};
+}
 
 const generateOffsetStyle = (values: number[]) => {
   switch (values.length) {
@@ -38,6 +38,7 @@ export const Offset: React.FC<Props> = ({
   style,
   className,
   children,
+  ...rest
 }) => {
   return (
     <div
@@ -59,6 +60,7 @@ export const Offset: React.FC<Props> = ({
         },
         className
       )}
+      {...rest}
     >
       {children}
     </div>

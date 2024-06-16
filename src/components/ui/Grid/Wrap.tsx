@@ -2,7 +2,7 @@ import { cn } from "@utils";
 import { MouseEventHandler, ReactNode } from "react";
 import styles from "./index.module.css";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   gap?: string | number;
   full?: boolean;
   w100?: boolean;
@@ -19,7 +19,7 @@ type Props = {
   style?: React.CSSProperties;
   onClick?: MouseEventHandler<HTMLDivElement>;
   children?: ReactNode;
-};
+}
 
 const Wrap: React.FC<Props> = ({
   gap,
@@ -38,7 +38,7 @@ const Wrap: React.FC<Props> = ({
   className,
   style,
   children,
-  ...props
+  ...rest
 }) => {
   return (
     <div
@@ -73,7 +73,7 @@ const Wrap: React.FC<Props> = ({
         },
         className
       )}
-      {...props}
+      {...rest}
     >
       {children}
     </div>

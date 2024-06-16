@@ -4,10 +4,10 @@ import { Key, ReactNode, useRef } from "react";
 import { Dropdown, Flex, Input, Scrollable, Text } from "@components";
 import { useOpen } from "@hooks";
 
-type Props<T extends object> = {
+interface Props<T extends object> extends React.HTMLAttributes<HTMLDivElement> {
   selectedCallback: (item: T) => boolean;
   parseItem: (item: T) => React.ReactNode;
-  onChange: (item: T) => void;
+  onChangeValue: (item: T) => void;
   items: T[];
   disabled?: boolean;
   placeholder?: string;
@@ -24,12 +24,12 @@ type Props<T extends object> = {
       onClick: (item: T) => void;
     } & Pick<Props<T>, "parseItem">
   >;
-};
+}
 
 export function Select<T extends object>({
   name,
   selectedCallback,
-  onChange,
+  onChangeValue,
   parseItem,
   items,
   style,
@@ -40,6 +40,7 @@ export function Select<T extends object>({
   Wrapper = ({ children }) => <div>{children}</div>,
   Component,
   mode,
+  ...rest
 }: Props<T>) {
   const [isOpened, onOpen, onClose] = useOpen();
 
@@ -59,7 +60,7 @@ export function Select<T extends object>({
         console.log("→ multi");
         break;
       case "single":
-        onChange(item);
+        onChangeValue(item);
         onClose();
         break;
     }
@@ -80,6 +81,7 @@ export function Select<T extends object>({
           },
           className
         )}
+        {...rest}
       >
         {selectedItem ? (
           <Flex className={cn(styles.preview)} alignCenter h100>

@@ -5,13 +5,13 @@ import { Flex, Transitioned } from "@components";
 import { cn } from "@utils";
 import { createPortal } from "react-dom";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   isOpened: boolean;
   onClose: (e: MouseEvent<HTMLDivElement>) => void;
   children?: ReactNode;
-};
+}
 
-const Wrap: React.FC<Props> = ({ isOpened, onClose, children }) => {
+const Wrap: React.FC<Props> = ({ isOpened, onClose, children, ...rest }) => {
   const onCloseInner = (e: MouseEvent<HTMLDivElement>) => {
     if (e.currentTarget === e.target) {
       typeof onClose === "function" && onClose(e);
@@ -21,7 +21,7 @@ const Wrap: React.FC<Props> = ({ isOpened, onClose, children }) => {
   return (
     <>
       <Transitioned
-        is={isOpened}
+        _is={isOpened}
         classes={{
           default: styles.modalWrapper,
           enter: styles.modalWrapperEnter,
@@ -31,12 +31,13 @@ const Wrap: React.FC<Props> = ({ isOpened, onClose, children }) => {
         <Flex full onClick={onCloseInner}></Flex>
       </Transitioned>
       <Transitioned
-        is={isOpened}
+        _is={isOpened}
         classes={{
           default: cn(styles.modal),
           enter: styles.modalEnter,
           exit: styles.modalExit,
         }}
+        {...rest}
       >
         <Flex full center onClick={onCloseInner}>
           {children}

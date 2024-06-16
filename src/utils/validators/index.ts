@@ -1,7 +1,6 @@
-import { FormFields, StoreAccountsAccountCurrencies, StoreCategoriesCategoryTypes, StoreTransactionsTransactionType, UseFormFields, UseFormValidator } from "@models"
 import { PLATFORM_CURRENCIES_LIST } from "src/consts/store"
 
-export const required: UseFormValidator = (value: string = "") => {
+export const required: Hooks.UseForm.Validator = (value: string = "") => {
   if (!value) {
     return {
       error: 'Field is required'
@@ -9,7 +8,7 @@ export const required: UseFormValidator = (value: string = "") => {
   }
 }
 
-export const noOnlyWhitespace: UseFormValidator = (value: string = "") => {
+export const noOnlyWhitespace: Hooks.UseForm.Validator = (value: string = "") => {
   if (/^\s+$/.test(value)) {
     return {
       error: 'Field cannot consist only of spaces'
@@ -17,7 +16,7 @@ export const noOnlyWhitespace: UseFormValidator = (value: string = "") => {
   }
 }
 
-export const email: UseFormValidator = (value: string = "") => {
+export const email: Hooks.UseForm.Validator = (value: string = "") => {
   if (!/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(value)) {
     return {
       error: 'Please enter a valid email'
@@ -25,7 +24,7 @@ export const email: UseFormValidator = (value: string = "") => {
   }
 }
 
-export const minLength = (minLength: number): UseFormValidator => (value: string = "") => {
+export const minLength = (minLength: number): Hooks.UseForm.Validator => (value: string = "") => {
   if (value.length < minLength) {
     return {
       error: `Min length is ${minLength} symbols`
@@ -33,7 +32,7 @@ export const minLength = (minLength: number): UseFormValidator => (value: string
   }
 }
 
-export const maxLength = (maxLength: number): UseFormValidator => (value: string = "") => {
+export const maxLength = (maxLength: number): Hooks.UseForm.Validator => (value: string = "") => {
   if (value.length > maxLength) {
     return {
       error: `Max length is ${maxLength} symbols`
@@ -61,8 +60,8 @@ export const categoryIcon = (value: string = "") => {
 }
 
 export const accountCurrency = (value: string) => {
-  const acceptedValues: StoreAccountsAccountCurrencies[] = PLATFORM_CURRENCIES_LIST.map(item => item.value)
-  if (!acceptedValues.includes(value as StoreAccountsAccountCurrencies)) {
+  const acceptedValues: Shared.Currencies.CurrencySymbols[] = PLATFORM_CURRENCIES_LIST.map(item => item.value)
+  if (!acceptedValues.includes(value as Shared.Currencies.CurrencySymbols)) {
     return {
       error: 'Please, choose currency'
     }
@@ -70,8 +69,8 @@ export const accountCurrency = (value: string) => {
 }
 
 export const categoryType = (value: string) => {
-  const acceptedValues: StoreCategoriesCategoryTypes[] = ['withdraw', 'income']
-  if (!acceptedValues.includes(value as StoreCategoriesCategoryTypes)) {
+  const acceptedValues: Store.CategoryType[] = ['withdraw', 'income']
+  if (!acceptedValues.includes(value as Store.CategoryType)) {
     return {
       error: 'Please, choose correct type'
     }
@@ -79,15 +78,15 @@ export const categoryType = (value: string) => {
 }
 
 export const transactionType = (value: string) => {
-  const acceptedValues: StoreTransactionsTransactionType[] = ['income', 'transfer', 'withdraw']
-  if (!acceptedValues.includes(value as StoreTransactionsTransactionType)) {
+  const acceptedValues: Store.TransactionType[] = ['income', 'transfer', 'withdraw']
+  if (!acceptedValues.includes(value as Store.TransactionType)) {
     return {
       error: 'Please, choose correct type'
     }
   }
 }
 
-export const transactionCategoryId: UseFormValidator = (value: string = "", formNode: HTMLFormElement & FormFields<UseFormFields>) => {
+export const transactionCategoryId: Hooks.UseForm.Validator = (value: string = "", formNode: HTMLFormElement & Hooks.UseForm.FormFields<Hooks.UseForm.UseFormFields>) => {
   if (formNode?.['is-create-transaction-after-change-account']) {
     if (formNode['is-create-transaction-after-change-account'].checked) {
       return required(value, formNode)
@@ -97,7 +96,7 @@ export const transactionCategoryId: UseFormValidator = (value: string = "", form
   }
 }
 
-export const getValidatorsForField = (field: keyof UseFormFields): UseFormValidator[] => {
+export const getValidatorsForField = (field: keyof Hooks.UseForm.UseFormFields): Hooks.UseForm.Validator[] => {
   switch (field) {
     case 'email': return [required, noOnlyWhitespace, email]
     case 'password': return [required, noOnlyWhitespace, minLength(6), maxLength(40)]
