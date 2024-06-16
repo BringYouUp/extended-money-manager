@@ -16,5 +16,6 @@ module.exports = {
     ],
     "@typescript-eslint/ban-ts-comment": "off",
     'no-debugger': "off",
+    "@typescript-eslint/no-namespace": "off",
   },
 }
