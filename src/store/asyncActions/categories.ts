@@ -1,9 +1,8 @@
 import { getRef, getStoreErrorFormat } from '@utils';
 import { addDoc, getDocs, setDoc } from 'firebase/firestore';
-import { StoreCategoriesCategory, StoreCategoriesCategories, OmittedStoreFields } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const categoriesSetCategories = createAsyncThunk<StoreCategoriesCategories, string>(
+export const categoriesSetCategories = createAsyncThunk<Store.Category[], string>(
   'categories/categoriesSetCategories',
   (uid, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
@@ -12,10 +11,10 @@ export const categoriesSetCategories = createAsyncThunk<StoreCategoriesCategorie
       getDocs(docRef)
         .then(docSnap => {
           if (docSnap.size) {
-            const data: StoreCategoriesCategories = []
+            const data: Store.Category[] = []
             docSnap.forEach(doc => {
               data.push({
-                ...doc.data() as StoreCategoriesCategory,
+                ...doc.data() as Store.Category,
                 id: doc.id
               })
             })
@@ -30,7 +29,7 @@ export const categoriesSetCategories = createAsyncThunk<StoreCategoriesCategorie
 
 )
 
-export const categoriesAddCategory = createAsyncThunk<StoreCategoriesCategory, { category: Omit<StoreCategoriesCategory, OmittedStoreFields>, uid: string }>(
+export const categoriesAddCategory = createAsyncThunk<Store.Category, { category: Omit<Store.Category, Store.OmittedDateFields>, uid: string }>(
   'categories/categoriesAddCategory',
   ({ category, uid }, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
@@ -41,14 +40,14 @@ export const categoriesAddCategory = createAsyncThunk<StoreCategoriesCategory, {
           resolve(fulfillWithValue({
             ...category,
             id: data.id,
-          } as StoreCategoriesCategory))
+          } as Store.Category))
         })
         .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
 
-export const categoriesEditCategory = createAsyncThunk<Partial<StoreCategoriesCategory> & Pick<StoreCategoriesCategory, "id">, { category: Partial<StoreCategoriesCategory> & Pick<StoreCategoriesCategory, 'id'>, uid: string }>(
+export const categoriesEditCategory = createAsyncThunk<Partial<Store.Category> & Pick<Store.Category, "id">, { category: Partial<Store.Category> & Pick<Store.Category, 'id'>, uid: string }>(
   'categories/categoriesEditCategory',
   ({ category, uid }, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {

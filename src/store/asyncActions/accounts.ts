@@ -1,10 +1,9 @@
 
 import { getRef, getStoreErrorFormat } from '@utils';
 import { addDoc, getDocs, setDoc } from 'firebase/firestore';
-import { OmittedStoreFields, StoreAccountsAccount, StoreAccountsAccounts } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-export const accountsSetAccounts = createAsyncThunk<StoreAccountsAccounts, string>(
+export const accountsSetAccounts = createAsyncThunk<Store.Account[], string>(
   'accounts/accountsSetAccounts',
   (uid, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
@@ -13,10 +12,10 @@ export const accountsSetAccounts = createAsyncThunk<StoreAccountsAccounts, strin
       getDocs(docRef)
         .then(docSnap => {
           if (docSnap.size) {
-            const data: StoreAccountsAccounts = []
+            const data: Store.Account[] = []
             docSnap.forEach(doc => {
               data.push({
-                ...doc.data() as StoreAccountsAccount,
+                ...doc.data() as Store.Account,
                 id: doc.id
               })
             })
@@ -30,7 +29,7 @@ export const accountsSetAccounts = createAsyncThunk<StoreAccountsAccounts, strin
   }
 )
 
-export const accountsAddAccount = createAsyncThunk<StoreAccountsAccount, { account: Omit<StoreAccountsAccount, OmittedStoreFields>, uid: string }>(
+export const accountsAddAccount = createAsyncThunk<Store.Account, { account: Omit<Store.Account, Store.OmittedDateFields>, uid: string }>(
   'accounts/accountsAddAccount',
   ({ account, uid }, { fulfillWithValue, rejectWithValue }) => {
     return new Promise((resolve, reject) => {
@@ -41,14 +40,14 @@ export const accountsAddAccount = createAsyncThunk<StoreAccountsAccount, { accou
           resolve(fulfillWithValue({
             ...account,
             id: data.id,
-          } as StoreAccountsAccount))
+          } as Store.Account))
         })
         .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
 
-export const accountsEditAccount = createAsyncThunk<Partial<StoreAccountsAccount> & Pick<StoreAccountsAccount, 'id'>, { account: Partial<StoreAccountsAccount> & Pick<StoreAccountsAccount, 'id'>, uid: string }>(
+export const accountsEditAccount = createAsyncThunk<Partial<Store.Account> & Pick<Store.Account, 'id'>, { account: Partial<Store.Account> & Pick<Store.Account, 'id'>, uid: string }>(
   'accounts/accountsEditAccount',
   ({ account, uid }, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {

@@ -6,6 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "allowJs": true,
+    "types": ["./src/types/index.d.ts", "@testing-library/jest-dom"],
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
@@ -14,7 +15,6 @@
       "@consts": ["src/consts"],
       "@containers": ["src/containers"],
       "@hooks": ["src/hooks"],
-      "@models": ["src/models"],
       "@pages": ["src/pages"],
       "@selectors": ["src/store/slices/selectors"],
       "@shared": ["src/shared"],

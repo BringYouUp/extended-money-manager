@@ -1,10 +1,9 @@
-import { CurrenciesData } from "@models"
 
-class Currency {
+export class Currency {
   url = `https://api.freecurrencyapi.com/v1/latest?apikey=${import.meta.env.VITE_CURRENCY_API_KEY}&currencies=EUR%2CUSD%2CPLN%2CRUB`
   constructor() { }
 
-  get(): Promise<CurrenciesData> {
+  get(): Promise<Shared.Currencies.CurrenciesData> {
     return new Promise((resolve, reject) => {
       fetch(this.url)
         .then(d => d.json())

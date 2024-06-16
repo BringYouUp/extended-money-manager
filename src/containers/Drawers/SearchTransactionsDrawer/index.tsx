@@ -15,20 +15,14 @@ import {
 } from "@components";
 import { TRANSACTIONS_TYPES } from "@consts";
 import { useAppSelector, useForm, useSearchTransactions } from "@hooks";
-import {
-  StoreTransactionsTransactionType,
-  TransactionsFilterForm,
-} from "@models";
 import { ACCOUNT_SELECTOR, CATEGORY_SELECTOR } from "@selectors";
 import { useEffect } from "react";
 
-import { FilterModel } from "src/models/hooks/useFilterTransactions";
-
 type Props = {
-  filter: FilterModel;
+  filter: Hooks.UseFilterTransactions.FilterModel;
   is: boolean;
   onClose: () => void;
-  onSearch: (data: FilterModel) => void;
+  onSearch: (data: Hooks.UseFilterTransactions.FilterModel) => void;
 };
 
 export const SearchTransactionsDrawer: React.FC<Props> = ({
@@ -45,7 +39,7 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
   } = useSearchTransactions();
 
   const { formRef, setValue, errors, onSubmitForm, onChangeForm } =
-    useForm<TransactionsFilterForm>(
+    useForm<Components.Form.TransactionsFilter>(
       {
         "filter-mode": filterTransactionsParams.mode,
         AND: "",
@@ -108,14 +102,12 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
                             {TRANSACTIONS_TYPES.map((item) => {
                               const isActive = filterTransactionsParams[
                                 "transaction-types"
-                              ].includes(
-                                item.type as StoreTransactionsTransactionType
-                              );
+                              ].includes(item.type as Store.TransactionType);
                               return (
                                 <Badge
                                   key={item.type}
                                   active={isActive}
-                                  color={item.color}
+                                  badgeColor={item.color}
                                   icon={item.type}
                                   text={item.label}
                                   type="transaction-type"
@@ -147,7 +139,7 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
                                   <Badge
                                     key={account.id}
                                     active={isActive}
-                                    color={account.color}
+                                    badgeColor={account.color}
                                     icon="bank-card"
                                     text={account.name}
                                     type="account"
@@ -177,7 +169,7 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
                                   <Badge
                                     key={category.id}
                                     active={isActive}
-                                    color={category.color}
+                                    badgeColor={category.color}
                                     icon={category.icon}
                                     text={category.name}
                                     type="category"
@@ -211,7 +203,7 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
                                   <Badge
                                     key={category.id}
                                     active={isActive}
-                                    color={category.color}
+                                    badgeColor={category.color}
                                     icon={category.icon}
                                     text={category.name}
                                     type="category"

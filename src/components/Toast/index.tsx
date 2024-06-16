@@ -1,10 +1,9 @@
 import { cn } from "@utils";
 import styles from "./index.module.css";
 import { Button, Container, Flex, Icon, Text } from "@components";
-import { StoreToastToast } from "@models";
 
 type Props = {
-  data: StoreToastToast;
+  data: Store.Toast;
   style?: React.CSSProperties;
   className?: string;
   children?: never;

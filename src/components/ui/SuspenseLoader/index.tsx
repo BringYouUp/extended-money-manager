@@ -1,8 +1,10 @@
 import { Flex, Spinner } from "@components";
 
-export const SuspenseLoader = () => {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {}
+
+export const SuspenseLoader = (props: Props) => {
   return (
-    <Flex full center>
+    <Flex full center {...props}>
       <Spinner color="var(--text-color-90)" size={36} />
     </Flex>
   );

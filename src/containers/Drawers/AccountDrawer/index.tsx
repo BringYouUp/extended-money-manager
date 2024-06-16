@@ -15,16 +15,12 @@ import {
 import { AccountCard } from "@components";
 import { EditAccountDrawer, EditTransactionDrawer } from "@containers";
 import { useAppDispatch, useLoading, useOpen, useToast, useUID } from "@hooks";
-import {
-  StoreAccountsAccount,
-  StoreTransactionsTransactionType,
-} from "@models";
 import { useRef } from "react";
 
 type Props = {
   is: boolean;
   onClose: () => void;
-  data: StoreAccountsAccount;
+  data: Store.Account;
 };
 
 export const AccountDrawer: React.FC<Props> = ({
@@ -55,7 +51,7 @@ export const AccountDrawer: React.FC<Props> = ({
     onCloseConfirmDeleteModal,
   ] = useOpen();
 
-  const transactionDrawerTypeRef = useRef<StoreTransactionsTransactionType>();
+  const transactionDrawerTypeRef = useRef<Store.TransactionType>();
 
   const onUpdatedeleteStatus = (newDeleteStatus: boolean) => () => {
     if (isOpenedConfirmDeleteModal) {
@@ -80,7 +76,7 @@ export const AccountDrawer: React.FC<Props> = ({
   };
 
   const onOpenTransactionDrawerHandler =
-    (type: StoreTransactionsTransactionType) => () => {
+    (type: Store.TransactionType) => () => {
       transactionDrawerTypeRef.current = type;
       onOpenTransactionDrawer();
     };
@@ -134,7 +130,7 @@ export const AccountDrawer: React.FC<Props> = ({
                           centered={false}
                           theme="outline"
                           onClick={onOpenTransactionDrawerHandler("income")}
-                          role="success"
+                          _role="success"
                         >
                           <Flex w100 gap={6} alignCenter justifyBetween>
                             <Text uppercase weight={500}>
@@ -147,7 +143,7 @@ export const AccountDrawer: React.FC<Props> = ({
                           centered={false}
                           onClick={onOpenTransactionDrawerHandler("withdraw")}
                           theme="outline"
-                          role="warning"
+                          _role="warning"
                         >
                           <Flex w100 gap={6} alignCenter justifyBetween>
                             <Text uppercase weight={500}>
@@ -176,7 +172,7 @@ export const AccountDrawer: React.FC<Props> = ({
                       onClick={onOpenConfirmDeleteModal}
                       theme="outline"
                       disabled={isLoading}
-                      role="error"
+                      _role="error"
                     >
                       <Flex gap={6} alignCenter>
                         <Text uppercase weight={500}>
@@ -191,7 +187,7 @@ export const AccountDrawer: React.FC<Props> = ({
                     </Button>
                   ) : (
                     <Button
-                      role="error"
+                      _role="error"
                       centered={false}
                       onClick={onUpdatedeleteStatus(false)}
                       theme="outline"
@@ -218,7 +214,7 @@ export const AccountDrawer: React.FC<Props> = ({
       <EditAccountDrawer
         is={Boolean(isEditAccountDrawerOpened)}
         mode="edit"
-        data={data as StoreAccountsAccount}
+        data={data as Store.Account}
         onClose={onCloseEditAccountDrawer}
       />
       <EditTransactionDrawer

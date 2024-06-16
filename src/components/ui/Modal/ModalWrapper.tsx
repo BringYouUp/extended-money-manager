@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 import { Container, Flex, Offset } from "@components";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   style?: React.CSSProperties;
   className?: string;
   children?: ReactNode;
-};
+}
 
 export const ModalWrapper: React.FC<Props> = ({
   style,

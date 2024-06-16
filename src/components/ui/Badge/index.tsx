@@ -1,20 +1,18 @@
 import { cn } from "@utils";
 import styles from "./index.module.css";
 import { Button, Flex, Icon, Text } from "@components";
-import { MouseEventHandler } from "react";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   style?: React.CSSProperties;
   children?: never;
   icon: string;
   text: string;
-  color: number | string;
+  badgeColor: string | number | -1;
   active: boolean;
   type: "transaction-type" | "account" | "category";
-  onClick?: MouseEventHandler<HTMLDivElement>;
-  onRemove?: MouseEventHandler<HTMLButtonElement>;
-};
+  onRemove?: React.MouseEventHandler<HTMLButtonElement>;
+}
 
 export const Badge: React.FC<Props> = ({
   className,
@@ -22,19 +20,18 @@ export const Badge: React.FC<Props> = ({
   icon,
   text,
   type,
-  color,
+  badgeColor,
   active,
-  onClick,
   onRemove,
+  ...rest
 }) => {
   return (
     <Flex
-      onClick={onClick}
       alignCenter
       gap={2}
       style={
         {
-          "--badge-color": color,
+          "--badge-color": badgeColor !== -1 ? badgeColor : "",
           ...style,
         } as React.CSSProperties
       }
@@ -43,10 +40,11 @@ export const Badge: React.FC<Props> = ({
         styles[type],
         {
           [styles.active]: active,
-          [styles.black]: color === -1,
+          [styles.black]: badgeColor === -1,
         },
         className
       )}
+      {...rest}
     >
       <Flex gap={6} alignCenter>
         <Icon size={24} name={icon} />

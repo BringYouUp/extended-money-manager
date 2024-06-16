@@ -6,14 +6,20 @@ import { cn } from "@utils";
 import { TransitionedPropsClasses } from "src/components/Transitioned";
 import { createPortal } from "react-dom";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   side: "left" | "right";
   isOpened: boolean;
   onClose: (e: MouseEvent<HTMLDivElement>) => void;
   children?: ReactNode;
-};
+}
 
-const Wrap: React.FC<Props> = ({ side, isOpened, onClose, children }) => {
+const Wrap: React.FC<Props> = ({
+  side,
+  isOpened,
+  onClose,
+  children,
+  ...rest
+}) => {
   const onCloseInner = (e: MouseEvent<HTMLDivElement>) => {
     if (e.currentTarget === e.target) {
       typeof onClose === "function" && onClose(e);
@@ -36,7 +42,7 @@ const Wrap: React.FC<Props> = ({ side, isOpened, onClose, children }) => {
   return (
     <>
       <Transitioned
-        is={isOpened}
+        _is={isOpened}
         classes={{
           default: styles.drawerWrapper,
           enter: styles.drawerWrapperEnter,
@@ -46,8 +52,9 @@ const Wrap: React.FC<Props> = ({ side, isOpened, onClose, children }) => {
         <Flex full onClick={onCloseInner}></Flex>
       </Transitioned>
       <Transitioned
-        is={isOpened}
+        _is={isOpened}
         classes={defineStyles[side] as TransitionedPropsClasses}
+        {...rest}
       >
         <Flex full onClick={onCloseInner}>
           {children}

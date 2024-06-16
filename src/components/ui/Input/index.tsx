@@ -1,7 +1,7 @@
 import { cn } from "@utils";
 import styles from "./index.module.css";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLInputElement> {
   id?: string;
   name: string;
   placeholder?: string;
@@ -12,7 +12,7 @@ type Props = {
   style?: React.CSSProperties;
   className?: string;
   children?: never;
-};
+}
 
 export const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = ({
   style,

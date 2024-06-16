@@ -1,8 +1,7 @@
 import { platformSetPlatform, platformSetUpdatePlatformCurrency } from '@async-actions'
-import { Currencies, StoreError, StorePlatform, StorePlatformPlatform } from '@models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-const initialState: StorePlatform = {
+const initialState: Store.PlatformSelector = {
   platform: {
     settings: {},
     currency: {
@@ -30,11 +29,11 @@ const platform = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(platformSetPlatform.fulfilled, (state, { payload }: PayloadAction<StorePlatformPlatform>) => {
+      .addCase(platformSetPlatform.fulfilled, (state, { payload }: PayloadAction<Store.Platform>) => {
         state.platform = payload || {}
         state.error = initialState.error
       })
-      .addCase(platformSetUpdatePlatformCurrency.fulfilled, (state, { payload }: PayloadAction<Currencies>) => {
+      .addCase(platformSetUpdatePlatformCurrency.fulfilled, (state, { payload }: PayloadAction<Shared.Currencies.Currencies>) => {
         state.platform.currency = payload || {}
       })
       .addMatcher(
@@ -45,7 +44,7 @@ const platform = createSlice({
       )
       .addMatcher(
         ({ type }) => type.startsWith('platform/') && type.endsWith('rejected'),
-        (state, { payload }: PayloadAction<StoreError>) => {
+        (state, { payload }: PayloadAction<Store.Error>) => {
           state.error = payload
         }
       )

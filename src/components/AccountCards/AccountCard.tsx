@@ -1,13 +1,12 @@
 import { Flex, Icon, Text } from "@components";
 import { useOpen } from "@hooks";
 
-import { OmittedStoreFields, StoreAccountsAccount } from "@models";
 import { AccountCardWrap } from "@components";
 import { AccountDrawer } from "@containers";
 import { MouseEvent, MouseEventHandler } from "react";
 
 type Props = {
-  data: StoreAccountsAccount | Omit<StoreAccountsAccount, OmittedStoreFields>;
+  data: Store.Account | Omit<Store.Account, Store.OmittedDateFields>;
   style?: React.CSSProperties;
   noClick?: boolean;
   selected?: boolean;
@@ -92,7 +91,7 @@ export const AccountCard: React.FC<Props> = ({
       <AccountDrawer
         is={isOpened as boolean}
         onClose={onClose}
-        data={data as StoreAccountsAccount}
+        data={data as Store.Account}
       />
     </>
   );

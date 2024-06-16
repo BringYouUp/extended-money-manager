@@ -1,27 +1,25 @@
 import { transactionsGetFilteredTransactions } from "@async-actions";
 import { useAppDispatch, useUID } from "@hooks";
-import { StoreTransactionsTransaction, StoreTransactionsTransactionType } from "@models";
 import { useMemo, useState } from "react";
-import { FilterModel, UpdateFilter } from "src/models/hooks/useFilterTransactions";
 
-const INITIAL_STATE: FilterModel = {
+const INITIAL_STATE: Hooks.UseFilterTransactions.FilterModel = {
   "transaction-types": [],
   accounts: [],
   categories: [],
   mode: 'OR',
 }
 
-export const useSearchTransactions = (initialState?: FilterModel) => {
+export const useSearchTransactions = (initialState?: Hooks.UseFilterTransactions.FilterModel) => {
   const uid = useUID()
   const dispatch = useAppDispatch();
 
   const [filterTransactionsParams, setFilterTransactionsParams] = useState(initialState || INITIAL_STATE)
 
-  const onUpdateFilter = (newData: FilterModel) => {
+  const onUpdateFilter = (newData: Hooks.UseFilterTransactions.FilterModel) => {
     setFilterTransactionsParams(newData)
   }
 
-  const onUpdateFilterKey: UpdateFilter = (key, item) => {
+  const onUpdateFilterKey: Hooks.UseFilterTransactions.UpdateFilter = (key, item) => {
     switch (key) {
       case 'categories':
       case 'accounts':
@@ -33,7 +31,7 @@ export const useSearchTransactions = (initialState?: FilterModel) => {
           if (isToRemove) {
             newValue = prev[key].filter(_item => _item !== item)
           } else {
-            newValue = prev[key].concat(item as StoreTransactionsTransactionType)
+            newValue = prev[key].concat(item as Store.TransactionType)
           }
 
           return ({
@@ -51,7 +49,7 @@ export const useSearchTransactions = (initialState?: FilterModel) => {
     }
   }
 
-  const onFilter = (): Promise<StoreTransactionsTransaction[]> => {
+  const onFilter = (): Promise<Store.Transaction[]> => {
     return new Promise((resolve, reject) => {
       dispatch(transactionsGetFilteredTransactions({ uid, filter: filterTransactionsParams }))
         .then(data => {
@@ -59,7 +57,7 @@ export const useSearchTransactions = (initialState?: FilterModel) => {
             // @ts-expect-error: TODO
             reject(data.error)
           } else {
-            resolve(data.payload as StoreTransactionsTransaction[])
+            resolve(data.payload as Store.Transaction[])
           }
         })
         .catch(reject)

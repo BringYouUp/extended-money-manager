@@ -2,7 +2,12 @@ import { cn } from "@utils";
 import styles from "./index.module.css";
 import { Flex, FormGroup, Text } from "@components";
 
-type Props = {
+export type PropsData = {
+  label: string;
+  value: string;
+};
+
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   id?: string;
   data: {
     label: string;
@@ -15,8 +20,7 @@ type Props = {
   className?: string;
   children?: never;
   checked?: boolean;
-  defaultValue?: boolean;
-};
+}
 
 export const RadioGroup: React.FC<Props> = ({
   data,
@@ -25,6 +29,7 @@ export const RadioGroup: React.FC<Props> = ({
   hidden,
   error,
   className,
+  ...rest
 }) => {
   return (
     <FormGroup
@@ -40,6 +45,7 @@ export const RadioGroup: React.FC<Props> = ({
         },
         className
       )}
+      {...rest}
     >
       <Flex w100 h100 gap={4} alignCenter>
         {data.map((item) => {

@@ -37,6 +37,7 @@ export const Text: React.FC<Props> = ({
   secondary,
   onClick,
   children,
+  ...rest
 }) => {
   return (
     <Wrapper
@@ -65,6 +66,7 @@ export const Text: React.FC<Props> = ({
         className
       )}
       onClick={onClick}
+      {...rest}
     >
       {children}
     </Wrapper>

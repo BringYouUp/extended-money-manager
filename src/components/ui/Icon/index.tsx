@@ -1,13 +1,13 @@
 import { cn } from "@utils";
 import styles from "./index.module.css";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLOrSVGElement> {
   size?: number;
   name: string;
   fill?: string;
   style?: React.CSSProperties;
   className?: string;
-};
+}
 
 export const Icon: React.FC<Props> = ({
   size = 14,

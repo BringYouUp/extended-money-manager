@@ -1,8 +1,6 @@
 import { User } from "firebase/auth";
 
-import { StoreUserUser } from "@models";
-
-export const getStoreUserFormat = (user: User): StoreUserUser => {
+export const getStoreUserFormat = (user: User): Store.User => {
   return {
     uid: user.uid,
     email: user.email || '',

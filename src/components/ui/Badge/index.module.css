@@ -38,11 +38,18 @@
 }
 
 .badge.active {
-  z-index: 1;
   color: var(--text-color-white-90);
+  z-index: 1;
+}
+
+.badge.active:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   background: linear-gradient(
     67.5deg,
-    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.35),
     rgba(255, 255, 255, 0.1)
   );
 }
@@ -51,7 +58,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-color: var(--badge-color-final);
+  background: var(--badge-color-final);
   z-index: -1;
   overflow: hidden;
 }

@@ -1,4 +1,3 @@
-import { TransitionedComponentStates } from "@models";
 import { cn } from "@utils";
 import { ReactNode, useLayoutEffect, useRef, useState } from "react";
 
@@ -8,23 +7,23 @@ export type TransitionedPropsClasses = {
   exit: string;
 };
 
-export type TransitionedProps = {
-  is: boolean;
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  _is: boolean;
   classes: TransitionedPropsClasses;
   className?: string;
   style?: React.CSSProperties;
   children?: ReactNode;
-};
+}
 
-export const Transitioned: React.FC<TransitionedProps> = ({
-  is,
+export const Transitioned: React.FC<Props> = ({
+  _is,
   style,
   classes,
   className = "",
   children,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [state, setState] = useState<TransitionedComponentStates>("default");
+  const [state, setState] = useState<Components.Transitioned.State>("default");
 
   const onTransitionHandle = () => {
     switch (state) {
@@ -74,17 +73,17 @@ export const Transitioned: React.FC<TransitionedProps> = ({
   }, [state]);
 
   useLayoutEffect(() => {
-    if (is && state === "default") {
+    if (_is && state === "default") {
       setState("enter");
     }
 
-    if (!is && state === "entered") {
+    if (!_is && state === "entered") {
       setState("exit");
     }
-  }, [is, state]);
+  }, [_is, state]);
 
   return (
-    (is || state !== "default") && (
+    (_is || state !== "default") && (
       <div
         style={
           {

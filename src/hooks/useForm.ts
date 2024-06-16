@@ -1,14 +1,13 @@
-import { FormFields, UseFormErrors, UseFormFields, UseFormOptions, UseFormOptionsBeforeSubmit, UseFormValidators } from "@models";
 import { getValidatorsForField } from "@utils";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-export const useForm = <Fields extends UseFormFields>(
+export const useForm = <Fields extends Hooks.UseForm.UseFormFields>(
   fields: Fields,
-  options?: UseFormOptions<Fields>
+  options?: Hooks.UseForm.Options<Fields>
 ) => {
-  const [errors, setErrors] = useState<UseFormErrors<Fields>>({})
-  const validatorsRef = useRef<UseFormValidators<Fields>>({})
-  const formRef = useRef<HTMLFormElement & FormFields<Fields>>(null)
+  const [errors, setErrors] = useState<Hooks.UseForm.Errors<Fields>>({})
+  const validatorsRef = useRef<Hooks.UseForm.Validators<Fields>>({})
+  const formRef = useRef<HTMLFormElement & Hooks.UseForm.FormFields<Fields>>(null)
 
   const getValue = (field: keyof Fields) => {
     if (!formRef.current) {
@@ -45,7 +44,7 @@ export const useForm = <Fields extends UseFormFields>(
   }
 
   const setValue = (field: keyof Fields, value: string | boolean | number) => {
-    const handler = (e: unknown) => onChangeForm(e as React.ChangeEvent<HTMLFormElement & FormFields<Fields>>)
+    const handler = (e: unknown) => onChangeForm(e as React.ChangeEvent<HTMLFormElement & Hooks.UseForm.FormFields<Fields>>)
     let ref: Element
     if (formRef.current) {
 
@@ -84,7 +83,7 @@ export const useForm = <Fields extends UseFormFields>(
     }
   }
 
-  const onChangeForm = (e: React.ChangeEvent<HTMLFormElement & FormFields<Fields>>) => {
+  const onChangeForm = (e: React.ChangeEvent<HTMLFormElement & Hooks.UseForm.FormFields<Fields>>) => {
     if (typeof options?.updateOnChange === 'function') {
       options?.updateOnChange(e, getValues())
     }
@@ -98,7 +97,7 @@ export const useForm = <Fields extends UseFormFields>(
   };
 
   const onValidate = (e: React.ChangeEvent<HTMLFormElement>): boolean => {
-    let beforeSubmitData: ReturnType<UseFormOptionsBeforeSubmit<Fields>> | undefined
+    let beforeSubmitData: ReturnType<Hooks.UseForm.OptionsBeforeSubmit<Fields>> | undefined
 
     if (typeof options?.beforeSubmit === 'function') {
       beforeSubmitData = options?.beforeSubmit({
@@ -140,7 +139,7 @@ export const useForm = <Fields extends UseFormFields>(
     return isWithoutError
   }
 
-  const onSubmitForm = (onSuccess?: unknown, onFail?: unknown) => (e: FormEvent<HTMLFormElement> & FormFields<Fields>) => {
+  const onSubmitForm = (onSuccess?: unknown, onFail?: unknown) => (e: FormEvent<HTMLFormElement> & Hooks.UseForm.FormFields<Fields>) => {
     e.preventDefault()
     if (!onValidate(e as React.ChangeEvent<HTMLFormElement>)) {
       typeof onFail === 'function' && onFail(e)
@@ -152,7 +151,7 @@ export const useForm = <Fields extends UseFormFields>(
 
   useEffect(() => {
     (Object.keys(fields) as (keyof Fields)[]).forEach((field) => {
-      validatorsRef.current[field] = getValidatorsForField(field as keyof UseFormFields)
+      validatorsRef.current[field] = getValidatorsForField(field as keyof Hooks.UseForm.UseFormFields)
     })
   }, [fields])
 

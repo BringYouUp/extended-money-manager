@@ -23,20 +23,13 @@ import {
   useUID,
   useToast,
 } from "@hooks";
-import {
-  CategoryFormFormFields,
-  StoreAccountsAccountCurrencies,
-  StoreCategoriesCategory,
-  StoreCategoriesCategoryTypes,
-  StoreCategoryIcon,
-} from "@models";
 import { PLATFORM_CURRENCIES_LIST } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 type Props = (
   | {
       mode: "edit";
-      data: StoreCategoriesCategory;
+      data: Store.Category;
     }
   | {
       mode: "create";
@@ -44,7 +37,7 @@ type Props = (
     }
 ) & {
   onClose: (...args: unknown[]) => void;
-  setValues: (values: CategoryFormFormFields) => void;
+  setValues: (values: Components.Form.Category) => void;
 };
 
 export const CategoryForm: React.FC<Props> = ({
@@ -71,7 +64,7 @@ export const CategoryForm: React.FC<Props> = ({
     getValue,
     formRef,
     setValue,
-  } = useForm<CategoryFormFormFields>(
+  } = useForm<Components.Form.Category>(
     {
       "category-color":
         mode === "edit" ? data.color : `${Math.floor(Math.random() * 360)}`,
@@ -94,12 +87,12 @@ export const CategoryForm: React.FC<Props> = ({
           category: {
             name: values["category-name"],
             color: values["category-color"],
-            icon: values["category-icon"] as StoreCategoryIcon,
-            type: values["category-type"] as StoreCategoriesCategoryTypes,
+            icon: values["category-icon"] as Store.CategoryIcon,
+            type: values["category-type"] as Store.CategoryType,
             deleted: false,
             currency: values[
               "category-currency"
-            ] as StoreAccountsAccountCurrencies,
+            ] as Shared.Currencies.CurrencySymbols,
           },
           uid,
         })
@@ -117,13 +110,13 @@ export const CategoryForm: React.FC<Props> = ({
           category: {
             name: values["category-name"],
             color: values["category-color"],
-            icon: values["category-icon"] as StoreCategoryIcon,
+            icon: values["category-icon"] as Store.CategoryIcon,
             id: data.id,
-            type: values["category-type"] as StoreCategoriesCategoryTypes,
+            type: values["category-type"] as Store.CategoryType,
             deleted: false,
             currency: values[
               "category-currency"
-            ] as StoreAccountsAccountCurrencies,
+            ] as Shared.Currencies.CurrencySymbols,
           },
           uid,
         })
@@ -136,7 +129,7 @@ export const CategoryForm: React.FC<Props> = ({
     }
   };
 
-  const onSetIcon = (icon: StoreCategoryIcon) => {
+  const onSetIcon = (icon: Store.CategoryIcon) => {
     setValue("category-icon", icon);
     forceUpdate();
   };
@@ -149,7 +142,7 @@ export const CategoryForm: React.FC<Props> = ({
         case "onSuccessSubmit":
           return onSuccessSubmit();
         case "onSetIcon":
-          return onSetIcon(data[0] as StoreCategoryIcon);
+          return onSetIcon(data[0] as Store.CategoryIcon);
       }
     };
 
@@ -184,8 +177,8 @@ export const CategoryForm: React.FC<Props> = ({
           <Flex style={{ flex: 1 }} w100 column gap={6}>
             <Label htmlFor="category-type">Type</Label>
             <Select<{
-              name: Capitalize<StoreCategoriesCategoryTypes>;
-              value: StoreCategoriesCategoryTypes;
+              name: Capitalize<Store.CategoryType>;
+              value: Store.CategoryType;
             }>
               disabled={mode === "edit"}
               mode="single"
@@ -200,7 +193,7 @@ export const CategoryForm: React.FC<Props> = ({
               selectedCallback={(type) =>
                 getValue("category-type") === type.value
               }
-              onChange={(e) => {
+              onChangeValue={(e) => {
                 setValue("category-type", e.value);
               }}
               Component={SelectOption}
@@ -226,8 +219,8 @@ export const CategoryForm: React.FC<Props> = ({
           <Flex style={{ flex: 1 }} w100 column gap={6}>
             <Label htmlFor="category-currency">Currency</Label>
             <Select<{
-              name: StoreAccountsAccountCurrencies;
-              value: StoreAccountsAccountCurrencies;
+              name: Shared.Currencies.CurrencySymbols;
+              value: Shared.Currencies.CurrencySymbols;
             }>
               mode="single"
               placeholder="Select currency..."
@@ -238,7 +231,7 @@ export const CategoryForm: React.FC<Props> = ({
               selectedCallback={(currency) =>
                 getValue("category-currency") === currency.value
               }
-              onChange={(e) => {
+              onChangeValue={(e) => {
                 setValue("category-currency", e.value);
               }}
               Component={SelectOption}

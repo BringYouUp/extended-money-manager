@@ -9,7 +9,7 @@ import {
 } from "@components";
 import { EditTransactionDrawer, SearchTransactionsDrawer } from "@containers";
 import { useLoading, useOpen, useSearchTransactions, useToast } from "@hooks";
-import { FilterModel, StoreTransactionsTransaction } from "@models";
+
 import { cn } from "@utils";
 import { useEffect, useState } from "react";
 import { TransactionsFilterBadges } from "src/pages/Transactions";
@@ -25,9 +25,7 @@ const Component: React.FC = () => {
     onResetFilter,
     onFilter,
   } = useSearchTransactions();
-  const [transactions, setTransactions] = useState<
-    StoreTransactionsTransaction[]
-  >([]);
+  const [transactions, setTransactions] = useState<Store.Transaction[]>([]);
 
   const [
     isTransactionDrawerOpened,
@@ -41,7 +39,7 @@ const Component: React.FC = () => {
     onCloseSearchTransactionsDrawer,
   ] = useOpen();
 
-  const onSearch = (data: FilterModel) => {
+  const onSearch = (data: Hooks.UseFilterTransactions.FilterModel) => {
     onCloseSearchTransactionsDrawer();
     onUpdateFilter(data);
   };

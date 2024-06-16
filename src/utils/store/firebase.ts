@@ -1,6 +1,5 @@
 import { QueryFieldFilterConstraint, collection, doc, or, where } from "firebase/firestore";
 import { db } from '../../../config/firebase'
-import { FilterModel } from "@models";
 
 export const getRef = {
   user: (uid: string) => doc(db, "users", uid),
@@ -15,7 +14,7 @@ export const getRef = {
   platformCurrency: () => doc(db, "platform", "currency"),
 }
 
-export const generateTransactionsQuery = (params: FilterModel): QueryFieldFilterConstraint[] => {
+export const generateTransactionsQuery = (params: Hooks.UseFilterTransactions.FilterModel): QueryFieldFilterConstraint[] => {
   let res = []
 
   if (params["transaction-types"].length) {

@@ -1,7 +1,5 @@
 import { Flex, Icon, Text } from "@components";
 
-import { StoreTransactionsTransaction } from "@models";
-
 import styles from "./index.module.css";
 import { cn } from "@utils";
 import { useAppSelector } from "@hooks";
@@ -9,9 +7,7 @@ import { useAppSelector } from "@hooks";
 import { ACCOUNT_SELECTOR } from "@selectors";
 
 type Props = {
-  data:
-    | StoreTransactionsTransaction
-    | Omit<StoreTransactionsTransaction, "id" | "createdAt">;
+  data: Store.Transaction | Omit<Store.Transaction, "id" | "createdAt">;
 };
 
 export const TransactionTransfer = ({ data }: Props) => {

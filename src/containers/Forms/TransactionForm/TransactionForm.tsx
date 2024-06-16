@@ -4,16 +4,12 @@ import {
   TransactionTransferForm,
 } from "@containers";
 
-import {
-  StoreTransactionsTransactionType,
-  TransactionFormProps,
-} from "@models";
 import { useState } from "react";
 
 type Props = {
   onClose: (...args: unknown[]) => void;
   isFormChanged: React.MutableRefObject<boolean>;
-} & TransactionFormProps;
+} & Components.Form.TransactionProps;
 
 export const TransactionForm: React.FC<Props> = ({
   data,
@@ -23,7 +19,7 @@ export const TransactionForm: React.FC<Props> = ({
   onClose,
 }: Props) => {
   const [transactionType, setTransactionType] =
-    useState<StoreTransactionsTransactionType | null>(() => {
+    useState<Store.TransactionType | null>(() => {
       if (mode === "edit") {
         return data.type;
       } else {
@@ -37,8 +33,8 @@ export const TransactionForm: React.FC<Props> = ({
         <Flex style={{ flex: 1 }} w100 column gap={6}>
           <Label htmlFor="transaction-account-id">Transaction type</Label>
           <Select<{
-            name: Capitalize<StoreTransactionsTransactionType>;
-            value: StoreTransactionsTransactionType;
+            name: Capitalize<Store.TransactionType>;
+            value: Store.TransactionType;
           }>
             disabled={mode === "edit"}
             mode="single"
@@ -51,7 +47,7 @@ export const TransactionForm: React.FC<Props> = ({
             ]}
             parseItem={(item) => item.name}
             selectedCallback={(type) => type.value === transactionType}
-            onChange={(e) => {
+            onChangeValue={(e) => {
               setTransactionType(e.value);
             }}
             Component={SelectOption}

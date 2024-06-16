@@ -1,6 +1,5 @@
-import { StoreCategoryIcon } from "@models";
 
-export const CATEGORIES_ICONS: StoreCategoryIcon[] = [
+export const CATEGORIES_ICONS: Store.CategoryIcon[] = [
   "docs",
   "desktop",
   "attributes",

@@ -1,10 +1,10 @@
 import { generateTransactionsQuery, getRef, getStoreErrorFormat } from '@utils';
 import { addDoc, getDoc, getDocs, query, setDoc } from 'firebase/firestore';
-import { OmittedStoreFields, FilterModel, StoreAccountsAccount, StoreTransactionsTransaction } from '@models';
+
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { accountsEditAccount } from '@async-actions';
 
-export const transactionsGetFilteredTransactions = createAsyncThunk<StoreTransactionsTransaction[], { uid: string, filter: FilterModel }>(
+export const transactionsGetFilteredTransactions = createAsyncThunk<Store.Transaction[], { uid: string, filter: Hooks.UseFilterTransactions.FilterModel }>(
   'transactions/transactionsGetFilteredTransactions',
   ({ uid, filter }, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
@@ -16,10 +16,10 @@ export const transactionsGetFilteredTransactions = createAsyncThunk<StoreTransac
       getDocs(query(docRef, ...generatedQuery))
         .then(docSnap => {
           if (docSnap.size) {
-            const data: StoreTransactionsTransaction[] = []
+            const data: Store.Transaction[] = []
             docSnap.forEach(doc => {
               data.push({
-                ...doc.data() as StoreTransactionsTransaction,
+                ...doc.data() as Store.Transaction,
                 id: doc.id,
               })
             })
@@ -33,7 +33,7 @@ export const transactionsGetFilteredTransactions = createAsyncThunk<StoreTransac
   }
 )
 
-export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTransaction[], string>(
+export const transactionsSetTransactions = createAsyncThunk<Store.Transaction[], string>(
   'transactions/transactionsSetTransactions',
   (uid, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
@@ -42,10 +42,10 @@ export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTra
       getDocs(query(docRef))
         .then(docSnap => {
           if (docSnap.size) {
-            const data: StoreTransactionsTransaction[] = []
+            const data: Store.Transaction[] = []
             docSnap.forEach(doc => {
               data.push({
-                ...doc.data() as StoreTransactionsTransaction,
+                ...doc.data() as Store.Transaction,
                 id: doc.id
               })
             })
@@ -59,17 +59,17 @@ export const transactionsSetTransactions = createAsyncThunk<StoreTransactionsTra
   }
 )
 
-export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTransaction, { transaction: Omit<StoreTransactionsTransaction, OmittedStoreFields>, uid: string, withoutModyfingAccount?: boolean }>(
+export const transactionsAddTransaction = createAsyncThunk<Store.Transaction, { transaction: Omit<Store.Transaction, Store.OmittedDateFields>, uid: string, withoutModyfingAccount?: boolean }>(
   'transactions/transactionsAddTransaction',
   ({ transaction, uid, withoutModyfingAccount }, { rejectWithValue, fulfillWithValue, dispatch }) => {
     return new Promise((resolve, reject) => {
       const docTransactionsRef = getRef.transactions(uid)
       const docAccountRef = getRef.account(uid, transaction.accountId)
-      let accountData: StoreAccountsAccount
-      let toAccountData: StoreAccountsAccount
+      let accountData: Store.Account
+      let toAccountData: Store.Account
 
       getDoc(docAccountRef).then(snap => {
-        accountData = snap.data() as StoreAccountsAccount
+        accountData = snap.data() as Store.Account
 
         switch (transaction.type) {
           case 'transfer': {
@@ -101,7 +101,7 @@ export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTran
             }))
           }
           if (snap) {
-            toAccountData = snap.data() as StoreAccountsAccount
+            toAccountData = snap.data() as Store.Account
             toAccountData.amount += transaction.toAmount || transaction.amount
 
             dispatch(accountsEditAccount({
@@ -118,29 +118,29 @@ export const transactionsAddTransaction = createAsyncThunk<StoreTransactionsTran
           resolve(fulfillWithValue({
             ...transaction,
             id: data.id,
-          } as StoreTransactionsTransaction))
+          } as Store.Transaction))
         })
         .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
     })
   }
 )
 
-export const transactionsEditTransaction = createAsyncThunk<Partial<StoreTransactionsTransaction> & Pick<StoreTransactionsTransaction, "id" | "accountId" | "amount" | "toAccountId">, { transaction: Partial<StoreTransactionsTransaction> & Pick<StoreTransactionsTransaction, "id" | "accountId" | "amount" | "toAccountId">, uid: string }>(
+export const transactionsEditTransaction = createAsyncThunk<Partial<Store.Transaction> & Pick<Store.Transaction, "id" | "accountId" | "amount" | "toAccountId">, { transaction: Partial<Store.Transaction> & Pick<Store.Transaction, "id" | "accountId" | "amount" | "toAccountId">, uid: string }>(
   'transactions/transactionsEditTransaction',
   ({ transaction, uid }, { rejectWithValue, fulfillWithValue, dispatch }) => {
     return new Promise((resolve, reject) => {
       const transactionRef = getRef.transactionsEdit(uid, transaction.id)
       const docAccountRef = getRef.account(uid, transaction.accountId)
-      let transactionData: StoreTransactionsTransaction
-      let accountData: StoreAccountsAccount
-      let toAccountData: StoreAccountsAccount
+      let transactionData: Store.Transaction
+      let accountData: Store.Account
+      let toAccountData: Store.Account
 
       getDoc(transactionRef).then(snap => {
-        transactionData = snap.data() as StoreTransactionsTransaction
+        transactionData = snap.data() as Store.Transaction
         return getDoc(docAccountRef)
       })
         .then(snap => {
-          accountData = snap.data() as StoreAccountsAccount
+          accountData = snap.data() as Store.Account
 
           switch (transaction.type) {
             case 'transfer': {
@@ -181,7 +181,7 @@ export const transactionsEditTransaction = createAsyncThunk<Partial<StoreTransac
             uid
           }))
           if (snap) {
-            toAccountData = snap.data() as StoreAccountsAccount
+            toAccountData = snap.data() as Store.Account
 
             if (transaction.deleted) {
               toAccountData.amount -= transactionData.toAmount || transactionData.amount

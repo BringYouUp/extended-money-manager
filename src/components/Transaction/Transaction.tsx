@@ -4,8 +4,6 @@ import {
   TransactionTransfer,
 } from "@components";
 
-import { StoreTransactionsTransaction } from "@models";
-
 import styles from "./index.module.css";
 import { cn } from "@utils";
 import { useAppSelector, useOpen } from "@hooks";
@@ -14,9 +12,7 @@ import { useMemo } from "react";
 import { ACCOUNT_SELECTOR, CATEGORY_SELECTOR } from "@selectors";
 
 type Props = {
-  data:
-    | StoreTransactionsTransaction
-    | Omit<StoreTransactionsTransaction, "id" | "createdAt">;
+  data: Store.Transaction | Omit<Store.Transaction, "id" | "createdAt">;
   style?: React.CSSProperties;
   noClick?: boolean;
 };
@@ -68,7 +64,7 @@ export const Transaction: React.FC<Props> = ({ noClick, data, style }) => {
       <EditTransactionDrawer
         is={isOpened}
         onClose={onClose}
-        data={data as StoreTransactionsTransaction}
+        data={data as Store.Transaction}
         mode="edit"
       />
     </>

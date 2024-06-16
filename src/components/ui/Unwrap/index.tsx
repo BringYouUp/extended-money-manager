@@ -3,13 +3,13 @@ import styles from "./index.module.css";
 
 import { ReactNode } from "react";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   visible: boolean;
   negativeOffset: `${string}px`;
   style?: React.CSSProperties;
   children?: ReactNode;
-};
+}
 
 export const Unwrap: React.FC<Props> = ({
   visible,
@@ -17,6 +17,7 @@ export const Unwrap: React.FC<Props> = ({
   style,
   children,
   className,
+  ...rest
 }) => {
   return (
     <div
@@ -33,6 +34,7 @@ export const Unwrap: React.FC<Props> = ({
         },
         className
       )}
+      {...rest}
     >
       {children}
     </div>

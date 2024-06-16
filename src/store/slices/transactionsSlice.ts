@@ -1,8 +1,7 @@
 import { transactionsAddTransaction, transactionsEditTransaction, transactionsSetTransactions } from '@async-actions'
-import { StoreTransactionsTransaction, StoreTransactions, StoreError } from '@models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-const initialState: StoreTransactions = {
+const initialState: Store.TransactionSelector = {
   transactions: [],
   error: {
     code: '',
@@ -21,15 +20,15 @@ const transactions = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(transactionsSetTransactions.fulfilled, (state, { payload }: PayloadAction<StoreTransactionsTransaction[]>) => {
+      .addCase(transactionsSetTransactions.fulfilled, (state, { payload }: PayloadAction<Store.Transaction[]>) => {
         state.transactions = payload || []
         state.error = initialState.error
       })
-      .addCase(transactionsAddTransaction.fulfilled, (state, { payload }: PayloadAction<StoreTransactionsTransaction>) => {
+      .addCase(transactionsAddTransaction.fulfilled, (state, { payload }: PayloadAction<Store.Transaction>) => {
         state.transactions.push(payload)
         state.error = initialState.error
       })
-      .addCase(transactionsEditTransaction.fulfilled, ((state, { payload }: PayloadAction<Partial<StoreTransactionsTransaction> & Pick<StoreTransactionsTransaction, 'id'>>) => {
+      .addCase(transactionsEditTransaction.fulfilled, ((state, { payload }: PayloadAction<Partial<Store.Transaction> & Pick<Store.Transaction, 'id'>>) => {
         const index = state.transactions.findIndex(transaction => transaction.id === payload.id);
 
         state.transactions[index] = {
@@ -52,7 +51,7 @@ const transactions = createSlice({
       )
       .addMatcher(
         ({ type }) => type.startsWith('transactions/') && type.endsWith('rejected'),
-        (state, { payload }: PayloadAction<StoreError>) => {
+        (state, { payload }: PayloadAction<Store.Error>) => {
           state.error = payload
         }
       )
