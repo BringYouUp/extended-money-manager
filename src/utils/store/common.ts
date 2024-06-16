@@ -1,5 +1,4 @@
 import { FirebaseError } from "firebase/app";
-import { StoreError } from "@models";
 import { Timestamp } from "firebase/firestore";
 
 export const getActualFirestoreFormatDate = (date?: string): Timestamp => {
@@ -24,7 +23,7 @@ export const toSerializeActualFirestoreFormatDate = <T extends {
   }
 }
 
-export const getStoreErrorFormat = (err: FirebaseError): StoreError => {
+export const getStoreErrorFormat = (err: FirebaseError): Store.Error => {
   return {
     code: err?.code,
     message: err.message.replace('Firebase: Error ', '').replace(/(\(|\)\.)/g, '')

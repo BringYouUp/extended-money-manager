@@ -2,14 +2,10 @@ import { Badge } from "@components";
 import { TRANSACTIONS_TYPES } from "@consts";
 import { useAppSelector } from "@hooks";
 import { ACCOUNT_SELECTOR, CATEGORY_SELECTOR } from "@selectors";
-import {
-  FilterModel,
-  UpdateFilter,
-} from "src/models/hooks/useFilterTransactions";
 
 export const TransactionsFilterBadges: React.FC<{
-  data: FilterModel;
-  onRemove: UpdateFilter;
+  data: Hooks.UseFilterTransactions.FilterModel;
+  onRemove: Hooks.UseFilterTransactions.UpdateFilter;
 }> = ({ data, onRemove }) => {
   const categories = useAppSelector(CATEGORY_SELECTOR.allCategoriesSelector);
   const accounts = useAppSelector(ACCOUNT_SELECTOR.allAccountsSelector);
@@ -27,7 +23,7 @@ export const TransactionsFilterBadges: React.FC<{
             onClick={() => {}}
             key={found.type}
             active={true}
-            color={found.color}
+            badgeColor={found.color}
             icon="bank-card"
             text={found.label}
             type="transaction-type"
@@ -44,7 +40,7 @@ export const TransactionsFilterBadges: React.FC<{
             onClick={() => {}}
             key={found.id}
             active={true}
-            color={found.color}
+            badgeColor={found.color}
             icon={found.icon}
             text={found.name}
             type="category"
@@ -61,7 +57,7 @@ export const TransactionsFilterBadges: React.FC<{
             onClick={() => {}}
             key={found.id}
             active={true}
-            color={found.color}
+            badgeColor={found.color}
             icon="bank-card"
             text={found.name}
             type="account"
@@ -74,7 +70,7 @@ export const TransactionsFilterBadges: React.FC<{
           onClick={() => {}}
           key={data.mode}
           active={true}
-          color={-1}
+          badgeColor={-1}
           icon="attributes"
           text={data.mode}
           type="account"

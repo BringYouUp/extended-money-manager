@@ -4,35 +4,37 @@ import styles from "./index.module.css";
 import { useEffect, useState } from "react";
 import { FormGroup } from "@components";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   value?: string;
   id?: string;
   name?: string;
   className?: string;
   error?: boolean;
-  onChange?: (value: string) => void;
+  onValueChange?: (value: string) => void;
   style?: React.CSSProperties;
-};
+}
 
 export const ColorPicker: React.FC<Props> = ({
   value: defaultValue,
-  onChange,
+  onValueChange,
   style,
   error,
   id,
   name,
   className = "",
+  ...rest
 }) => {
   const [value, setValue] = useState(defaultValue || "");
 
   useEffect(() => {
-    typeof onChange === "function" && onChange(value);
+    typeof onValueChange === "function" && onValueChange(value);
   }, [value]);
 
   return (
     <FormGroup
       style={style}
       className={cn(styles.container, { [styles.error]: error }, className)}
+      {...rest}
     >
       <input
         id={id}

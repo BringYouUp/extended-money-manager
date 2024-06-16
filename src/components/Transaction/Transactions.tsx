@@ -8,11 +8,10 @@ import {
 
 import { useAppSelector } from "@hooks";
 import styles from "./index.module.css";
-import { StoreTransactionsTransaction } from "@models";
 
 type Props = {
   withAdd: boolean;
-  transactions: StoreTransactionsTransaction[];
+  transactions: Store.Transaction[];
   countTransactions: number;
   countPlaceholders: number;
   isPending?: boolean;

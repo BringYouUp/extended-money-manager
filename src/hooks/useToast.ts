@@ -1,5 +1,4 @@
 import { useAppDispatch } from "@hooks";
-import { StoreToastToast, StoreToastToastType } from "@models";
 import { TOAST_SLICE } from "@slices";
 import { uid } from "@utils";
 import { useCallback } from "react";
@@ -7,8 +6,8 @@ import { useCallback } from "react";
 export const useToast = () => {
   const dispatch = useAppDispatch()
 
-  const createToast = useCallback((title: string, type: StoreToastToastType, description: string = '') => {
-    const toast: StoreToastToast = {
+  const createToast = useCallback((title: string, type: Store.ToastType, description: string = '') => {
+    const toast: Store.Toast = {
       id: uid(),
       title,
       description,

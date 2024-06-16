@@ -22,18 +22,12 @@ import {
   useUID,
   useToast,
 } from "@hooks";
-import {
-  FormFields,
-  StoreAccountsAccount,
-  TransactionTransferFormFormFields,
-  TransactionFormProps,
-} from "@models";
 import { ACCOUNT_SELECTOR, PLATFORM_SELECTOR } from "@selectors";
 import { getActualFirestoreFormatDate, getConvertedValue } from "@utils";
 import { useMemo } from "react";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
-type Props = TransactionFormProps & {
+type Props = Components.Form.TransactionProps & {
   isFormChanged: React.MutableRefObject<boolean>;
   onClose: (...args: unknown[]) => void;
 };
@@ -66,7 +60,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
     getValue,
     formRef,
     setValue,
-  } = useForm<TransactionTransferFormFormFields>(
+  } = useForm<Components.Form.TransactionTransfer>(
     {
       "transaction-description": mode === "edit" ? data.description : "",
       "transaction-amount": mode === "edit" ? data.amount : 0,
@@ -128,10 +122,11 @@ export const TransactionTransferForm: React.FC<Props> = ({
 
   function updateOnChangeCheckForAmountInput(
     e: React.ChangeEvent<
-      HTMLFormElement & FormFields<TransactionTransferFormFormFields>
+      HTMLFormElement &
+        Hooks.UseForm.FormFields<Components.Form.TransactionTransfer>
     >,
     values: {
-      [K in keyof TransactionTransferFormFormFields]: TransactionTransferFormFormFields[K];
+      [K in keyof Components.Form.TransactionTransfer]: Components.Form.TransactionTransfer[K];
     }
   ): void {
     if (e.target.nodeName !== "FORM" && isFormChanged !== null) {
@@ -221,7 +216,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
     }
   };
 
-  const appropriateAccounts: StoreAccountsAccount[] = useMemo(() => {
+  const appropriateAccounts: Store.Account[] = useMemo(() => {
     return accounts.filter((account) => {
       switch (mode) {
         case "create":
@@ -253,7 +248,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
         <Flex w100 column gap={6}>
           <Flex style={{ flex: 1 }} w100 column gap={6}>
             <Label htmlFor="transaction-account-id">Account</Label>
-            <Select<StoreAccountsAccount>
+            <Select<Store.Account>
               placeholder="Select account..."
               className="flex flex-column flex-gap-8"
               mode="single"
@@ -271,7 +266,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               selectedCallback={(account) =>
                 getValue("transaction-account-id") === account.id
               }
-              onChange={(e) => {
+              onChangeValue={(e) => {
                 setValue("transaction-account-id", e.id);
               }}
               Wrapper={({ children }) => (
@@ -307,7 +302,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
         <Flex w100 column gap={6}>
           <Flex style={{ flex: 1 }} w100 column gap={6}>
             <Label htmlFor="transaction-to-account-id">To account</Label>
-            <Select<StoreAccountsAccount>
+            <Select<Store.Account>
               placeholder="To account..."
               className="flex flex-column flex-gap-8"
               mode="single"
@@ -325,7 +320,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               selectedCallback={(account) =>
                 getValue("transaction-to-account-id") === account.id
               }
-              onChange={(e) => {
+              onChangeValue={(e) => {
                 setValue("transaction-to-account-id", e.id);
               }}
               Wrapper={({ children }) => (

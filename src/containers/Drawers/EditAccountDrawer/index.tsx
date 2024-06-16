@@ -13,18 +13,13 @@ import {
 import { AccountForm } from "@containers";
 import { AccountCard } from "@components";
 import { SetStateAction, useRef, useState } from "react";
-import {
-  AccountFormFormFields,
-  StoreAccountsAccount,
-  StoreAccountsAccountCurrencies,
-} from "@models";
 import { useDebounce, useOpen } from "@hooks";
 
 const INITIAL_STATE = {};
 
 type Edit = {
   mode: "edit";
-  data: StoreAccountsAccount;
+  data: Store.Account;
 };
 
 type Create = {
@@ -45,8 +40,8 @@ export const EditAccountDrawer: React.FC<Props> = ({
 }: Props) => {
   const isFormChanged = useRef<boolean>(false);
 
-  const [values, setValues] = useState<AccountFormFormFields>(
-    INITIAL_STATE as AccountFormFormFields
+  const [values, setValues] = useState<Components.Form.Account>(
+    INITIAL_STATE as Components.Form.Account
   );
 
   const setDebouncedValues = useDebounce((values) => {
@@ -55,7 +50,7 @@ export const EditAccountDrawer: React.FC<Props> = ({
         isFormChanged.current = true;
       }
 
-      return values as AccountFormFormFields;
+      return values as Components.Form.Account;
     });
   }, 125);
 
@@ -65,7 +60,9 @@ export const EditAccountDrawer: React.FC<Props> = ({
   const onCloseHandler = () => {
     onClose();
     isFormChanged.current = false;
-    setDebouncedValues(INITIAL_STATE as SetStateAction<AccountFormFormFields>);
+    setDebouncedValues(
+      INITIAL_STATE as SetStateAction<Components.Form.Account>
+    );
   };
 
   const onTryToClose = (forceClose: boolean = false) => {
@@ -133,7 +130,7 @@ export const EditAccountDrawer: React.FC<Props> = ({
                             type: "regular",
                             currency:
                               values["account-currency"] ||
-                              ("" as StoreAccountsAccountCurrencies),
+                              ("" as Shared.Currencies.CurrencySymbols),
                             deleted: false,
                           }}
                         />

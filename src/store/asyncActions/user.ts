@@ -1,6 +1,5 @@
 import { getRef, getStoreErrorFormat, getStoreUserFormat } from '@utils';
 import { getDoc, setDoc } from 'firebase/firestore';
-import { GotDoc, StoreUserUser } from '@models';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { auth, googleProvider, githubProvider } from '../../../config/firebase'
 
@@ -8,7 +7,7 @@ import { User, UserCredential, createUserWithEmailAndPassword, sendPasswordReset
 
 import { accountsSetAccounts, categoriesSetCategories, platformSetPlatform, transactionsSetTransactions } from '@async-actions';
 
-export const userSetUser = createAsyncThunk<StoreUserUser, { uid: string, user: User }>(
+export const userSetUser = createAsyncThunk<Store.User, { uid: string, user: User }>(
   'user/userSetUser',
   ({ uid, user }, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
@@ -16,7 +15,7 @@ export const userSetUser = createAsyncThunk<StoreUserUser, { uid: string, user: 
 
       const createProfileSnap = () => {
         const profile = getStoreUserFormat(user)
-        return Promise.all<[unknown, StoreUserUser]>([
+        return Promise.all<[unknown, Store.User]>([
           setDoc(getRef.user(uid), { profile }, { merge: true }),
           profile
         ])
@@ -25,7 +24,7 @@ export const userSetUser = createAsyncThunk<StoreUserUser, { uid: string, user: 
       getDoc(docRef)
         .then(docSnap => {
           if (docSnap.exists()) {
-            const data = docSnap.data() as GotDoc
+            const data = docSnap.data() as Shared.Firebase.GotDoc
 
             if (data.profile) {
               resolve(fulfillWithValue(data.profile))

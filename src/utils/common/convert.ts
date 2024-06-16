@@ -1,17 +1,16 @@
-import { Currencies, StoreAccountsAccountCurrencies } from "@models"
 import { PLATFORM_CURRENCIES_CODE_MAP } from "src/consts/store";
 
 export const getConvertedValue = ({
   from, to, value, currencies
 }: {
-  from: StoreAccountsAccountCurrencies | undefined,
-  to: StoreAccountsAccountCurrencies | undefined,
+  from: Shared.Currencies.CurrencySymbols | undefined,
+  to: Shared.Currencies.CurrencySymbols | undefined,
   value: number | string,
-  currencies: Currencies
+  currencies: Shared.Currencies.Currencies
 }): string => {
 
-  const fromConverted = currencies[PLATFORM_CURRENCIES_CODE_MAP[from as StoreAccountsAccountCurrencies]];
-  const toConverted = currencies[PLATFORM_CURRENCIES_CODE_MAP[to as StoreAccountsAccountCurrencies]];
+  const fromConverted = currencies[PLATFORM_CURRENCIES_CODE_MAP[from as Shared.Currencies.CurrencySymbols]];
+  const toConverted = currencies[PLATFORM_CURRENCIES_CODE_MAP[to as Shared.Currencies.CurrencySymbols]];
 
   const newValue = (((+value || 0) * toConverted) / fromConverted).toFixed(2);
 

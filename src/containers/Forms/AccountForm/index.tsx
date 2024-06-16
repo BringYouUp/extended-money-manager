@@ -26,12 +26,6 @@ import {
   useToast,
   useUID,
 } from "@hooks";
-import {
-  AccountFormFormFields,
-  StoreAccountsAccount,
-  StoreAccountsAccountCurrencies,
-  StoreCategoriesCategory,
-} from "@models";
 import { CATEGORY_SELECTOR } from "@selectors";
 import { getActualFirestoreFormatDate } from "@utils";
 import { useMemo } from "react";
@@ -40,7 +34,7 @@ import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
 type Edit = {
   mode: "edit";
-  data: StoreAccountsAccount;
+  data: Store.Account;
 };
 
 type Create = {
@@ -50,7 +44,7 @@ type Create = {
 
 type Props = {
   onClose: (...args: unknown[]) => void;
-  setValues: (values: AccountFormFormFields) => void;
+  setValues: (values: Components.Form.Account) => void;
 } & (Create | Edit);
 
 export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
@@ -74,7 +68,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
     onChangeForm,
     setValue,
     formRef,
-  } = useForm<AccountFormFormFields>(
+  } = useForm<Components.Form.Account>(
     {
       "account-color": mode === "edit" ? data.color : "",
       "account-amount": mode === "edit" ? data.amount : 0,
@@ -142,7 +136,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
             amount: +values["account-amount"],
             currency: values[
               "account-currency"
-            ] as StoreAccountsAccountCurrencies,
+            ] as Shared.Currencies.CurrencySymbols,
             deleted: false,
           },
           uid: uid,
@@ -164,7 +158,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
             amount: +values["account-amount"],
             currency: values[
               "account-currency"
-            ] as StoreAccountsAccountCurrencies,
+            ] as Shared.Currencies.CurrencySymbols,
             id: data.id,
             deleted: false,
           },
@@ -197,7 +191,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
     }
   };
 
-  const appropriateCategories: StoreCategoriesCategory[] = useMemo(() => {
+  const appropriateCategories: Store.Category[] = useMemo(() => {
     return categories.filter((category) => category.type === "income");
   }, [categories]);
 
@@ -254,8 +248,8 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           <Flex style={{ flex: 1 }} w100 column gap={6}>
             <Label htmlFor="account-currency">Currency</Label>
             <Select<{
-              name: StoreAccountsAccountCurrencies;
-              value: StoreAccountsAccountCurrencies;
+              name: Shared.Currencies.CurrencySymbols;
+              value: Shared.Currencies.CurrencySymbols;
             }>
               mode="single"
               placeholder="Select currency..."
@@ -266,7 +260,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
               selectedCallback={(currency) =>
                 getValue("account-currency") === currency.value
               }
-              onChange={(e) => {
+              onChangeValue={(e) => {
                 setValue("account-currency", e.value);
               }}
               Component={SelectOption}
@@ -361,7 +355,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
         >
           <Flex style={{ flex: 1 }} w100 column gap={6}>
             <Label htmlFor="transaction-category-id">Category</Label>
-            <Select<StoreCategoriesCategory>
+            <Select<Store.Category>
               placeholder="Select category..."
               className="flex flex-column flex-gap-8"
               mode="single"
@@ -377,7 +371,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
               selectedCallback={(account) =>
                 getValue("transaction-category-id") === account.id
               }
-              onChange={(e) => {
+              onChangeValue={(e) => {
                 setValue("transaction-category-id", e.id);
               }}
               Wrapper={({ children }) => (

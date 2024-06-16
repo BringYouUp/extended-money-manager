@@ -11,7 +11,6 @@ import {
 } from "@components";
 import { PATHS } from "@consts";
 import { useAppDispatch, useForm, useLoading } from "@hooks";
-import { SignUpInFormFields } from "@models";
 import { useNavigate } from "react-router-dom";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
 
@@ -22,7 +21,7 @@ export const SignUpForm: React.FC = () => {
   useStoreErrorObserver("user");
 
   const { errors, onSubmitForm, onChangeForm, getValues, formRef } =
-    useForm<SignUpInFormFields>({ email: "", password: "" });
+    useForm<Components.Form.SignUpIn>({ email: "", password: "" });
 
   const { isLoading, startLoading, endLoading, loadingData } =
     useLoading(false);

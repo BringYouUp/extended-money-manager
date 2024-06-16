@@ -23,14 +23,6 @@ import {
   useUID,
   useToast,
 } from "@hooks";
-import {
-  TransactionFormFormFields,
-  FormFields,
-  StoreAccountsAccount,
-  StoreCategoriesCategory,
-  StoreTransactionsTransactionType,
-  TransactionFormProps,
-} from "@models";
 import { getActualFirestoreFormatDate, getConvertedValue } from "@utils";
 import { useEffect, useMemo } from "react";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
@@ -40,9 +32,9 @@ import {
   PLATFORM_SELECTOR,
 } from "src/store/slices/selectors";
 
-type Props = TransactionFormProps & {
+type Props = Components.Form.TransactionProps & {
   onClose: (...args: unknown[]) => void;
-  transactionType: Exclude<StoreTransactionsTransactionType, "transfer">;
+  transactionType: Exclude<Store.TransactionType, "transfer">;
   isFormChanged: React.MutableRefObject<boolean>;
 };
 
@@ -76,7 +68,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
     getValue,
     formRef,
     setValue,
-  } = useForm<TransactionFormFormFields>(
+  } = useForm<Components.Form.Transaction>(
     {
       "transaction-description": mode === "edit" ? data.description : "",
       "transaction-amount": mode === "edit" ? data.amount : 0,
@@ -110,10 +102,10 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
 
   function updateOnChangeCheckForAmountInput(
     e: React.ChangeEvent<
-      HTMLFormElement & FormFields<TransactionFormFormFields>
+      HTMLFormElement & Hooks.UseForm.FormFields<Components.Form.Transaction>
     >,
     values: {
-      [K in keyof TransactionFormFormFields]: TransactionFormFormFields[K];
+      [K in keyof Components.Form.Transaction]: Components.Form.Transaction[K];
     }
   ): void {
     if (e.target.nodeName !== "FORM" && isFormChanged !== null) {
@@ -153,9 +145,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
             date: getActualFirestoreFormatDate(
               values["transaction-date"]
             ) as unknown as string,
-            type: values[
-              "transaction-type"
-            ] as StoreTransactionsTransactionType,
+            type: values["transaction-type"] as Store.TransactionType,
             toAccountId: "",
             deleted: false,
             toAmount:
@@ -206,7 +196,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
     }
   };
 
-  const appropriateCategories: StoreCategoriesCategory[] = useMemo(() => {
+  const appropriateCategories: Store.Category[] = useMemo(() => {
     return categories.filter((category) => {
       switch (mode) {
         case "create":
@@ -223,7 +213,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
     });
   }, [mode, transactionType]);
 
-  const appropriateAccounts: StoreAccountsAccount[] = useMemo(() => {
+  const appropriateAccounts: Store.Account[] = useMemo(() => {
     return accounts.filter((account) => {
       switch (mode) {
         case "create":
@@ -294,7 +284,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
         <Flex w100 column gap={6}>
           <Flex style={{ flex: 1 }} w100 column gap={6}>
             <Label htmlFor="transaction-category-id">Category</Label>
-            <Select<StoreCategoriesCategory>
+            <Select<Store.Category>
               placeholder="Select category..."
               className="flex flex-column flex-gap-8"
               mode="single"
@@ -310,7 +300,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
               selectedCallback={(account) =>
                 getValue("transaction-category-id") === account.id
               }
-              onChange={(e) => {
+              onChangeValue={(e) => {
                 setValue("transaction-category-id", e.id);
               }}
               Wrapper={({ children }) => (
@@ -346,7 +336,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
         <Flex w100 column gap={6}>
           <Flex style={{ flex: 1 }} w100 column gap={6}>
             <Label htmlFor="transaction-account-id">Account</Label>
-            <Select<StoreAccountsAccount>
+            <Select<Store.Account>
               placeholder="Select account..."
               className="flex flex-column flex-gap-8"
               mode="single"
@@ -362,7 +352,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
               selectedCallback={(account) =>
                 getValue("transaction-account-id") === account.id
               }
-              onChange={(e) => {
+              onChangeValue={(e) => {
                 setValue("transaction-account-id", e.id);
               }}
               Wrapper={({ children }) => (

@@ -2,7 +2,6 @@ import { cn } from "@utils";
 import styles from "./index.module.css";
 import { Flex, Toast } from "@components";
 import { useAppDispatch, useAppSelector } from "@hooks";
-import { StoreToastToast } from "@models";
 import { TOAST_SLICE } from "@slices";
 import { createPortal } from "react-dom";
 
@@ -10,7 +9,7 @@ const Component = () => {
   const dispatch = useAppDispatch();
   const toasts = useAppSelector((state) => state.toast.toasts);
 
-  const removeToastHandler = (toast: StoreToastToast) => () => {
+  const removeToastHandler = (toast: Store.Toast) => () => {
     dispatch(TOAST_SLICE.removeToast(toast));
   };
 

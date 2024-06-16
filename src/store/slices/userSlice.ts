@@ -1,4 +1,3 @@
-import { StoreError, StoreUserUser } from '@models'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { userSetUser, userLogOut } from '@async-actions'
 
@@ -27,7 +26,7 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(userSetUser.fulfilled, (state, { payload }: PayloadAction<StoreUserUser>) => {
+      .addCase(userSetUser.fulfilled, (state, { payload }: PayloadAction<Store.User>) => {
         state.user = payload
       })
       .addCase(userLogOut.fulfilled, (state) => {
@@ -41,7 +40,7 @@ const userSlice = createSlice({
       )
       .addMatcher(
         ({ type }) => type.startsWith('user/') && type.endsWith('rejected'),
-        (state, { payload }: PayloadAction<StoreError>) => {
+        (state, { payload }: PayloadAction<Store.Error>) => {
           state.error = payload
         }
       );
