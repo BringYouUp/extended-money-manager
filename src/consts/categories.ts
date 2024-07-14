@@ -1,4 +1,3 @@
-
 export const CATEGORIES_ICONS: Store.CategoryIcon[] = [
   "docs",
   "desktop",

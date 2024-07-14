@@ -8,16 +8,14 @@ import {
   Category,
   ColorPicker,
   Flex,
+  Form,
   Input,
-  Label,
+  RadioGroup,
   Select,
   SelectOption,
   Spinner,
   Text,
-  RadioGroup,
-  Unwrap,
 } from "@components";
-
 import {
   useAppDispatch,
   useAppSelector,
@@ -31,6 +29,17 @@ import { getActualFirestoreFormatDate } from "@utils";
 import { useMemo } from "react";
 import { PLATFORM_CURRENCIES_LIST } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
+
+const RADIO_GROUP_DATA = [
+  {
+    label: "Yes",
+    value: "yes",
+  },
+  {
+    label: "No",
+    value: "no",
+  },
+];
 
 type Edit = {
   mode: "edit";
@@ -203,206 +212,136 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
       className="w100"
       onChange={onChangeForm}
     >
-      <Flex w100 column gap={20}>
-        <Flex w100 column gap={6}>
-          <Label htmlFor="account-name">Account name</Label>
+      <Form.Items>
+        <Form.Item
+          error={errors["account-name"]}
+          htmlFor="account-name"
+          label="Account name"
+        >
           <Input
             error={Boolean(errors["account-name"])}
             id="account-name"
             name="account-name"
             placeholder="Enter account name..."
           />
-          <Unwrap
-            visible={Boolean(errors["account-name"])}
-            negativeOffset="6px"
-          >
-            <Text size={11} color="var(--text-color-error)">
-              {errors["account-name"]}
-            </Text>
-          </Unwrap>
-        </Flex>
+        </Form.Item>
 
-        <Flex w100 column gap={6}>
-          <Flex style={{ flex: 1 }} w100 column gap={6}>
-            <Label htmlFor="account-amount">Amount </Label>
-            <Input
-              id="account-amount"
-              name="account-amount"
-              type="number"
-              placeholder="Enter amount..."
-              error={Boolean(errors["account-amount"])}
-              step="any"
-            />
-            <Unwrap
-              visible={Boolean(errors["account-amount"])}
-              negativeOffset="6px"
-            >
-              <Text size={11} color="var(--text-color-error)">
-                {errors["account-amount"]}
-              </Text>
-            </Unwrap>
-          </Flex>
-        </Flex>
+        <Form.Item
+          error={errors["account-amount"]}
+          htmlFor="account-amount"
+          label="Amount"
+        >
+          <Input
+            id="account-amount"
+            name="account-amount"
+            type="number"
+            placeholder="Enter amount..."
+            error={Boolean(errors["account-amount"])}
+            step="any"
+          />
+        </Form.Item>
 
-        <Flex w100 column gap={6}>
-          <Flex style={{ flex: 1 }} w100 column gap={6}>
-            <Label htmlFor="account-currency">Currency</Label>
-            <Select<{
-              name: Shared.Currencies.CurrencySymbols;
-              value: Shared.Currencies.CurrencySymbols;
-            }>
-              mode="single"
-              placeholder="Select currency..."
-              name="account-currency"
-              error={Boolean(errors["account-currency"])}
-              items={PLATFORM_CURRENCIES_LIST}
-              parseItem={(item) => item.name}
-              selectedCallback={(currency) =>
-                getValue("account-currency") === currency.value
-              }
-              onChangeValue={(e) => {
-                setValue("account-currency", e.value);
-              }}
-              Component={SelectOption}
-              Wrapper={({ children }) => (
-                <Flex style={{ width: "264px", padding: "4px 0px" }} column>
-                  {children}
-                </Flex>
-              )}
-            />
+        <Form.Item
+          htmlFor="account-currency"
+          label="Currency"
+          error={errors["account-currency"]}
+        >
+          <Select<{
+            name: Shared.Currencies.CurrencySymbols;
+            value: Shared.Currencies.CurrencySymbols;
+          }>
+            mode="single"
+            placeholder="Select currency..."
+            name="account-currency"
+            error={Boolean(errors["account-currency"])}
+            items={PLATFORM_CURRENCIES_LIST}
+            parseItem={(item) => item.name}
+            selectedCallback={(currency) =>
+              getValue("account-currency") === currency.value
+            }
+            onChangeValue={(e) => {
+              setValue("account-currency", e.value);
+            }}
+            Component={SelectOption}
+            Wrapper={({ children }) => (
+              <Flex style={{ width: "264px", padding: "4px 0px" }} column>
+                {children}
+              </Flex>
+            )}
+          />
+        </Form.Item>
 
-            <Unwrap
-              visible={Boolean(errors["account-currency"])}
-              negativeOffset="6px"
-            >
-              <Text size={11} color="var(--text-color-error)">
-                {errors["account-currency"]}
-              </Text>
-            </Unwrap>
-          </Flex>
-        </Flex>
-
-        <Flex w100 column gap={6}>
-          <Label htmlFor="account-color">Color</Label>
+        <Form.Item
+          htmlFor="account-color"
+          label="Color"
+          error={errors["account-color"]}
+        >
           <ColorPicker
             value={mode === "edit" ? data.color : ""}
             id="account-color"
             name="account-color"
           />
-          <Unwrap
-            visible={Boolean(errors["account-color"])}
-            negativeOffset="6px"
-          >
-            <Text size={11} color="var(--text-color-error)">
-              {errors["account-color"]}
-            </Text>
-          </Unwrap>
-        </Flex>
+        </Form.Item>
 
-        <Flex
-          style={{
-            display:
-              mode === "edit" && +getValue("account-amount") !== data.amount
-                ? "flex"
-                : "none",
-          }}
-          w100
-          column
-          gap={6}
+        <Form.Item
+          visible={
+            mode === "edit" && +getValue("account-amount") !== data.amount
+          }
+          label="Create transaction?"
+          error={errors["is-create-transaction-after-change-account"]}
+          htmlFor="is-create-transaction-after-change-account"
         >
-          <Label htmlFor="is-create-transaction-after-change-account">
-            Create transaction?
-          </Label>
           <RadioGroup
-            data={[
-              {
-                label: "Yes",
-                value: "yes",
-              },
-              {
-                label: "No",
-                value: "no",
-              },
-            ]}
+            data={RADIO_GROUP_DATA}
             id="is-create-transaction-after-change-account"
             name="is-create-transaction-after-change-account"
           />
-          <Unwrap
-            visible={Boolean(
-              errors["is-create-transaction-after-change-account"]
-            )}
-            negativeOffset="6px"
-          >
-            <Text size={11} color="var(--text-color-error)">
-              {errors["is-create-transaction-after-change-account"]}
-            </Text>
-          </Unwrap>
-        </Flex>
+        </Form.Item>
 
-        <Flex
-          style={{
-            display:
-              mode === "edit" &&
-              getValue("is-create-transaction-after-change-account") ===
-                "yes" &&
-              +getValue("account-amount") !== data.amount
-                ? "flex"
-                : "none",
-          }}
-          w100
-          column
-          gap={6}
+        <Form.Item
+          visible={
+            mode === "edit" &&
+            getValue("is-create-transaction-after-change-account") === "yes" &&
+            +getValue("account-amount") !== data.amount
+          }
+          error={errors["transaction-category-id"]}
+          htmlFor="transaction-category-id"
+          label="Category"
         >
-          <Flex style={{ flex: 1 }} w100 column gap={6}>
-            <Label htmlFor="transaction-category-id">Category</Label>
-            <Select<Store.Category>
-              placeholder="Select category..."
-              className="flex flex-column flex-gap-8"
-              mode="single"
-              name="transaction-category-id"
-              error={Boolean(errors["transaction-category-id"])}
-              items={appropriateCategories}
-              parseItem={(item) => {
-                if (item.deleted) {
-                  return `${item.name} (Deleted)`;
-                }
-                return item.name;
-              }}
-              selectedCallback={(account) =>
-                getValue("transaction-category-id") === account.id
+          <Select<Store.Category>
+            placeholder="Select category..."
+            className="flex flex-column flex-gap-8"
+            mode="single"
+            name="transaction-category-id"
+            error={Boolean(errors["transaction-category-id"])}
+            items={appropriateCategories}
+            parseItem={(item) => {
+              if (item.deleted) {
+                return `${item.name} (Deleted)`;
               }
-              onChangeValue={(e) => {
-                setValue("transaction-category-id", e.id);
-              }}
-              Wrapper={({ children }) => (
-                <Flex
-                  style={{ width: "264px", padding: "12px" }}
-                  column
-                  gap={8}
-                >
-                  {children}
-                </Flex>
-              )}
-              Component={({ onClick, selected, data }) => (
-                <Category
-                  style={{ width: "100%" }}
-                  data={data}
-                  onClick={() => onClick(data)}
-                  selected={selected}
-                />
-              )}
-            />
-
-            <Unwrap
-              visible={Boolean(errors["transaction-category-id"])}
-              negativeOffset="6px"
-            >
-              <Text size={11} color="var(--text-color-error)">
-                {errors["transaction-category-id"]}
-              </Text>
-            </Unwrap>
-          </Flex>
-        </Flex>
+              return item.name;
+            }}
+            selectedCallback={(account) =>
+              getValue("transaction-category-id") === account.id
+            }
+            onChangeValue={(e) => {
+              setValue("transaction-category-id", e.id);
+            }}
+            Wrapper={({ children }) => (
+              <Flex style={{ width: "264px", padding: "12px" }} column gap={8}>
+                {children}
+              </Flex>
+            )}
+            Component={({ onClick, selected, data }) => (
+              <Category
+                style={{ width: "100%" }}
+                data={data}
+                onClick={() => onClick(data)}
+                selected={selected}
+              />
+            )}
+          />
+        </Form.Item>
 
         <Flex column gap={12}>
           <Button type="submit" theme="primary" disabled={isLoading}>
@@ -412,7 +351,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
             <Text uppercase>{mode === "create" ? "Create" : "Update"}</Text>
           </Button>
         </Flex>
-      </Flex>
+      </Form.Items>
     </form>
   );
 };

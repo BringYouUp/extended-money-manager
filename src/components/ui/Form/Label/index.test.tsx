@@ -1,7 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { Label } from "./index";
-import { describe, expect, it } from "vitest";
 import styles from "./index.module.css";
 
 describe("Label component", () => {
@@ -10,7 +10,7 @@ describe("Label component", () => {
       render(
         <Label htmlFor="debug" data-testid="label">
           <span>Hi there</span>
-        </Label>
+        </Label>,
       );
     });
 

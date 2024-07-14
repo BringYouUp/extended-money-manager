@@ -14,4 +14,4 @@ export const TRANSACTIONS_TYPES = [
     type: "withdraw",
     color: 0,
   },
-]
+];

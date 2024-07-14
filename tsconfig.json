@@ -21,8 +21,9 @@
       "@slices": ["src/store/slices"],
       "@store": ["src/store"],
       "@style": ["src/style"],
+      "@router": ["src/router"],
       "@utils": ["src/utils"],
-      "@providers": ["src/providers"],
+      "@providers": ["src/providers"]
     },
 
     /* Bundler mode */

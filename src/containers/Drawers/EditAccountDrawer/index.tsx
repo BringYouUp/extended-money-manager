@@ -1,19 +1,16 @@
 import {
+  Account,
   Button,
-  Container,
   Drawer,
   Flex,
-  Icon,
   Modal,
-  ModalWrapper,
   Offset,
   Scrollable,
   Text,
 } from "@components";
 import { AccountForm } from "@containers";
-import { AccountCard } from "@components";
-import { SetStateAction, useRef, useState } from "react";
 import { useDebounce, useOpen } from "@hooks";
+import { SetStateAction, useRef, useState } from "react";
 
 const INITIAL_STATE = {};
 
@@ -88,20 +85,14 @@ export const EditAccountDrawer: React.FC<Props> = ({
   return (
     <>
       <Drawer side="right" isOpened={is} onClose={() => onTryToClose(false)}>
-        <Container h100 background="var(--soft-background-color)" width="300px">
-          <Offset full padding={[24, 16]}>
+        <Drawer.Container>
+          <Drawer.Content>
             <Flex full column gap={24} justifyBetween>
               <Flex justifyBetween alignCenter>
-                <Text as="h3" uppercase>
+                <Drawer.Title>
                   {mode === "create" ? "Create Account" : "Edit account"}
-                </Text>
-                <Button
-                  theme="transparent"
-                  rounded
-                  onClick={() => onTryToClose(false)}
-                >
-                  <Icon size={16} name="close" />
-                </Button>
+                </Drawer.Title>
+                <Drawer.Close onClose={() => onTryToClose(false)} />
               </Flex>
               <Scrollable full overlay>
                 <Flex column gap={16}>
@@ -120,7 +111,7 @@ export const EditAccountDrawer: React.FC<Props> = ({
                       </Text>
                       <hr />
                       <Flex justifyCenter full>
-                        <AccountCard
+                        <Account
                           noClick
                           style={{ zIndex: 2 }}
                           data={{
@@ -140,18 +131,18 @@ export const EditAccountDrawer: React.FC<Props> = ({
                 </Flex>
               </Scrollable>
             </Flex>
-          </Offset>
-        </Container>
+          </Drawer.Content>
+        </Drawer.Container>
       </Drawer>
       <Modal isOpened={isOpenedConfirmModal} onClose={onCloseConfirmModal}>
-        <ModalWrapper>
-          <Flex column gap={24}>
-            <Flex column gap={12}>
-              <Text as="h3" uppercase>
-                Confirm
-              </Text>
-              <Text>Do you really want to close drawer</Text>
-            </Flex>
+        <Modal.Wrapper>
+          <Modal.Container>
+            <Modal.Top>
+              <Modal.Title>Confirm</Modal.Title>
+              <Modal.Subtitle>
+                Do you really want to close drawer
+              </Modal.Subtitle>
+            </Modal.Top>
             <Flex gap={16}>
               <Button onClick={onConfirmClose} theme="outline">
                 Yes
@@ -160,8 +151,8 @@ export const EditAccountDrawer: React.FC<Props> = ({
                 No
               </Button>
             </Flex>
-          </Flex>
-        </ModalWrapper>
+          </Modal.Container>
+        </Modal.Wrapper>
       </Modal>
     </>
   );

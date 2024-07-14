@@ -1,20 +1,10 @@
 import { cn } from "@utils";
+
 import styles from "./index.module.css";
 
-interface Props extends React.HTMLAttributes<HTMLInputElement> {
-  id?: string;
-  name: string;
-  placeholder?: string;
-  type?: string;
-  error?: boolean;
-  hidden?: boolean;
-  defaultValue?: string;
-  style?: React.CSSProperties;
-  className?: string;
-  children?: never;
-}
-
-export const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = ({
+export const Input: React.FC<
+  Components.Input.Props & React.HTMLProps<HTMLInputElement>
+> = ({
   style,
   id,
   name,
@@ -35,7 +25,7 @@ export const Input: React.FC<Props & React.HTMLProps<HTMLInputElement>> = ({
           [styles.error]: error,
           [styles.hidden]: hidden,
         },
-        className
+        className,
       )}
     >
       <input

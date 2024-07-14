@@ -1,7 +1,7 @@
 import { cn } from "@utils";
-import styles from "./index.module.css";
-
 import { ReactNode } from "react";
+
+import styles from "./index.module.css";
 
 enum Themes {
   primary = "primary",
@@ -57,7 +57,7 @@ export const Button: React.FC<Props> = ({
           [styles.active]: active,
           [styles.centered]: centered,
         },
-        className
+        className,
       )}
       disabled={disabled}
       type={type}

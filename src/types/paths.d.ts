@@ -8,16 +8,15 @@ declare namespace Paths {
     CATEGORIES,
     TRANSACTIONS,
     SETTINGS,
+    AUTH,
     ANY,
   }
 
   type Item = {
-    path: string,
-    name: keyof typeof Enum,
-    title: string,
-  }
+    path: string;
+    name: keyof typeof Enum;
+    title: string;
+  };
 
-  type Map = {
-    [K in keyof typeof Enum]: string
-  }
+  type Map = Record<keyof typeof Enum, string>;
 }

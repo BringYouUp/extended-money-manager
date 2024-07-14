@@ -1,5 +1,3 @@
-import { useAppSelector, useAuthListening, useAuthNavigating } from "@hooks";
-import styles from "./index.module.css";
 import {
   Container,
   Flex,
@@ -9,6 +7,9 @@ import {
   Text,
 } from "@components";
 import { LoginForm } from "@containers";
+import { useAppSelector, useAuthListening, useAuthNavigating } from "@hooks";
+
+import styles from "./index.module.css";
 
 export const LoginPage: React.FC = () => {
   const isAuthLoading = useAuthListening();

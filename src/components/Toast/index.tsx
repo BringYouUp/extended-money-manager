@@ -1,6 +1,7 @@
-import { cn } from "@utils";
-import styles from "./index.module.css";
 import { Button, Container, Flex, Icon, Text } from "@components";
+import { cn } from "@utils";
+
+import styles from "./index.module.css";
 
 type Props = {
   data: Store.Toast;
@@ -31,7 +32,7 @@ export const Toast = ({ style, className, data, onClose }: Props) => {
         {
           [styles[data.type]]: data.type,
         },
-        className
+        className,
       )}
       gap={8}
     >

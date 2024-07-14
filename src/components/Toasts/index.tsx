@@ -1,9 +1,10 @@
-import { cn } from "@utils";
-import styles from "./index.module.css";
 import { Flex, Toast } from "@components";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { TOAST_SLICE } from "@slices";
+import { cn } from "@utils";
 import { createPortal } from "react-dom";
+
+import styles from "./index.module.css";
 
 const Component = () => {
   const dispatch = useAppDispatch();

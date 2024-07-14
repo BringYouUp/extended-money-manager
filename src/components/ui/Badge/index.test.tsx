@@ -1,7 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { Badge } from "./index";
-import { describe, expect, it } from "vitest";
 import styles from "./index.module.css";
 
 describe("Badge", () => {
@@ -15,7 +15,7 @@ describe("Badge", () => {
           text="Badge text"
           type="account"
           data-testid="badge"
-        />
+        />,
       );
     });
 
@@ -23,7 +23,7 @@ describe("Badge", () => {
     expect(component).toHaveClass(styles.active);
     expect(component).toHaveClass(styles.account);
     expect(component.style.getPropertyValue("--badge-color")).toBe(
-      "var(--primary-color)"
+      "var(--primary-color)",
     );
   });
 
@@ -37,7 +37,7 @@ describe("Badge", () => {
           text="Badge text"
           type="category"
           data-testid="badge"
-        />
+        />,
       );
     });
 

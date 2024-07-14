@@ -1,7 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { FormGroup } from "./index";
-import { describe, expect, it } from "vitest";
 import styles from "./index.module.css";
 
 describe("FormGroup component", () => {
@@ -10,7 +10,7 @@ describe("FormGroup component", () => {
       render(
         <FormGroup error={true} data-testid="formGroup">
           <span>Hi there</span>
-        </FormGroup>
+        </FormGroup>,
       );
     });
 

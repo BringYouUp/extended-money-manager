@@ -33,7 +33,8 @@
 
   --spinner-color: var(--primary-color);
 
-  --transition-default: 0.1s;
+  --transition-long: 0.3s;
+  --transition-default: 0.2s;
   --transition-quick: 0.1s;
   --border-radius-default: 1px;
   --border-radius-x2: 2px;

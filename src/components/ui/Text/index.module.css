@@ -9,11 +9,13 @@ h2.text {
   --text-size: 20px;
 }
 h3.text {
-  --text-size: 16px;
+  --text-size: 18px;
 }
 h4.text {
+  --text-size: 16px;
 }
 h5.text {
+  --text-size: 14px;
 }
 
 .block {

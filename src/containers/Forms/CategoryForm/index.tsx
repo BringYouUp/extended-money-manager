@@ -3,25 +3,24 @@ import {
   Button,
   ColorPicker,
   Flex,
+  Form,
   FormGroup,
   Icon,
   Input,
-  Label,
   Offset,
   Select,
   SelectOption,
   Spinner,
   Text,
-  Unwrap,
 } from "@components";
 import { CATEGORIES_ICONS } from "@consts";
 import {
   useAppDispatch,
-  useForm,
   useForceUpdate,
+  useForm,
   useLoading,
-  useUID,
   useToast,
+  useUID,
 } from "@hooks";
 import { PLATFORM_CURRENCIES_LIST } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
@@ -154,124 +153,101 @@ export const CategoryForm: React.FC<Props> = ({
       className="w100"
       onChange={onChangeForm}
     >
-      <Flex w100 column gap={20}>
-        <Flex w100 column gap={6}>
-          <Label htmlFor="category-name">Category name</Label>
+      <Form.Items>
+        <Form.Item
+          error={errors["category-name"]}
+          htmlFor="category-name"
+          label="Category name"
+        >
           <Input
             error={Boolean(errors["category-name"])}
             id="category-name"
             name="category-name"
             placeholder="Enter category name..."
           />
-          <Unwrap
-            visible={Boolean(errors["category-name"])}
-            negativeOffset="6px"
-          >
-            <Text size={11} color="var(--text-color-error)">
-              {errors["category-name"]}
-            </Text>
-          </Unwrap>
-        </Flex>
+        </Form.Item>
 
-        <Flex w100 column gap={6}>
-          <Flex style={{ flex: 1 }} w100 column gap={6}>
-            <Label htmlFor="category-type">Type</Label>
-            <Select<{
-              name: Capitalize<Store.CategoryType>;
-              value: Store.CategoryType;
-            }>
-              disabled={mode === "edit"}
-              mode="single"
-              placeholder="Select type..."
-              name="category-type"
-              error={Boolean(errors["category-type"])}
-              items={[
-                { name: "Withdraw", value: "withdraw" },
-                { name: "Income", value: "income" },
-              ]}
-              parseItem={(item) => item.name}
-              selectedCallback={(type) =>
-                getValue("category-type") === type.value
-              }
-              onChangeValue={(e) => {
-                setValue("category-type", e.value);
-              }}
-              Component={SelectOption}
-              Wrapper={({ children }) => (
-                <Flex style={{ width: "264px", padding: "4px 0px" }} column>
-                  {children}
-                </Flex>
-              )}
-            />
+        <Form.Item
+          htmlFor="category-type"
+          label="Type"
+          error={errors["category-type"]}
+        >
+          <Select<{
+            name: Capitalize<Store.CategoryType>;
+            value: Store.CategoryType;
+          }>
+            disabled={mode === "edit"}
+            mode="single"
+            placeholder="Select type..."
+            name="category-type"
+            error={Boolean(errors["category-type"])}
+            items={[
+              { name: "Withdraw", value: "withdraw" },
+              { name: "Income", value: "income" },
+            ]}
+            parseItem={(item) => item.name}
+            selectedCallback={(type) =>
+              getValue("category-type") === type.value
+            }
+            onChangeValue={(e) => {
+              setValue("category-type", e.value);
+            }}
+            Component={SelectOption}
+            Wrapper={({ children }) => (
+              <Flex style={{ width: "264px", padding: "4px 0px" }} column>
+                {children}
+              </Flex>
+            )}
+          />
+        </Form.Item>
 
-            <Unwrap
-              visible={Boolean(errors["category-type"])}
-              negativeOffset="6px"
-            >
-              <Text size={11} color="var(--text-color-error)">
-                {errors["category-type"]}
-              </Text>
-            </Unwrap>
-          </Flex>
-        </Flex>
+        <Form.Item
+          htmlFor="category-currency"
+          label="Currency"
+          error={errors["category-currency"]}
+        >
+          <Select<{
+            name: Shared.Currencies.CurrencySymbols;
+            value: Shared.Currencies.CurrencySymbols;
+          }>
+            mode="single"
+            placeholder="Select currency..."
+            name="category-currency"
+            error={Boolean(errors["category-currency"])}
+            items={PLATFORM_CURRENCIES_LIST}
+            parseItem={(item) => item.name}
+            selectedCallback={(currency) =>
+              getValue("category-currency") === currency.value
+            }
+            onChangeValue={(e) => {
+              setValue("category-currency", e.value);
+            }}
+            Component={SelectOption}
+            Wrapper={({ children }) => (
+              <Flex style={{ width: "264px", padding: "4px 0px" }} column>
+                {children}
+              </Flex>
+            )}
+          />
+        </Form.Item>
 
-        <Flex w100 column gap={6}>
-          <Flex style={{ flex: 1 }} w100 column gap={6}>
-            <Label htmlFor="category-currency">Currency</Label>
-            <Select<{
-              name: Shared.Currencies.CurrencySymbols;
-              value: Shared.Currencies.CurrencySymbols;
-            }>
-              mode="single"
-              placeholder="Select currency..."
-              name="category-currency"
-              error={Boolean(errors["category-currency"])}
-              items={PLATFORM_CURRENCIES_LIST}
-              parseItem={(item) => item.name}
-              selectedCallback={(currency) =>
-                getValue("category-currency") === currency.value
-              }
-              onChangeValue={(e) => {
-                setValue("category-currency", e.value);
-              }}
-              Component={SelectOption}
-              Wrapper={({ children }) => (
-                <Flex style={{ width: "264px", padding: "4px 0px" }} column>
-                  {children}
-                </Flex>
-              )}
-            />
-
-            <Unwrap
-              visible={Boolean(errors["category-currency"])}
-              negativeOffset="6px"
-            >
-              <Text size={11} color="var(--text-color-error)">
-                {errors["category-currency"]}
-              </Text>
-            </Unwrap>
-          </Flex>
-        </Flex>
-
-        <Flex w100 column gap={6}>
-          <Label htmlFor="category-color">Color</Label>
+        <Form.Item
+          htmlFor="category-color"
+          label="Color"
+          error={errors["category-color"]}
+        >
           <ColorPicker
             id="category-color"
             name="category-color"
             value={getValue("category-color")}
           />
-          <Unwrap
-            visible={Boolean(errors["category-color"])}
-            negativeOffset="6px"
-          >
-            <Text size={11} color="var(--text-color-error)">
-              {errors["category-color"]}
-            </Text>
-          </Unwrap>
-        </Flex>
+        </Form.Item>
 
-        <Flex w100 column gap={6}>
-          <Label htmlFor="category-color">Icon</Label>
+        <Form.Item
+          htmlFor="category-color"
+          label="Icon"
+          error={errors["category-icon"]}
+        >
           <Input hidden id="category-icon" name="category-icon" />
           <FormGroup error={Boolean(errors["category-icon"])}>
             <Offset w100 padding={[8]}>
@@ -295,15 +271,7 @@ export const CategoryForm: React.FC<Props> = ({
               </Flex>
             </Offset>
           </FormGroup>
-          <Unwrap
-            visible={Boolean(errors["category-icon"])}
-            negativeOffset="6px"
-          >
-            <Text size={11} color="var(--text-color-error)">
-              {errors["category-icon"]}
-            </Text>
-          </Unwrap>
-        </Flex>
+        </Form.Item>
 
         <Flex column gap={8}>
           <Flex column gap={12}>
@@ -315,7 +283,7 @@ export const CategoryForm: React.FC<Props> = ({
             </Button>
           </Flex>
         </Flex>
-      </Flex>
+      </Form.Items>
     </form>
   );
 };

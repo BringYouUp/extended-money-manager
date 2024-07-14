@@ -1,3 +1,3 @@
-export * from './paths'
-export * from './categories'
-export * from './transactions'
+export * from "./categories";
+export * from "./paths";
+export * from "./transactions";

@@ -1,5 +1,6 @@
 import { cn } from "@utils";
 import { MouseEventHandler, ReactNode } from "react";
+
 import styles from "./index.module.css";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -71,7 +72,7 @@ const Wrap: React.FC<Props> = ({
           [styles.gridGap]: gap,
           // [styles.gridAutoflow]: autoFlow,
         },
-        className
+        className,
       )}
       {...rest}
     >

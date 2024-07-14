@@ -1,50 +1,57 @@
 export const PATHS_LIST: Paths.Item[] = [
   {
-    path: '/login',
-    name: 'LOGIN',
-    title: 'Login'
+    path: "/auth",
+    name: "AUTH",
+    title: "Auth",
   },
   {
-    path: '/signup',
-    name: 'SIGN_UP',
-    title: 'Sign Up'
+    path: "/login",
+    name: "LOGIN",
+    title: "Login",
   },
   {
-    path: '/home',
-    name: 'HOME',
-    title: 'Home'
+    path: "/signup",
+    name: "SIGN_UP",
+    title: "Sign Up",
   },
   {
-    path: '/',
-    name: 'ROOT',
-    title: ''
+    path: "/home",
+    name: "HOME",
+    title: "Home",
   },
   {
-    path: '/accounts',
-    name: 'ACCOUNTS',
-    title: ''
+    path: "/",
+    name: "ROOT",
+    title: "",
   },
   {
-    path: '/categories',
-    name: 'CATEGORIES',
-    title: ''
+    path: "/accounts",
+    name: "ACCOUNTS",
+    title: "",
   },
   {
-    path: '/transactions',
-    name: 'TRANSACTIONS',
-    title: ''
+    path: "/categories",
+    name: "CATEGORIES",
+    title: "",
   },
   {
-    path: '/settings',
-    name: 'SETTINGS',
-    title: ''
+    path: "/transactions",
+    name: "TRANSACTIONS",
+    title: "",
   },
   {
-    path: '*',
-    name: 'ANY',
-    title: ''
+    path: "/settings",
+    name: "SETTINGS",
+    title: "",
+  },
+  {
+    path: "*",
+    name: "ANY",
+    title: "",
   },
 ];
 
-
-export const PATHS: Paths.Map = PATHS_LIST.reduce((res, { path, name }) => ({ ...res, [name]: path }), {} as Paths.Map);
+export const PATHS: Paths.Map = PATHS_LIST.reduce(
+  (res, { path, name }) => ({ ...res, [name]: path }),
+  {} as Paths.Map
+);

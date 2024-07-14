@@ -1,22 +1,30 @@
 import {
   Badge,
   Button,
-  Container,
   Drawer,
   Flex,
+  Form,
   FormGroup,
   Icon,
-  Label,
   Offset,
-  Scrollable,
-  Text,
   RadioGroup,
-  Unwrap,
+  Scrollable,
 } from "@components";
 import { TRANSACTIONS_TYPES } from "@consts";
 import { useAppSelector, useForm, useSearchTransactions } from "@hooks";
 import { ACCOUNT_SELECTOR, CATEGORY_SELECTOR } from "@selectors";
 import { useEffect } from "react";
+
+const RADIO_GROUP_DATA = [
+  {
+    label: "OR",
+    value: "OR",
+  },
+  {
+    label: "AND",
+    value: "AND",
+  },
+];
 
 type Props = {
   filter: Hooks.UseFilterTransactions.FilterModel;
@@ -72,16 +80,12 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
 
   return (
     <Drawer side="right" isOpened={Boolean(is)} onClose={onClose}>
-      <Container h100 background="var(--soft-background-color)" width="400px">
-        <Offset full padding={[24, 16]}>
+      <Drawer.Container width="400px">
+        <Drawer.Content>
           <Flex full column gap={24}>
             <Flex justifyBetween alignCenter>
-              <Text as="h3" uppercase>
-                Search transactions
-              </Text>
-              <Button theme="transparent" rounded onClick={onClose}>
-                <Icon size={16} name="close" />
-              </Button>
+              <Drawer.Title>Search transactions</Drawer.Title>
+              <Drawer.Close onClose={onClose} />
             </Flex>
 
             <form
@@ -93,9 +97,8 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
             >
               <Scrollable full overlay>
                 <Flex column gap={20} full justifyBetween>
-                  <Flex w100 column gap={20}>
-                    <Flex style={{ flex: 1 }} w100 column gap={6}>
-                      <Label>Transaction type</Label>
+                  <Form.Items>
+                    <Form.Item style={{ flex: 1 }} label="Transaction type">
                       <FormGroup>
                         <Offset padding={[4]}>
                           <Flex wrap gap={8}>
@@ -123,10 +126,9 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
                           </Flex>
                         </Offset>
                       </FormGroup>
-                    </Flex>
+                    </Form.Item>
                     {accounts.length ? (
-                      <Flex style={{ flex: 1 }} w100 column gap={6}>
-                        <Label>Accounts</Label>
+                      <Form.Item style={{ flex: 1 }} label="Accounts">
                         <FormGroup>
                           <Offset padding={[4]}>
                             <Flex wrap gap={8}>
@@ -152,11 +154,10 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
                             </Flex>
                           </Offset>
                         </FormGroup>
-                      </Flex>
+                      </Form.Item>
                     ) : null}
                     {incomeCategories.length ? (
-                      <Flex style={{ flex: 1 }} w100 column gap={6}>
-                        <Label>Income categories</Label>
+                      <Form.Item style={{ flex: 1 }} label="Income categories">
                         <FormGroup>
                           <Offset padding={[4]}>
                             <Flex wrap gap={8}>
@@ -185,11 +186,13 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
                             </Flex>
                           </Offset>
                         </FormGroup>
-                      </Flex>
+                      </Form.Item>
                     ) : null}
                     {withdrawCategories.length ? (
-                      <Flex style={{ flex: 1 }} w100 column gap={6}>
-                        <Label>Withdraw categories</Label>
+                      <Form.Item
+                        style={{ flex: 1 }}
+                        label="Withdraw categories"
+                      >
                         <FormGroup>
                           <Offset padding={[4]}>
                             <Flex wrap gap={8}>
@@ -219,34 +222,21 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
                             </Flex>
                           </Offset>
                         </FormGroup>
-                      </Flex>
+                      </Form.Item>
                     ) : null}
-                    <Flex w100 column gap={6}>
-                      <Label htmlFor="filter-mode">Filter mode</Label>
+
+                    <Form.Item
+                      label="Filter mode"
+                      error={errors["filter-mode"]}
+                      htmlFor="filter-mode"
+                    >
                       <RadioGroup
-                        data={[
-                          {
-                            label: "OR",
-                            value: "OR",
-                          },
-                          {
-                            label: "AND",
-                            value: "AND",
-                          },
-                        ]}
+                        data={RADIO_GROUP_DATA}
                         id="filter-mode"
                         name="filter-mode"
                       />
-                      <Unwrap
-                        visible={Boolean(errors["filter-mode"])}
-                        negativeOffset="6px"
-                      >
-                        <Text size={11} color="var(--text-color-error)">
-                          {errors["filter-mode"]}
-                        </Text>
-                      </Unwrap>
-                    </Flex>
-                  </Flex>
+                    </Form.Item>
+                  </Form.Items>
                   <Flex gap={16}>
                     <Button theme="primary" type="submit">
                       Search
@@ -263,8 +253,8 @@ export const SearchTransactionsDrawer: React.FC<Props> = ({
               </Scrollable>
             </form>
           </Flex>
-        </Offset>
-      </Container>
+        </Drawer.Content>
+      </Drawer.Container>
     </Drawer>
   );
 };

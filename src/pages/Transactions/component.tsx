@@ -1,17 +1,9 @@
-import {
-  Button,
-  Flex,
-  Grid,
-  Icon,
-  Spinner,
-  Text,
-  Transactions,
-} from "@components";
+import { Flex, Grid, Spinner, Transactions } from "@components";
 import { EditTransactionDrawer, SearchTransactionsDrawer } from "@containers";
 import { useLoading, useOpen, useSearchTransactions, useToast } from "@hooks";
-
 import { cn } from "@utils";
 import { useEffect, useState } from "react";
+import { Section } from "src/components/compose/Section";
 import { TransactionsFilterBadges } from "src/pages/Transactions";
 
 const Component: React.FC = () => {
@@ -58,52 +50,40 @@ const Component: React.FC = () => {
 
   return (
     <>
-      <Flex className={cn("containerBlock")}>
-        <Flex justifyBetween gap={10} alignCenter>
-          <Text color="var(--text-color-70)" as="h2" uppercase>
-            <Flex alignCenter gap={10}>
-              <Icon size={24} name="list" />
-              Transactions
-              <Button
-                theme="transparent"
-                rounded
-                onClick={onOpenTransactionDrawer}
-              >
-                <Icon name="plus" size={24} fill="var(--text-color-40)" />
-              </Button>
-            </Flex>
-          </Text>
+      <Section.Container>
+        <Section.Top>
+          <Section.Title>
+            <Section.Icon name="list" />
+            Transactions
+            <Section.Icon name="plus" onClick={onOpenTransactionDrawer} />
+          </Section.Title>
           <Flex gap={16}>
             {!isFilterEmpty ? (
-              <Button theme="transparent" rounded onClick={onResetFilter}>
-                <Icon size={24} name="trash" />
-              </Button>
+              <Section.Icon name="trash" onClick={onResetFilter} />
             ) : null}
-            <Button
-              theme="transparent"
-              rounded
-              onClick={onOpenSearchTransactionsDrawer}
-            >
-              {isLoading ? (
-                <Spinner size={24} />
-              ) : (
-                <Icon name="search" size={24} />
-              )}
-            </Button>
+
+            {isLoading ? (
+              <Spinner size={24} />
+            ) : (
+              <Section.Icon
+                name="search"
+                onClick={onOpenSearchTransactionsDrawer}
+              />
+            )}
           </Flex>
-        </Flex>
-      </Flex>
+        </Section.Top>
+      </Section.Container>
       {!isFilterEmpty ? (
-        <Flex className={cn("containerBlock containerBlock--medium")}>
+        <Section.Container medium>
           <Flex gap={8}>
             <TransactionsFilterBadges
               onRemove={onUpdateFilterKey}
               data={filterTransactionsParams}
             />
           </Flex>
-        </Flex>
+        </Section.Container>
       ) : null}
-      <Flex className={cn("containerBlock")}>
+      <Section.Container>
         <Grid.Wrap
           templateColumns="repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)"
           gap={12}
@@ -117,7 +97,7 @@ const Component: React.FC = () => {
             countPlaceholders={7}
           />
         </Grid.Wrap>
-      </Flex>
+      </Section.Container>
 
       <EditTransactionDrawer
         mode="create"

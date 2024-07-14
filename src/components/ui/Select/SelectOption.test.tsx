@@ -1,9 +1,8 @@
 import { act, render, screen } from "@testing-library/react";
-
-import { SelectOption } from "./SelectOption";
 import { describe, expect, it } from "vitest";
 
 import styles from "../Button/index.module.css";
+import { SelectOption } from "./SelectOption";
 
 const data = [
   {
@@ -24,7 +23,7 @@ describe("SelectOption component", () => {
           parseItem={(z) => <div>{z.id}</div>}
           data={data[0]}
           data-testid="select-option"
-        />
+        />,
       );
     });
 

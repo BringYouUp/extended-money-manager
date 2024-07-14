@@ -1,7 +1,7 @@
 import { cn } from "@utils";
-import styles from "./index.module.css";
-
 import { ReactNode } from "react";
+
+import styles from "./index.module.css";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   error?: boolean;
@@ -25,7 +25,7 @@ export const FormGroup: React.FC<Props> = ({
         {
           [styles.error]: error,
         },
-        className
+        className,
       )}
       {...rest}
     >

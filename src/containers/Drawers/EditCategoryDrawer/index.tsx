@@ -1,19 +1,16 @@
 import {
   Button,
-  Container,
   Drawer,
   Flex,
-  Icon,
   Modal,
-  ModalWrapper,
   Offset,
   Scrollable,
   Text,
 } from "@components";
 import { CategoryForm } from "@containers";
-import { SetStateAction, useRef, useState } from "react";
 import { useDebounce, useOpen } from "@hooks";
-import { Category } from "src/components/Category";
+import { SetStateAction, useRef, useState } from "react";
+import { Category } from "src/components/compose/Category";
 
 const INITIAL_STATE = {};
 
@@ -91,20 +88,14 @@ export const EditCategoryDrawer: React.FC<Props> = ({
         isOpened={Boolean(is)}
         onClose={() => onTryToClose(false)}
       >
-        <Container h100 background="var(--soft-background-color)" width="300px">
-          <Offset full padding={[24, 16]}>
+        <Drawer.Container>
+          <Drawer.Content>
             <Flex full column gap={24}>
               <Flex justifyBetween alignCenter>
-                <Text as="h3" uppercase>
+                <Drawer.Title>
                   {mode === "create" ? "Create category" : "Edit category"}
-                </Text>
-                <Button
-                  theme="transparent"
-                  rounded
-                  onClick={() => onTryToClose(false)}
-                >
-                  <Icon size={16} name="close" />
-                </Button>
+                </Drawer.Title>
+                <Drawer.Close onClose={() => onTryToClose(false)} />
               </Flex>
 
               <Scrollable full overlay>
@@ -144,18 +135,18 @@ export const EditCategoryDrawer: React.FC<Props> = ({
                 </Flex>
               </Scrollable>
             </Flex>
-          </Offset>
-        </Container>
+          </Drawer.Content>
+        </Drawer.Container>
       </Drawer>
       <Modal isOpened={isOpenedConfirmModal} onClose={onCloseConfirmModal}>
-        <ModalWrapper>
-          <Flex column gap={24}>
-            <Flex column gap={12}>
-              <Text as="h3" uppercase>
-                Confirm
-              </Text>
-              <Text>Do you really want to close drawer</Text>
-            </Flex>
+        <Modal.Wrapper>
+          <Modal.Container>
+            <Modal.Top>
+              <Modal.Title>Confirm</Modal.Title>
+              <Modal.Subtitle>
+                Do you really want to close drawer
+              </Modal.Subtitle>
+            </Modal.Top>
             <Flex gap={16}>
               <Button onClick={onConfirmClose} theme="outline">
                 Yes
@@ -164,8 +155,8 @@ export const EditCategoryDrawer: React.FC<Props> = ({
                 No
               </Button>
             </Flex>
-          </Flex>
-        </ModalWrapper>
+          </Modal.Container>
+        </Modal.Wrapper>
       </Modal>
     </>
   );

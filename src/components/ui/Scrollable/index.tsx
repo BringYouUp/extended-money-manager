@@ -1,6 +1,7 @@
 import { cn } from "@utils";
-import styles from "./index.module.css";
 import { ReactNode } from "react";
+
+import styles from "./index.module.css";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   full?: boolean;
@@ -51,7 +52,7 @@ export const Scrollable: React.FC<Props> = ({
           [styles.auto]: auto,
           [styles.stableGutter]: stableGutter,
         },
-        className
+        className,
       )}
       {...rest}
     >

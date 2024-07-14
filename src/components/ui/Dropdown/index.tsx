@@ -1,8 +1,8 @@
-import styles from "./index.module.css";
-
-import { MouseEvent, ReactNode, useEffect, useState } from "react";
 import { Flex, Transitioned } from "@components";
+import { MouseEvent, ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+
+import styles from "./index.module.css";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   buttonRef: React.RefObject<HTMLElement>;

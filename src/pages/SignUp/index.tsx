@@ -1,6 +1,3 @@
-import { useAppSelector, useAuthListening, useAuthNavigating } from "@hooks";
-import styles from "./index.module.css";
-import { SignUpForm } from "@containers";
 import {
   Container,
   Flex,
@@ -9,6 +6,10 @@ import {
   Spinner,
   Text,
 } from "@components";
+import { SignUpForm } from "@containers";
+import { useAppSelector, useAuthListening, useAuthNavigating } from "@hooks";
+
+import styles from "./index.module.css";
 
 export const SignUpPage: React.FC = () => {
   const isAuthLoading = useAuthListening();

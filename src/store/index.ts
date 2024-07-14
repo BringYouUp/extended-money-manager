@@ -1,46 +1,47 @@
-import { combineReducers } from "redux";
-import * as REDUCERS from './slices/reducers'
-import * as MIDDLEWARES from './middlewares'
 import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
+
+import * as MIDDLEWARES from "./middlewares";
+import * as REDUCERS from "./slices/reducers";
 
 const preloadedState = {
   user: {
     user: {
-      email: '',
-      displayName: '',
-      phoneNumber: '',
-      uid: '',
+      email: "",
+      displayName: "",
+      phoneNumber: "",
+      uid: "",
       emailVerified: false,
-      photoURL: ''
+      photoURL: "",
     },
     error: {
-      code: '',
-      message: ''
+      code: "",
+      message: "",
     },
   },
   accounts: {
     accounts: [],
     error: {
-      code: '',
-      message: ''
+      code: "",
+      message: "",
     },
-    status: ''
+    status: "",
   },
   categories: {
     categories: [],
     error: {
-      code: '',
-      message: ''
+      code: "",
+      message: "",
     },
-    status: ''
+    status: "",
   },
   transactions: {
     transactions: [],
     error: {
-      code: '',
-      message: ''
+      code: "",
+      message: "",
     },
-    status: ''
+    status: "",
   },
   platform: {
     platform: {
@@ -50,19 +51,19 @@ const preloadedState = {
         PLN: 0,
         RUB: 0,
         USD: 0,
-        updatedAt: ''
-      }
+        updatedAt: "",
+      },
     },
     error: {
-      code: '',
-      message: ''
+      code: "",
+      message: "",
     },
-    status: ''
+    status: "",
   },
   toast: {
-    toasts: []
-  }
-}
+    toasts: [],
+  },
+};
 
 const rootReducer = combineReducers(REDUCERS);
 
@@ -70,9 +71,14 @@ export const store = configureStore({
   preloadedState,
   reducer: rootReducer,
   devTools: true,
-  // @ts-expect-error: TODO
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(...(Object.keys(MIDDLEWARES).reduce((acc, middleware) => { return acc.concat(MIDDLEWARES[middleware]) }, []))),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      ...Object.keys(MIDDLEWARES).reduce((acc, middleware) => {
+        // @ts-expect-error: TODO
+        return acc.concat(MIDDLEWARES[middleware]);
+      }, [])
+    ),
 });
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

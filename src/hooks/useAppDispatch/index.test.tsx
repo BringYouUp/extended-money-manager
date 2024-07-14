@@ -1,10 +1,11 @@
-import { renderHook } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
-import { useAppDispatch } from ".";
-import { Provider } from "react-redux";
-import { store } from "@store";
-import { ReactNode } from "react";
 import { USER_SLICES } from "@slices";
+import { store } from "@store";
+import { renderHook } from "@testing-library/react";
+import { ReactNode } from "react";
+import { Provider } from "react-redux";
+import { describe, expect, it } from "vitest";
+
+import { useAppDispatch } from ".";
 
 describe("useAppDispatch", () => {
   it("default check", () => {

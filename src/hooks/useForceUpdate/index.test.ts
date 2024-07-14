@@ -1,13 +1,14 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { useForceUpdate } from '.'
 
-describe('useForceUpdate', () => {
-  it('default check', () => {
+import { useForceUpdate } from ".";
+
+describe("useForceUpdate", () => {
+  it("default check", () => {
     const { result } = renderHook(() => useForceUpdate());
 
-    act(() => result.current())
+    act(() => result.current());
 
-    expect(typeof result.current).toBe('function')
+    expect(typeof result.current).toBe("function");
   });
 });

@@ -30,7 +30,8 @@
 }
 
 .toastList > div {
-  transition: transform var(--transition-default),
+  transition:
+    transform var(--transition-default),
     opacity var(--transition-default),
     box-shadow var(--transition-default) ease-in-out;
 }

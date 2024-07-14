@@ -22,9 +22,8 @@ import { describe, expect, it } from "vitest";
 //   useAppSelector.mockImplementation(selector);
 // };
 
-
-describe('useUID', () => {
-  it('default check', () => {
+describe("useUID", () => {
+  it("default check", () => {
     // const state: RootState = {
     //   user: {
     //     user: {
@@ -33,7 +32,6 @@ describe('useUID', () => {
     //   },
     // };
     // mockUseAppSelector((selector) => selector(state));
-
 
     // const { result } = renderHook(() => useUID());
 
