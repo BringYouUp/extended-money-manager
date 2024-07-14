@@ -1,8 +1,9 @@
-import { cn } from "@utils";
-import styles from "./index.module.css";
-import { Key, ReactNode, useRef } from "react";
 import { Dropdown, Flex, Input, Scrollable, Text } from "@components";
 import { useOpen } from "@hooks";
+import { cn } from "@utils";
+import { Key, ReactNode, useRef } from "react";
+
+import styles from "./index.module.css";
 
 interface Props<T extends object> extends React.HTMLAttributes<HTMLDivElement> {
   selectedCallback: (item: T) => boolean;
@@ -79,7 +80,7 @@ export function Select<T extends object>({
             [styles.error]: error,
             disabled,
           },
-          className
+          className,
         )}
         {...rest}
       >

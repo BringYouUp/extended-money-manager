@@ -1,5 +1,6 @@
-import { render, fireEvent, screen, act } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+
 import { ColorPicker } from "./index";
 import styles from "./index.module.css";
 
@@ -22,7 +23,7 @@ describe("ColorPicker component", () => {
         <ColorPicker
           data-testid="colorPicker"
           onValueChange={onValueChangeMock}
-        />
+        />,
       );
     });
 

@@ -1,52 +1,54 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { userSetUser, userLogOut } from '@async-actions'
+import { userLogOut, userSetUser } from "@async-actions";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {
-    email: '',
-    displayName: '',
-    phoneNumber: '',
-    uid: '',
+    email: "",
+    displayName: "",
+    phoneNumber: "",
+    uid: "",
     emailVerified: false,
-    photoURL: ''
+    photoURL: "",
   },
   error: {
-    code: '',
-    message: ''
+    code: "",
+    message: "",
   },
-}
+};
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     clear: (state) => {
-      state.user = initialState.user
-    }
+      state.user = initialState.user;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(userSetUser.fulfilled, (state, { payload }: PayloadAction<Store.User>) => {
-        state.user = payload
-      })
+      .addCase(
+        userSetUser.fulfilled,
+        (state, { payload }: PayloadAction<Store.User>) => {
+          state.user = payload;
+        },
+      )
       .addCase(userLogOut.fulfilled, (state) => {
-        state.user = initialState.user
+        state.user = initialState.user;
       })
       .addMatcher(
-        ({ type }) => type.startsWith('user/') && type.endsWith('pending'),
+        ({ type }) => type.startsWith("user/") && type.endsWith("pending"),
         (state) => {
-          state.error = initialState.error
-        }
+          state.error = initialState.error;
+        },
       )
       .addMatcher(
-        ({ type }) => type.startsWith('user/') && type.endsWith('rejected'),
+        ({ type }) => type.startsWith("user/") && type.endsWith("rejected"),
         (state, { payload }: PayloadAction<Store.Error>) => {
-          state.error = payload
-        }
+          state.error = payload;
+        },
       );
-  }
-})
-
+  },
+});
 
 export const { clear } = userSlice.actions;
 

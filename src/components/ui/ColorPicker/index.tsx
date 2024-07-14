@@ -1,8 +1,8 @@
-import { cn } from "@utils";
-import styles from "./index.module.css";
-
-import { useEffect, useState } from "react";
 import { FormGroup } from "@components";
+import { cn } from "@utils";
+import { useEffect, useState } from "react";
+
+import styles from "./index.module.css";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   value?: string;

@@ -1,17 +1,17 @@
-import { PATHS } from "@consts"
-import { useCallback } from "react"
-import { useNavigate } from "react-router-dom"
+import { PATHS } from "@consts";
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const useAuthNavigating = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const navigateToPlatform = useCallback(() => {
-    navigate(PATHS.ROOT)
-  }, [navigate])
+    navigate(PATHS.ROOT);
+  }, [navigate]);
 
   const navigateFromPlatform = useCallback(() => {
-    navigate(PATHS.LOGIN)
-  }, [navigate])
+    navigate(`${PATHS.AUTH}${PATHS.LOGIN}`);
+  }, [navigate]);
 
-  return { navigateToPlatform, navigateFromPlatform }
-}
+  return { navigateToPlatform, navigateFromPlatform };
+};

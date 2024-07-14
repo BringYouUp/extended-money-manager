@@ -1,7 +1,4 @@
-import Wrap from './Wrap';
-import Item from './Item';
+import Item from "./Item";
+import Wrap from "./Wrap";
 
-export {
-  Wrap,
-  Item,
-};
+export { Item, Wrap };

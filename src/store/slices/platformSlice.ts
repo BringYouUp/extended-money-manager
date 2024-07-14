@@ -1,5 +1,8 @@
-import { platformSetPlatform, platformSetUpdatePlatformCurrency } from '@async-actions'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import {
+  platformSetPlatform,
+  platformSetUpdatePlatformCurrency,
+} from "@async-actions";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: Store.PlatformSelector = {
   platform: {
@@ -9,47 +12,54 @@ const initialState: Store.PlatformSelector = {
       PLN: 0,
       RUB: 0,
       USD: 0,
-      updatedAt: '',
-    }
+      updatedAt: "",
+    },
   },
   error: {
-    code: '',
-    message: ''
+    code: "",
+    message: "",
   },
-  status: 'platform/platformSetPlatform/pending'
-}
+  status: "platform/platformSetPlatform/pending",
+};
 
 const platform = createSlice({
-  name: 'platform',
+  name: "platform",
   initialState,
   reducers: {
     clear: (state) => {
-      state.platform = initialState.platform
-    }
+      state.platform = initialState.platform;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(platformSetPlatform.fulfilled, (state, { payload }: PayloadAction<Store.Platform>) => {
-        state.platform = payload || {}
-        state.error = initialState.error
-      })
-      .addCase(platformSetUpdatePlatformCurrency.fulfilled, (state, { payload }: PayloadAction<Shared.Currencies.Currencies>) => {
-        state.platform.currency = payload || {}
-      })
+      .addCase(
+        platformSetPlatform.fulfilled,
+        (state, { payload }: PayloadAction<Store.Platform>) => {
+          state.platform = payload || {};
+          state.error = initialState.error;
+        }
+      )
+      .addCase(
+        platformSetUpdatePlatformCurrency.fulfilled,
+        (state, { payload }: PayloadAction<Shared.Currencies.Currencies>) => {
+          state.platform.currency = payload || {};
+        }
+      )
       .addMatcher(
-        ({ type }) => type.startsWith('platform/') && type.endsWith('fulfilled'),
+        ({ type }) =>
+          type.startsWith("platform/") && type.endsWith("fulfilled"),
         (state) => {
-          state.status = null
+          state.status = null;
         }
       )
       .addMatcher(
-        ({ type }) => type.startsWith('platform/') && type.endsWith('rejected'),
+        ({ type }) => type.startsWith("platform/") && type.endsWith("rejected"),
         (state, { payload }: PayloadAction<Store.Error>) => {
-          state.error = payload
+          state.error = payload;
         }
-      )
-  }
-})
+      );
+  },
+});
 
 export const { clear } = platform.actions;
 

@@ -1,6 +1,7 @@
-import { cn } from "@utils";
-import styles from "./index.module.css";
 import { Flex, FormGroup, Text } from "@components";
+import { cn } from "@utils";
+
+import styles from "./index.module.css";
 
 export type PropsData = {
   label: string;
@@ -43,7 +44,7 @@ export const RadioGroup: React.FC<Props> = ({
         {
           [styles.hidden]: hidden,
         },
-        className
+        className,
       )}
       {...rest}
     >

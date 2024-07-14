@@ -1,5 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+
 import { Input } from "./index";
 import styles from "./index.module.css";
 
@@ -13,7 +14,7 @@ describe("Input component", () => {
           error
           name="test"
           defaultValue="test"
-        />
+        />,
       );
     });
 

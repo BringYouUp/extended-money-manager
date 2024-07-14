@@ -1,13 +1,17 @@
 import { act, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { Spinner } from "./index";
-import { describe, expect, it } from "vitest";
 
 describe("Spinner component", () => {
   it("Check common case", () => {
     act(() => {
       render(
-        <Spinner data-testid="spinner" size={24} color="var(--primary-color)" />
+        <Spinner
+          data-testid="spinner"
+          size={24}
+          color="var(--primary-color)"
+        />,
       );
     });
 

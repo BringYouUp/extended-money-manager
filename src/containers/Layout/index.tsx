@@ -1,19 +1,37 @@
-import { Flex, Scrollable, SuspenseLoader } from "@components";
+//@ts-nocheck
+
+import { Flex, Page, Scrollable, SuspenseLoader } from "@components";
 import { Sidebar } from "@containers";
 import { Suspense } from "react";
-import { Outlet } from "react-router-dom";
+import { useOutlet } from "react-router-dom";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
-export const Layout: React.FC = () => {
+export function Layout() {
+  const currentOutlet = useOutlet();
+
   return (
     <Scrollable full hidden>
       <Flex full gap={0}>
         <Sidebar />
-        <Scrollable full overlay>
-          <Suspense fallback={<SuspenseLoader />}>
-            <Outlet />
-          </Suspense>
-        </Scrollable>
+        <SwitchTransition>
+          <CSSTransition
+            key={location.pathname}
+            timeout={300}
+            classNames="page"
+            unmountOnExit
+          >
+            {
+              <Page style={{ width: "calc(100% - 72px)" }} className="page">
+                <Scrollable full overlay>
+                  <Suspense fallback={<SuspenseLoader />}>
+                    {currentOutlet}
+                  </Suspense>
+                </Scrollable>
+              </Page>
+            }
+          </CSSTransition>
+        </SwitchTransition>
       </Flex>
     </Scrollable>
   );
-};
+}

@@ -1,7 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { PropsData, RadioGroup } from "./index";
-import { describe, expect, it } from "vitest";
 import styles from "./index.module.css";
 
 describe("RadioGroup component", () => {
@@ -14,7 +14,7 @@ describe("RadioGroup component", () => {
 
     act(() => {
       render(
-        <RadioGroup data={data} hidden name="test" data-testid="radioGroup" />
+        <RadioGroup data={data} hidden name="test" data-testid="radioGroup" />,
       );
     });
 

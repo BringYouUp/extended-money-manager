@@ -1,7 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 
 import { Button } from "./index";
-import { describe, expect, it, vi } from "vitest";
 import styles from "./index.module.css";
 
 describe("Button component", () => {
@@ -16,7 +16,7 @@ describe("Button component", () => {
           _role="error"
           rounded
           data-testid="button"
-        />
+        />,
       );
     });
 

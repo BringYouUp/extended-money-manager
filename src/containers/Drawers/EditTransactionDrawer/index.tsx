@@ -1,13 +1,10 @@
 import { transactionsEditTransaction } from "@async-actions";
 import {
   Button,
-  Container,
   Drawer,
   Flex,
   Icon,
   Modal,
-  ModalWrapper,
-  Offset,
   Scrollable,
   Spinner,
   Text,
@@ -110,15 +107,15 @@ export const EditTransactionDrawer: React.FC<Props> = ({
         isOpened={Boolean(is)}
         onClose={() => onTryToClose(false)}
       >
-        <Container h100 background="var(--soft-background-color)" width="300px">
-          <Offset full padding={[24, 16]}>
+        <Drawer.Container>
+          <Drawer.Content>
             <Flex full column gap={24}>
               <Flex justifyBetween alignCenter>
-                <Text as="h3" uppercase>
+                <Drawer.Title>
                   {mode === "create"
                     ? "Create transaction"
                     : "Edit transaction"}
-                </Text>
+                </Drawer.Title>
                 <Button
                   theme="transparent"
                   rounded
@@ -156,21 +153,21 @@ export const EditTransactionDrawer: React.FC<Props> = ({
                 </Flex>
               </Scrollable>
             </Flex>
-          </Offset>
-        </Container>
+          </Drawer.Content>
+        </Drawer.Container>
       </Drawer>
       <Modal
         isOpened={isOpenedConfirmDeleteModal}
         onClose={onCloseConfirmDeleteModal}
       >
-        <ModalWrapper>
-          <Flex column gap={24}>
-            <Flex column gap={12}>
-              <Text as="h3" uppercase>
-                Confirm
-              </Text>
-              <Text>Do you really want to delete transaction?</Text>
-            </Flex>
+        <Modal.Wrapper>
+          <Modal.Container>
+            <Modal.Top>
+              <Modal.Title>Confirm</Modal.Title>
+              <Modal.Subtitle>
+                Do you really want to delete transaction?
+              </Modal.Subtitle>
+            </Modal.Top>
             <Flex gap={16}>
               <Button onClick={onDeleteTransaction} theme="outline">
                 Yes
@@ -179,18 +176,18 @@ export const EditTransactionDrawer: React.FC<Props> = ({
                 No
               </Button>
             </Flex>
-          </Flex>
-        </ModalWrapper>
+          </Modal.Container>
+        </Modal.Wrapper>
       </Modal>
       <Modal isOpened={isOpenedConfirmModal} onClose={onCloseConfirmModal}>
-        <ModalWrapper>
-          <Flex column gap={24}>
-            <Flex column gap={12}>
-              <Text as="h3" uppercase>
-                Confirm
-              </Text>
-              <Text>Do you really want to close drawer</Text>
-            </Flex>
+        <Modal.Wrapper>
+          <Modal.Container>
+            <Modal.Top>
+              <Modal.Title>Confirm</Modal.Title>
+              <Modal.Subtitle>
+                Do you really want to close drawer
+              </Modal.Subtitle>
+            </Modal.Top>
             <Flex gap={16}>
               <Button onClick={onConfirmClose} theme="outline">
                 Yes
@@ -199,8 +196,8 @@ export const EditTransactionDrawer: React.FC<Props> = ({
                 No
               </Button>
             </Flex>
-          </Flex>
-        </ModalWrapper>
+          </Modal.Container>
+        </Modal.Wrapper>
       </Modal>
     </>
   );

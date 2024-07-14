@@ -1,0 +1,27 @@
+.page {
+  flex: 1;
+}
+
+.page-enter {
+  opacity: 0;
+  transform: translateX(10%);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateX(0%);
+  transition: opacity var(--transition-default),
+    transform var(--transition-long);
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateX(0%);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateX(-10%);
+  transition: opacity var(--transition-default),
+    transform var(--transition-long);
+}

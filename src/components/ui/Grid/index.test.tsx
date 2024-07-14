@@ -1,5 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+
 import { Item, Wrap } from "./index";
 
 describe("Grid.Wrap component", () => {
@@ -13,7 +14,7 @@ describe("Grid.Wrap component", () => {
           templateColumns="repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)"
           templateRows="1fr 1fr"
           area="test-area"
-        />
+        />,
       );
     });
 
@@ -21,13 +22,13 @@ describe("Grid.Wrap component", () => {
 
     expect(component.style.getPropertyValue("--grid-gap")).toBe("8px");
     expect(component.style.getPropertyValue("--grid-template-areas")).toBe(
-      "test test-2"
+      "test test-2",
     );
     expect(component.style.getPropertyValue("--grid-template-columns")).toBe(
-      "repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)"
+      "repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)",
     );
     expect(component.style.getPropertyValue("--grid-template-rows")).toBe(
-      "1fr 1fr"
+      "1fr 1fr",
     );
     expect(component.style.getPropertyValue("--grid-area")).toBe("test-area");
   });
@@ -43,7 +44,7 @@ describe("Grid.Item component", () => {
 
     expect(component.style.getPropertyValue("--grid-item-gap")).toBe("8px");
     expect(component.style.getPropertyValue("--grid-item-area")).toBe(
-      "test-area"
+      "test-area",
     );
   });
 });

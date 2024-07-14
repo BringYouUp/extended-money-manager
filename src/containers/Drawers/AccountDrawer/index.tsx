@@ -1,18 +1,15 @@
 import { accountsEditAccount } from "@async-actions";
 import {
+  Account,
   Button,
-  Container,
   Drawer,
   Flex,
   Icon,
   Modal,
-  ModalWrapper,
-  Offset,
   Scrollable,
   Spinner,
   Text,
 } from "@components";
-import { AccountCard } from "@components";
 import { EditAccountDrawer, EditTransactionDrawer } from "@containers";
 import { useAppDispatch, useLoading, useOpen, useToast, useUID } from "@hooks";
 import { useRef } from "react";
@@ -84,13 +81,11 @@ export const AccountDrawer: React.FC<Props> = ({
   return (
     <>
       <Drawer side="right" isOpened={is} onClose={onClose}>
-        <Container h100 background="var(--soft-background-color)" width="300px">
-          <Offset h100 padding={[24, 16]}>
+        <Drawer.Container>
+          <Drawer.Content>
             <Flex column full gap={24}>
               <Flex justifyBetween alignCenter>
-                <Text as="h3" uppercase>
-                  Account
-                </Text>
+                <Drawer.Title>Account</Drawer.Title>
                 <Flex gap={16}>
                   {!data.deleted && (
                     <Button
@@ -107,7 +102,7 @@ export const AccountDrawer: React.FC<Props> = ({
                 </Flex>
               </Flex>
               <Flex w100 center>
-                <AccountCard noClick style={{ zIndex: 2 }} data={data} />
+                <Account noClick style={{ zIndex: 2 }} data={data} />
               </Flex>
               <Scrollable full overlay>
                 <Flex full justifyBetween flex1 column gap={16}>
@@ -208,8 +203,8 @@ export const AccountDrawer: React.FC<Props> = ({
                 </Flex>
               </Scrollable>
             </Flex>
-          </Offset>
-        </Container>
+          </Drawer.Content>
+        </Drawer.Container>
       </Drawer>
       <EditAccountDrawer
         is={Boolean(isEditAccountDrawerOpened)}
@@ -230,14 +225,14 @@ export const AccountDrawer: React.FC<Props> = ({
         isOpened={isOpenedConfirmDeleteModal}
         onClose={onCloseConfirmDeleteModal}
       >
-        <ModalWrapper>
-          <Flex column gap={24}>
-            <Flex column gap={12}>
-              <Text as="h3" uppercase>
-                Confirm
-              </Text>
-              <Text>Do you really want to delete account?</Text>
-            </Flex>
+        <Modal.Wrapper>
+          <Modal.Container>
+            <Modal.Top>
+              <Modal.Title>Confirm</Modal.Title>
+              <Modal.Subtitle>
+                Do you really want to delete account?
+              </Modal.Subtitle>
+            </Modal.Top>
             <Flex gap={16}>
               <Button onClick={onUpdatedeleteStatus(true)} theme="outline">
                 Yes
@@ -246,8 +241,8 @@ export const AccountDrawer: React.FC<Props> = ({
                 No
               </Button>
             </Flex>
-          </Flex>
-        </ModalWrapper>
+          </Modal.Container>
+        </Modal.Wrapper>
       </Modal>
     </>
   );

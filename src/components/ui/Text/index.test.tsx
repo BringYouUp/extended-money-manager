@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+
 import { Text } from "./index";
 
 describe("Unwrap component", () => {
@@ -17,7 +18,7 @@ describe("Unwrap component", () => {
       render(
         <Text as="h2" data-testid="text" size={20} color="red" weight={700}>
           Styled Text
-        </Text>
+        </Text>,
       );
     });
     const component: HTMLDivElement = screen.getByTestId("text");
@@ -31,7 +32,7 @@ describe("Unwrap component", () => {
       render(
         <Text as="h2" data-testid="text" clickable onClick={handleClick}>
           Styled Text
-        </Text>
+        </Text>,
       );
     });
     const component: HTMLDivElement = screen.getByTestId("text");

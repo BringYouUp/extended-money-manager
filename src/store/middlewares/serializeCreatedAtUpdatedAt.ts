@@ -1,39 +1,58 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
+//@ts-nocheck
 
-import { Action, Middleware, Dispatch, UnknownAction } from "@reduxjs/toolkit";
+import { Action, Dispatch, Middleware, UnknownAction } from "@reduxjs/toolkit";
 import { toSerializeActualFirestoreFormatDate } from "@utils";
+import { AppDispatch, RootState } from "@store";
 
-export const serializeCreatedAtUpdatedAt: Middleware<unknown, unknown, Dispatch<UnknownAction>> = () => {
+export const serializeCreatedAtUpdatedAt: Middleware<
+  unknown,
+  RootState,
+  AppDispatch
+> = () => {
   return (next) => {
-    return (action: Action) => {
+    return (action: UnknownAction) => {
       switch (action.type) {
-        case 'accounts/accountsSetAccounts/fulfilled':
-          action.payload.forEach(toSerializeActualFirestoreFormatDate<Store.Account>)
-          break
-        case 'categories/categoriesSetCategories/fulfilled':
-          action.payload.forEach(toSerializeActualFirestoreFormatDate<Store.Category>)
-          break
-        case 'transactions/transactionsSetTransactions/fulfilled':
-          action.payload.forEach(toSerializeActualFirestoreFormatDate<Store.Transaction>)
-          break
-        case 'accounts/accountsAddAccount/fulfilled':
-        case 'accounts/accountsEditAccount/fulfilled':
-          toSerializeActualFirestoreFormatDate(action.payload)<Store.Account>
-          break
-        case 'categories/categoriesAddCategory/fulfilled':
-        case 'categories/categoriesEditCategory/fulfilled':
-          toSerializeActualFirestoreFormatDate(action.payload)<Store.Category>
-          break
-        case 'transactions/transactionsAddTransaction/fulfilled':
-        case 'transactions/transactionsEditTransaction/fulfilled':
-          toSerializeActualFirestoreFormatDate(action.payload)<Store.Transaction>
-          break
-        case 'platform/platformSetUpdatePlatformCurrency/fulfilled':
-          toSerializeActualFirestoreFormatDate(action.payload)<Shared.Currencies.Currencies>
-          break
+        case "accounts/accountsSetAccounts/fulfilled":
+          action.payload.forEach(
+            toSerializeActualFirestoreFormatDate<Store.Account>,
+          );
+          break;
+        case "categories/categoriesSetCategories/fulfilled":
+          action.payload.forEach(
+            toSerializeActualFirestoreFormatDate<Store.Category>,
+          );
+          break;
+        case "transactions/transactionsSetTransactions/fulfilled":
+          action.payload.forEach(
+            toSerializeActualFirestoreFormatDate<Store.Transaction>,
+          );
+          break;
+        case "accounts/accountsAddAccount/fulfilled":
+        case "accounts/accountsEditAccount/fulfilled":
+          toSerializeActualFirestoreFormatDate(action.payload);
+          break;
+        case "categories/categoriesAddCategory/fulfilled":
+        case "categories/categoriesEditCategory/fulfilled":
+          toSerializeActualFirestoreFormatDate<Store.Category>(action.payload);
+          break;
+        case "transactions/transactionsAddTransaction/fulfilled":
+        case "transactions/transactionsEditTransaction/fulfilled":
+          toSerializeActualFirestoreFormatDate<Store.Transaction>(
+            action.payload,
+          );
+          break;
+        case "platform/platformSetUpdatePlatformCurrency/fulfilled":
+          toSerializeActualFirestoreFormatDate<Shared.Currencies.Currencies>(
+            action.payload,
+          );
+          break;
+        case "transactions/transactionsGetFilteredTransactions/fulfilled":
+          action.payload.forEach(
+            toSerializeActualFirestoreFormatDate<Store.Transaction>,
+          );
+          break;
       }
-      return (next(action))
-    }
+      return next(action);
+    };
   };
 };

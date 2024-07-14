@@ -1,7 +1,7 @@
 import { cn } from "@utils";
-import styles from "./index.module.css";
-
 import { ReactNode } from "react";
+
+import styles from "./index.module.css";
 
 type Props = {
   size?: number;
@@ -63,7 +63,7 @@ export const Text: React.FC<Props> = ({
           [styles.ellipsed]: ellipsed,
           [styles.secondary]: secondary,
         },
-        className
+        className,
       )}
       onClick={onClick}
       {...rest}

@@ -3,25 +3,24 @@ import {
   transactionsEditTransaction,
 } from "@async-actions";
 import {
-  AccountCard,
+  Account,
   Button,
   Category,
   Flex,
+  Form,
   Input,
-  Label,
   Select,
   Spinner,
   Text,
-  Unwrap,
 } from "@components";
 import {
   useAppDispatch,
   useAppSelector,
-  useForm,
   useForceUpdate,
+  useForm,
   useLoading,
-  useUID,
   useToast,
+  useUID,
 } from "@hooks";
 import { getActualFirestoreFormatDate, getConvertedValue } from "@utils";
 import { useEffect, useMemo } from "react";
@@ -280,119 +279,98 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
       onChange={onChangeForm}
     >
       <Input hidden name="transaction-type" />
-      <Flex w100 column gap={20}>
-        <Flex w100 column gap={6}>
-          <Flex style={{ flex: 1 }} w100 column gap={6}>
-            <Label htmlFor="transaction-category-id">Category</Label>
-            <Select<Store.Category>
-              placeholder="Select category..."
-              className="flex flex-column flex-gap-8"
-              mode="single"
-              name="transaction-category-id"
-              error={Boolean(errors["transaction-category-id"])}
-              items={appropriateCategories}
-              parseItem={(item) => {
-                if (item.deleted) {
-                  return `${item.name}, ${item.currency} (Deleted)`;
-                }
-                return `${item.name}, ${item.currency}`;
-              }}
-              selectedCallback={(account) =>
-                getValue("transaction-category-id") === account.id
+      <Form.Items>
+        <Form.Item
+          htmlFor="transaction-category-id"
+          label="Category"
+          error={errors["transaction-category-id"]}
+        >
+          <Select<Store.Category>
+            placeholder="Select category..."
+            className="flex flex-column flex-gap-8"
+            mode="single"
+            name="transaction-category-id"
+            error={Boolean(errors["transaction-category-id"])}
+            items={appropriateCategories}
+            parseItem={(item) => {
+              if (item.deleted) {
+                return `${item.name}, ${item.currency} (Deleted)`;
               }
-              onChangeValue={(e) => {
-                setValue("transaction-category-id", e.id);
-              }}
-              Wrapper={({ children }) => (
-                <Flex
-                  style={{ width: "264px", padding: "12px" }}
-                  column
-                  gap={8}
-                >
-                  {children}
-                </Flex>
-              )}
-              Component={({ onClick, selected, data }) => (
-                <Category
-                  style={{ width: "100%" }}
-                  data={data}
-                  onClick={() => onClick(data)}
-                  selected={selected}
-                />
-              )}
-            />
+              return `${item.name}, ${item.currency}`;
+            }}
+            selectedCallback={(account) =>
+              getValue("transaction-category-id") === account.id
+            }
+            onChangeValue={(e) => {
+              setValue("transaction-category-id", e.id);
+            }}
+            Wrapper={({ children }) => (
+              <Flex style={{ width: "264px", padding: "12px" }} column gap={8}>
+                {children}
+              </Flex>
+            )}
+            Component={({ onClick, selected, data }) => (
+              <Category
+                style={{ width: "100%" }}
+                data={data}
+                onClick={() => onClick(data)}
+                selected={selected}
+              />
+            )}
+          />
+        </Form.Item>
 
-            <Unwrap
-              visible={Boolean(errors["transaction-category-id"])}
-              negativeOffset="6px"
-            >
-              <Text size={11} color="var(--text-color-error)">
-                {errors["transaction-category-id"]}
-              </Text>
-            </Unwrap>
-          </Flex>
-        </Flex>
-
-        <Flex w100 column gap={6}>
-          <Flex style={{ flex: 1 }} w100 column gap={6}>
-            <Label htmlFor="transaction-account-id">Account</Label>
-            <Select<Store.Account>
-              placeholder="Select account..."
-              className="flex flex-column flex-gap-8"
-              mode="single"
-              name="transaction-account-id"
-              error={Boolean(errors["transaction-account-id"])}
-              items={appropriateAccounts}
-              parseItem={(item) => {
-                if (item.deleted) {
-                  return `${item.name}, ${item.currency} (Deleted)`;
-                }
-                return `${item.name}, ${item.currency}`;
-              }}
-              selectedCallback={(account) =>
-                getValue("transaction-account-id") === account.id
+        <Form.Item
+          htmlFor="transaction-account-id"
+          label="Account"
+          error={errors["transaction-account-id"]}
+        >
+          <Select<Store.Account>
+            placeholder="Select account..."
+            className="flex flex-column flex-gap-8"
+            mode="single"
+            name="transaction-account-id"
+            error={Boolean(errors["transaction-account-id"])}
+            items={appropriateAccounts}
+            parseItem={(item) => {
+              if (item.deleted) {
+                return `${item.name}, ${item.currency} (Deleted)`;
               }
-              onChangeValue={(e) => {
-                setValue("transaction-account-id", e.id);
-              }}
-              Wrapper={({ children }) => (
-                <Flex
-                  style={{ width: "264px", padding: "12px" }}
-                  column
-                  gap={8}
-                >
-                  {children}
-                </Flex>
-              )}
-              Component={({ onClick, selected, data }) => (
-                <AccountCard
-                  style={{ minWidth: "revert" }}
-                  data={data}
-                  onClick={() => onClick(data)}
-                  selected={selected}
-                />
-              )}
-            />
-
-            <Unwrap
-              visible={Boolean(errors["transaction-account-id"])}
-              negativeOffset="6px"
-            >
-              <Text size={11} color="var(--text-color-error)">
-                {errors["transaction-account-id"]}
-              </Text>
-            </Unwrap>
-          </Flex>
-        </Flex>
+              return `${item.name}, ${item.currency}`;
+            }}
+            selectedCallback={(account) =>
+              getValue("transaction-account-id") === account.id
+            }
+            onChangeValue={(e) => {
+              setValue("transaction-account-id", e.id);
+            }}
+            Wrapper={({ children }) => (
+              <Flex style={{ width: "264px", padding: "12px" }} column gap={8}>
+                {children}
+              </Flex>
+            )}
+            Component={({ onClick, selected, data }) => (
+              <Account
+                style={{ minWidth: "revert" }}
+                data={data}
+                onClick={() => onClick(data)}
+                selected={selected}
+              />
+            )}
+          />
+        </Form.Item>
 
         <Flex gap={16}>
-          <Flex w100 column gap={6}>
-            <Label htmlFor="transaction-amount">
-              Amount{" "}
-              {fromCategoryToAccount[0]
-                ? `(${fromCategoryToAccount[0].currency})`
-                : null}
-            </Label>
+          <Form.Item
+            htmlFor="transaction-amount"
+            label={`Amount
+              ${
+                fromCategoryToAccount[0]
+                  ? `(${fromCategoryToAccount[0].currency})`
+                  : null
+              }`}
+            error={errors["transaction-amount"]}
+          >
             <Input
               type="number"
               error={Boolean(errors["transaction-amount"])}
@@ -401,35 +379,23 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
               placeholder="Enter amount"
               step="any"
             />
-            <Unwrap
-              visible={Boolean(errors["transaction-amount"])}
-              negativeOffset="6px"
-            >
-              <Text size={11} color="var(--text-color-error)">
-                {errors["transaction-amount"]}
-              </Text>
-            </Unwrap>
-          </Flex>
+          </Form.Item>
 
-          <Flex
-            style={{
-              display:
-                fromCategoryToAccount[1] &&
+          <Form.Item
+            visible={Boolean(
+              fromCategoryToAccount[1] &&
                 fromCategoryToAccount[0]?.currency !==
                   fromCategoryToAccount[1]?.currency
-                  ? "flex"
-                  : "none",
-            }}
-            w100
-            column
-            gap={6}
-          >
-            <Label htmlFor="transaction-to-amount">
-              Amount{" "}
-              {fromCategoryToAccount[1]
+            )}
+            htmlFor="transaction-to-amount"
+            label={`Amount
+            ${
+              fromCategoryToAccount[1]
                 ? `(${fromCategoryToAccount[1]?.currency})`
-                : null}
-            </Label>
+                : null
+            }`}
+            error={errors["transaction-to-amount"]}
+          >
             <Input
               type="number"
               error={Boolean(errors["transaction-to-amount"])}
@@ -438,19 +404,14 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
               placeholder="Enter amount"
               step="any"
             />
-            <Unwrap
-              visible={Boolean(errors["transaction-to-amount"])}
-              negativeOffset="6px"
-            >
-              <Text size={11} color="var(--text-color-error)">
-                {errors["transaction-to-amount"]}
-              </Text>
-            </Unwrap>
-          </Flex>
+          </Form.Item>
         </Flex>
 
-        <Flex w100 column gap={6}>
-          <Label htmlFor="transaction-date">Date</Label>
+        <Form.Item
+          htmlFor="transaction-date"
+          label="Date"
+          error={errors["transaction-date"]}
+        >
           <Input
             error={Boolean(errors["transaction-date"])}
             id="transaction-date"
@@ -458,35 +419,20 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
             type="date"
             placeholder="Enter transaction description..."
           />
-          <Unwrap
-            visible={Boolean(errors["transaction-date"])}
-            negativeOffset="6px"
-          >
-            <Text size={11} color="var(--text-color-error)">
-              {errors["transaction-date"]}
-            </Text>
-          </Unwrap>
-        </Flex>
+        </Form.Item>
 
-        <Flex w100 column gap={6}>
-          <Label htmlFor="transaction-description">
-            Transaction description
-          </Label>
+        <Form.Item
+          htmlFor="transaction-description"
+          label="Transaction description"
+          error={errors["transaction-description"]}
+        >
           <Input
             error={Boolean(errors["transaction-description"])}
             id="transaction-description"
             name="transaction-description"
             placeholder="Enter transaction description..."
           />
-          <Unwrap
-            visible={Boolean(errors["transaction-description"])}
-            negativeOffset="6px"
-          >
-            <Text size={11} color="var(--text-color-error)">
-              {errors["transaction-description"]}
-            </Text>
-          </Unwrap>
-        </Flex>
+        </Form.Item>
 
         <Flex column gap={12}>
           <Button type="submit" theme="primary" disabled={isLoading}>
@@ -496,7 +442,7 @@ export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
             <Text uppercase>{mode === "create" ? "Create" : "Update"}</Text>
           </Button>
         </Flex>
-      </Flex>
+      </Form.Items>
     </form>
   );
 };

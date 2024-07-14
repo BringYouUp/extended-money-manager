@@ -1,20 +1,17 @@
+import { categoriesEditCategory } from "@async-actions";
 import {
   Button,
-  Container,
   Drawer,
   Flex,
   Icon,
   Modal,
-  ModalWrapper,
-  Offset,
   Scrollable,
   Spinner,
   Text,
 } from "@components";
 import { EditCategoryDrawer, EditTransactionDrawer } from "@containers";
 import { useAppDispatch, useLoading, useOpen, useToast, useUID } from "@hooks";
-import { Category } from "src/components/Category";
-import { categoriesEditCategory } from "@async-actions";
+import { Category } from "src/components/compose/Category";
 
 type Props = {
   is: boolean;
@@ -75,13 +72,11 @@ export const CategoryDrawer: React.FC<Props> = ({
   return (
     <>
       <Drawer side="right" isOpened={Boolean(is)} onClose={onClose}>
-        <Container h100 background="var(--soft-background-color)" width="300px">
-          <Offset h100 padding={[24, 16]}>
+        <Drawer.Container>
+          <Drawer.Content>
             <Flex column full gap={24}>
               <Flex justifyBetween alignCenter>
-                <Text as="h3" uppercase>
-                  Category
-                </Text>
+                <Drawer.Title>Category</Drawer.Title>
 
                 <Flex gap={16}>
                   {!data.deleted && (
@@ -93,9 +88,7 @@ export const CategoryDrawer: React.FC<Props> = ({
                       <Icon name="edit" />
                     </Button>
                   )}
-                  <Button theme="transparent" rounded onClick={onClose}>
-                    <Icon size={16} name="close" />
-                  </Button>
+                  <Drawer.Close onClose={onClose} />
                 </Flex>
               </Flex>
 
@@ -184,8 +177,8 @@ export const CategoryDrawer: React.FC<Props> = ({
                 </Flex>
               </Scrollable>
             </Flex>
-          </Offset>
-        </Container>
+          </Drawer.Content>
+        </Drawer.Container>
       </Drawer>
       <EditCategoryDrawer
         is={Boolean(isEditCategoryDrawerOpened)}
@@ -206,14 +199,14 @@ export const CategoryDrawer: React.FC<Props> = ({
         isOpened={isOpenedConfirmDeleteModal}
         onClose={onCloseConfirmDeleteModal}
       >
-        <ModalWrapper>
-          <Flex column gap={24}>
-            <Flex column gap={12}>
-              <Text as="h3" uppercase>
-                Confirm
-              </Text>
-              <Text>Do you really want to delete category?</Text>
-            </Flex>
+        <Modal.Wrapper>
+          <Modal.Container>
+            <Modal.Top>
+              <Modal.Title>Confirm</Modal.Title>
+              <Modal.Subtitle>
+                Do you really want to delete category?
+              </Modal.Subtitle>
+            </Modal.Top>
             <Flex gap={16}>
               <Button onClick={onUpdatedeleteStatus(true)} theme="outline">
                 Yes
@@ -222,8 +215,8 @@ export const CategoryDrawer: React.FC<Props> = ({
                 No
               </Button>
             </Flex>
-          </Flex>
-        </ModalWrapper>
+          </Modal.Container>
+        </Modal.Wrapper>
       </Modal>
     </>
   );

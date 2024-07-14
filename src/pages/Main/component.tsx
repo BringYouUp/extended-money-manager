@@ -1,28 +1,24 @@
-import { userLogOut } from "@async-actions";
 import {
-  AccountCards,
-  Button,
+  Accounts,
   Categories,
   Flex,
   Grid,
-  Icon,
   Scrollable,
-  Text,
   Transactions,
 } from "@components";
-import { useAppDispatch, useAppSelector, useOpen } from "@hooks";
-
-import styles from "./index.module.css";
-
 import {
   EditAccountDrawer,
   EditCategoryDrawer,
   EditTransactionDrawer,
 } from "@containers";
-import { useNavigate } from "react-router-dom";
+import { useAppSelector, useOpen } from "@hooks";
+import { TRANSACTION_SELECTOR } from "@selectors";
 import { cn } from "@utils";
 import { useEffect } from "react";
-import { TRANSACTION_SELECTOR } from "@selectors";
+import { useNavigate } from "react-router-dom";
+
+import { Section } from "src/components/compose/Section";
+import styles from "./index.module.css";
 
 export const Component: React.FC = () => {
   const navigate = useNavigate();
@@ -40,15 +36,9 @@ export const Component: React.FC = () => {
     onCloseTransactionDrawer,
   ] = useOpen();
 
-  const dispatch = useAppDispatch();
-
   const transactions = useAppSelector(
     TRANSACTION_SELECTOR.visibleTransactionsSelector
   );
-
-  const onLogout = () => {
-    dispatch(userLogOut());
-  };
 
   const onNavigate =
     (page: "accounts" | "categories" | "transactions") => () => {
@@ -60,104 +50,79 @@ export const Component: React.FC = () => {
   return (
     <>
       <Flex full column>
-        <Flex column gap={0}>
-          <Flex className={cn("containerBlock")}>
-            <Flex alignCenter justifyBetween>
-              <Text color="var(--text-color-70)" as="h2" uppercase>
-                <Flex alignCenter gap={10}>
-                  <Icon size={24} name="bank-card" />
-                  Accounts
-                  <Button
-                    theme="transparent"
-                    rounded
-                    onClick={onOpenEditAccountDrawer}
-                  >
-                    <Icon name="plus" size={24} fill="var(--text-color-40)" />
-                  </Button>
-                </Flex>
-              </Text>
-              <Text onClick={onNavigate("accounts")} clickable secondary>
-                See all
-              </Text>
-            </Flex>
+        <Section.Container>
+          <Section.Top>
+            <Section.Title>
+              <Section.Icon name="bank-card" />
+              Accounts
+              <Section.Icon onClick={onOpenEditAccountDrawer} name="plus" />
+            </Section.Title>
 
-            <Flex center className={styles.containerGradient}>
-              <Scrollable
-                none
-                scroll
-                style={{ display: "flex" }}
-                className={cn(styles.container, "w100")}
-              >
-                <Flex gap={12}>
-                  <AccountCards />
-                </Flex>
-              </Scrollable>
-            </Flex>
-          </Flex>
+            <Section.Icon onClick={onNavigate("accounts")} name="arrow-right" />
+          </Section.Top>
 
-          <Flex className={cn("containerBlock")}>
-            <Flex alignCenter justifyBetween>
-              <Text color="var(--text-color-70)" as="h2" uppercase>
-                <Flex alignCenter gap={10}>
-                  <Icon size={24} name="category" />
-                  Categories
-                  <Button
-                    theme="transparent"
-                    rounded
-                    onClick={onOpenCategoryDrawer}
-                  >
-                    <Icon name="plus" size={24} fill="var(--text-color-40)" />
-                  </Button>
-                </Flex>
-              </Text>
-              <Text onClick={onNavigate("categories")} clickable secondary>
-                See all
-              </Text>
-            </Flex>
-
-            <Flex>
-              <Flex wrap gap={12}>
-                <Categories />
-              </Flex>
-            </Flex>
-          </Flex>
-
-          <Flex className={cn("containerBlock")}>
-            <Flex alignCenter justifyBetween>
-              <Text color="var(--text-color-70)" as="h2" uppercase>
-                <Flex alignCenter gap={10}>
-                  <Icon size={24} name="list" />
-                  Transactions
-                  <Button
-                    theme="transparent"
-                    rounded
-                    onClick={onOpenTransactionDrawer}
-                  >
-                    <Icon name="plus" size={24} fill="var(--text-color-40)" />
-                  </Button>
-                </Flex>
-              </Text>
-              <Text onClick={onNavigate("transactions")} clickable secondary>
-                See all
-              </Text>
-            </Flex>
-
-            <Grid.Wrap
-              templateColumns="repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)"
-              gap={12}
-              className={cn("w100")}
+          <Flex center className={styles.containerGradient}>
+            <Scrollable
+              none
+              scroll
+              style={{ display: "flex" }}
+              className={cn(styles.container, "w100")}
             >
-              <Transactions
-                transactions={transactions}
-                withAdd={true}
-                countTransactions={7}
-                countPlaceholders={7}
-              />
-            </Grid.Wrap>
+              <Flex gap={12}>
+                <Accounts />
+              </Flex>
+            </Scrollable>
           </Flex>
-        </Flex>
-        <button onClick={onLogout}>logout</button>
+        </Section.Container>
+
+        <Section.Container>
+          <Section.Top>
+            <Section.Title>
+              <Section.Icon name="category" />
+              Categories
+              <Section.Icon name="plus" onClick={onOpenCategoryDrawer} />
+            </Section.Title>
+            <Section.Icon
+              name="arrow-right"
+              onClick={onNavigate("categories")}
+            />
+          </Section.Top>
+
+          <Flex>
+            <Flex wrap gap={12}>
+              <Categories />
+            </Flex>
+          </Flex>
+        </Section.Container>
+
+        <Section.Container>
+          <Section.Top>
+            <Section.Title>
+              <Section.Icon name="list" />
+              Transactions
+              <Section.Icon name="plus" onClick={onOpenTransactionDrawer} />
+            </Section.Title>
+            <Section.Icon
+              name="arrow-right"
+              onClick={onNavigate("transactions")}
+            />
+          </Section.Top>
+
+          <Grid.Wrap
+            templateColumns="repeat(auto-fit, minmax(var(--transaction-list-width), 1fr)"
+            gap={12}
+            className={cn("w100")}
+          >
+            <Transactions
+              transactions={transactions}
+              withAdd={true}
+              countTransactions={7}
+              countPlaceholders={7}
+            />
+          </Grid.Wrap>
+        </Section.Container>
       </Flex>
+
       <EditAccountDrawer
         mode="create"
         is={isEditAccountDrawerOpened}

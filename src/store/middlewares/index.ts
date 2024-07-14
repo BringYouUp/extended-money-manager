@@ -1,2 +1,2 @@
-export * from "./timeStampMiddleware"
-export * from "./serializeCreatedAtUpdatedAt"
+export * from "./serializeCreatedAtUpdatedAt";
+export * from "./timeStampMiddleware";

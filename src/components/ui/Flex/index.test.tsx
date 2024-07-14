@@ -1,7 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { Flex } from "./index";
-import { describe, expect, it } from "vitest";
 import styles from "./index.module.css";
 
 describe("Flex component", () => {

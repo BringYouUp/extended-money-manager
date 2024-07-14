@@ -13,7 +13,8 @@
   padding: 6px 8px;
   color: var(--badge-color-final);
   border: 1px solid var(--badge-color-final);
-  transition: color var(--transition-quick),
+  transition:
+    color var(--transition-quick),
     border-color var(--transition-quick);
   z-index: 1;
   overflow: hidden;

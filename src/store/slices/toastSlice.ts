@@ -1,28 +1,27 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: Store.ToastSelector = {
   toasts: [],
-}
+};
 
 const toastSlice = createSlice({
-  name: 'toast',
+  name: "toast",
   initialState,
   reducers: {
     addToast: (state, { payload }: PayloadAction<Store.Toast>) => {
-      state.toasts.push(payload)
+      state.toasts.push(payload);
     },
     removeToast: (state, { payload }: PayloadAction<Store.Toast>) => {
-      const idx = state.toasts.findIndex(toast => toast.id === payload.id)
+      const idx = state.toasts.findIndex((toast) => toast.id === payload.id);
       if (idx !== -1) {
-        state.toasts.splice(idx, 1)
+        state.toasts.splice(idx, 1);
       }
     },
     clear: (store) => {
-      store.toasts = initialState.toasts
-    }
+      store.toasts = initialState.toasts;
+    },
   },
-})
-
+});
 
 export const { addToast, removeToast, clear } = toastSlice.actions;
 

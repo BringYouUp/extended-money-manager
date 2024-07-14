@@ -1,6 +1,7 @@
 import { cn } from "@utils";
-import styles from "./index.module.css";
 import { MouseEventHandler, ReactNode } from "react";
+
+import styles from "./index.module.css";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   gap?: string | number;
@@ -54,7 +55,7 @@ const Item: React.FC<Props> = ({
           ["el-grid-item-area"]: area,
           ["el-grid-item-gap"]: Number.isInteger(gap),
         },
-        className
+        className,
       )}
       {...rest}
     >

@@ -2,7 +2,8 @@
   display: grid;
   grid-template-rows: 0fr;
   overflow: hidden;
-  transition: grid-template-rows var(--transition-default),
+  transition:
+    grid-template-rows var(--transition-default),
     margin-top var(--transition-default);
   margin-top: calc(-1 * var(--unwrap-negative-offset));
 }

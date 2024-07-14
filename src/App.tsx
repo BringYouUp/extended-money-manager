@@ -1,58 +1,6 @@
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
-
 import { Flex, Offset, Scrollable, Text, Toasts } from "@components";
-import {
-  AccountsPage,
-  CategoriesPage,
-  LoginPage,
-  MainPage,
-  SignUpPage,
-  TransactionsPage,
-} from "@pages";
-import { PATHS } from "@consts";
-import { Root } from "@containers";
-
-const router = createBrowserRouter([
-  {
-    path: PATHS.LOGIN,
-    element: <LoginPage />,
-  },
-  {
-    path: PATHS.SIGN_UP,
-    element: <SignUpPage />,
-  },
-  {
-    path: PATHS.ROOT,
-    element: <Root />,
-
-    children: [
-      {
-        index: true,
-        element: <MainPage />,
-      },
-      {
-        path: PATHS.ACCOUNTS,
-        element: <AccountsPage />,
-      },
-      {
-        path: PATHS.CATEGORIES,
-        element: <CategoriesPage />,
-      },
-      {
-        path: PATHS.TRANSACTIONS,
-        element: <TransactionsPage />,
-      },
-      {
-        path: PATHS.ANY,
-        element: <Navigate to={PATHS.ROOT} />,
-      },
-    ],
-  },
-]);
+import { router } from "@router";
+import { RouterProvider } from "react-router-dom";
 
 function App() {
   return (

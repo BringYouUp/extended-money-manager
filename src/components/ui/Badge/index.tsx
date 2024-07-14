@@ -1,6 +1,7 @@
-import { cn } from "@utils";
-import styles from "./index.module.css";
 import { Button, Flex, Icon, Text } from "@components";
+import { cn } from "@utils";
+
+import styles from "./index.module.css";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -42,7 +43,7 @@ export const Badge: React.FC<Props> = ({
           [styles.active]: active,
           [styles.black]: badgeColor === -1,
         },
-        className
+        className,
       )}
       {...rest}
     >

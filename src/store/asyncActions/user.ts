@@ -1,154 +1,180 @@
-import { getRef, getStoreErrorFormat, getStoreUserFormat } from '@utils';
-import { getDoc, setDoc } from 'firebase/firestore';
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { auth, googleProvider, githubProvider } from '../../../config/firebase'
+import {
+  accountsSetAccounts,
+  categoriesSetCategories,
+  platformSetPlatform,
+  transactionsSetTransactions,
+} from "@async-actions";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { getRef, getStoreErrorFormat, getStoreUserFormat } from "@utils";
+import {
+  createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  User,
+  UserCredential,
+} from "firebase/auth";
+import { getDoc, setDoc } from "firebase/firestore";
 
-import { User, UserCredential, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
+import { auth, githubProvider, googleProvider } from "../../../config/firebase";
 
-import { accountsSetAccounts, categoriesSetCategories, platformSetPlatform, transactionsSetTransactions } from '@async-actions';
-
-export const userSetUser = createAsyncThunk<Store.User, { uid: string, user: User }>(
-  'user/userSetUser',
+export const userSetUser = createAsyncThunk<
+  Store.User,
+  { uid: string; user: User }
+>(
+  "user/userSetUser",
   ({ uid, user }, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
-      const docRef = getRef.user(uid)
+      const docRef = getRef.user(uid);
 
       const createProfileSnap = () => {
-        const profile = getStoreUserFormat(user)
+        const profile = getStoreUserFormat(user);
         return Promise.all<[unknown, Store.User]>([
           setDoc(getRef.user(uid), { profile }, { merge: true }),
-          profile
-        ])
-      }
+          profile,
+        ]);
+      };
 
       getDoc(docRef)
-        .then(docSnap => {
+        .then((docSnap) => {
           if (docSnap.exists()) {
-            const data = docSnap.data() as Shared.Firebase.GotDoc
+            const data = docSnap.data() as Shared.Firebase.GotDoc;
 
             if (data.profile) {
-              resolve(fulfillWithValue(data.profile))
-              return
+              resolve(fulfillWithValue(data.profile));
+              return;
             } else {
-              return createProfileSnap()
+              return createProfileSnap();
             }
           } else {
-            return createProfileSnap()
+            return createProfileSnap();
           }
         })
-        .then(data => {
+        .then((data) => {
           if (data?.[1]) {
-            resolve(fulfillWithValue(data?.[1]))
+            resolve(fulfillWithValue(data?.[1]));
           }
         })
-        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
-    })
-  }
-)
+        .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
+    });
+  },
+);
 
-export const userSignUpWithEmailAndPassword = createAsyncThunk<unknown, { email: string, password: string }>(
-  'user/signUpWithEmailAndPassword',
+export const userSignUpWithEmailAndPassword = createAsyncThunk<
+  unknown,
+  { email: string; password: string }
+>(
+  "user/signUpWithEmailAndPassword",
   ({ email, password }, { dispatch, rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
-      let authData: UserCredential
+      let authData: UserCredential;
 
       dispatch(platformSetPlatform(null))
         .then(() => createUserWithEmailAndPassword(auth, email, password))
-        .then(data => {
-          authData = data
-          dispatch(accountsSetAccounts(authData.user.uid))
-          dispatch(categoriesSetCategories(authData.user.uid))
-          dispatch(transactionsSetTransactions(authData.user.uid))
-          resolve(fulfillWithValue(authData))
+        .then((data) => {
+          authData = data;
+          dispatch(accountsSetAccounts(authData.user.uid));
+          dispatch(categoriesSetCategories(authData.user.uid));
+          dispatch(transactionsSetTransactions(authData.user.uid));
+          resolve(fulfillWithValue(authData));
         })
-        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
-    })
-  }
-)
+        .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
+    });
+  },
+);
 
-export const userSignInWithEmailAndPassword = createAsyncThunk<unknown, { email: string, password: string }>(
-  'user/signInWithEmailAndPassword',
+export const userSignInWithEmailAndPassword = createAsyncThunk<
+  unknown,
+  { email: string; password: string }
+>(
+  "user/signInWithEmailAndPassword",
   ({ email, password }, { dispatch, rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
-      let authData: UserCredential
+      let authData: UserCredential;
 
       dispatch(platformSetPlatform(null))
         .then(() => signInWithEmailAndPassword(auth, email, password))
-        .then(data => {
-          authData = data
-          dispatch(accountsSetAccounts(authData.user.uid))
-          dispatch(categoriesSetCategories(authData.user.uid))
-          dispatch(transactionsSetTransactions(authData.user.uid))
-          resolve(fulfillWithValue(authData))
+        .then((data) => {
+          authData = data;
+          dispatch(accountsSetAccounts(authData.user.uid));
+          dispatch(categoriesSetCategories(authData.user.uid));
+          dispatch(transactionsSetTransactions(authData.user.uid));
+          resolve(fulfillWithValue(authData));
         })
-        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
-    })
-  }
-)
+        .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
+    });
+  },
+);
 
 export const userLogOut = createAsyncThunk<unknown, void>(
-  'user/logOut',
+  "user/logOut",
   (_, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
       signOut(auth)
-        .then(data => resolve(fulfillWithValue(data)))
-        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
-    })
-  }
-)
+        .then((data) => resolve(fulfillWithValue(data)))
+        .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
+    });
+  },
+);
 
-export const signInWithProvider = createAsyncThunk<unknown, { provider: 'google' | 'github' }>(
-  'users/signInWithProvider',
+export const signInWithProvider = createAsyncThunk<
+  unknown,
+  { provider: "google" | "github" }
+>(
+  "users/signInWithProvider",
   ({ provider }, { dispatch, rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
       const providers = {
         google: googleProvider,
-        github: githubProvider
-      }
+        github: githubProvider,
+      };
 
-      let authData: UserCredential
+      let authData: UserCredential;
 
       dispatch(platformSetPlatform(null))
         .then(() => signInWithPopup(auth, providers[provider]))
-        .then(data => {
-          authData = data
-          dispatch(userSetUser({ uid: authData.user.uid, user: authData.user }))
+        .then((data) => {
+          authData = data;
+          dispatch(
+            userSetUser({ uid: authData.user.uid, user: authData.user }),
+          );
         })
         .then(() => {
-          dispatch(accountsSetAccounts(authData.user.uid))
-          dispatch(categoriesSetCategories(authData.user.uid))
-          dispatch(transactionsSetTransactions(authData.user.uid))
-          resolve(fulfillWithValue(authData))
+          dispatch(accountsSetAccounts(authData.user.uid));
+          dispatch(categoriesSetCategories(authData.user.uid));
+          dispatch(transactionsSetTransactions(authData.user.uid));
+          resolve(fulfillWithValue(authData));
         })
-        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
-    })
-  }
-)
+        .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
+    });
+  },
+);
 
 export const userResetPassword = createAsyncThunk<unknown, { email: string }>(
-  'user/resetPassword',
+  "user/resetPassword",
   ({ email }, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
       sendPasswordResetEmail(auth, email)
-        .then(data => resolve(fulfillWithValue(data)))
-        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
-    })
-  }
-)
+        .then((data) => resolve(fulfillWithValue(data)))
+        .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
+    });
+  },
+);
 
 export const signInAutomatically = createAsyncThunk<unknown, User>(
-  'user/signInAutomatically',
+  "user/signInAutomatically",
   (data, { dispatch, rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
       dispatch(platformSetPlatform(null))
         .then(() => dispatch(userSetUser({ uid: data.uid, user: data })))
         .then(() => {
-          dispatch(accountsSetAccounts(data.uid))
-          dispatch(categoriesSetCategories(data.uid))
-          dispatch(transactionsSetTransactions(data.uid))
-          resolve(fulfillWithValue(getStoreUserFormat(data)))
+          dispatch(accountsSetAccounts(data.uid));
+          dispatch(categoriesSetCategories(data.uid));
+          dispatch(transactionsSetTransactions(data.uid));
+          resolve(fulfillWithValue(getStoreUserFormat(data)));
         })
-        .catch(err => reject(rejectWithValue(getStoreErrorFormat(err))))
-    })
-  }
-)
+        .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
+    });
+  },
+);

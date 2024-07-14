@@ -1,7 +1,7 @@
 import { cn } from "@utils";
-import styles from "./index.module.css";
-
 import { ReactNode } from "react";
+
+import styles from "./index.module.css";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   full?: boolean;
@@ -58,7 +58,7 @@ export const Offset: React.FC<Props> = ({
           [styles.padding]: Boolean(padding),
           [styles.margin]: Boolean(margin),
         },
-        className
+        className,
       )}
       {...rest}
     >

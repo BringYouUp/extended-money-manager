@@ -14,7 +14,7 @@ export const TransactionsFilterBadges: React.FC<{
     <>
       {data["transaction-types"].map((transactionType) => {
         const found = TRANSACTIONS_TYPES.find(
-          (_transactionType) => _transactionType.type === transactionType
+          (_transactionType) => _transactionType.type === transactionType,
         );
 
         if (!found) return;
