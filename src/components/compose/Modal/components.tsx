@@ -54,10 +54,15 @@ const ModalSubtitle = ({ children }: { children: ReactNode }) => {
   return <Text>{children}</Text>;
 };
 
+const ModalActions = ({ children }: { children: ReactNode }) => {
+  return <Flex gap={16}>{children}</Flex>;
+};
+
 export default {
   ModalWrapper,
   ModalContainer,
   ModalTop,
   ModalTitle,
   ModalSubtitle,
+  ModalActions,
 };

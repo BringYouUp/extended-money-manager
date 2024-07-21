@@ -10,32 +10,13 @@ import {
   Text,
 } from "@components";
 import { TransactionForm } from "@containers";
+import { withClosingComfirmation } from "@hocs/withClosingComfirmation";
 import { useAppDispatch, useLoading, useOpen, useToast, useUID } from "@hooks";
 import { useRef } from "react";
 
-type Props = {
-  is: boolean;
-  onClose: () => void;
-} & (
-  | {
-      mode: "edit";
-      data: Store.Transaction;
-      initialValues?: never;
-    }
-  | {
-      mode: "create";
-      data?: never;
-      initialValues?: Partial<Store.Transaction>;
-    }
-);
-
-export const EditTransactionDrawer: React.FC<Props> = ({
-  is,
-  initialValues,
-  data,
-  mode,
-  onClose,
-}: Props) => {
+export const TransactionDrawer: React.FC<
+  Components.TransactionDrawer.Props & Hocs.WithClosingConfirmation.Props
+> = ({ is, initialValues, data, mode, onClose }) => {
   const dispatch = useAppDispatch();
   const uid = useUID();
   const { createToast } = useToast();
@@ -48,8 +29,7 @@ export const EditTransactionDrawer: React.FC<Props> = ({
     onCloseConfirmDeleteModal,
   ] = useOpen();
 
-  const onCloseHandler = () => {
-    onClose();
+  const onCleanUp = () => {
     isFormChanged.current = false;
   };
 
@@ -70,34 +50,15 @@ export const EditTransactionDrawer: React.FC<Props> = ({
         })
       )
         .then(() => {
-          onCloseHandler();
+          onClose(true, onCleanUp);
           createToast("transaction deleted", "success");
         })
         .finally(() => endLoading());
     }
   };
 
-  const [isOpenedConfirmModal, onOpenConfirmModal, onCloseConfirmModal] =
-    useOpen();
-
-  const onTryToClose = (forceClose: boolean = false) => {
-    if (!forceClose) {
-      if (isFormChanged.current) {
-        return onOpenConfirmModal();
-      } else {
-        onCloseHandler();
-      }
-    } else {
-      onCloseHandler();
-    }
-  };
-
-  const onConfirmClose = () => {
-    if (isOpenedConfirmModal) {
-      onCloseConfirmModal();
-    }
-
-    onCloseHandler();
+  const onCloseDrawer = (forceClose: boolean = false) => {
+    onClose(forceClose || !isFormChanged.current, onCleanUp);
   };
 
   return (
@@ -105,7 +66,7 @@ export const EditTransactionDrawer: React.FC<Props> = ({
       <Drawer
         side="right"
         isOpened={Boolean(is)}
-        onClose={() => onTryToClose(false)}
+        onClose={() => onCloseDrawer(false)}
       >
         <Drawer.Container>
           <Drawer.Content>
@@ -119,7 +80,7 @@ export const EditTransactionDrawer: React.FC<Props> = ({
                 <Button
                   theme="transparent"
                   rounded
-                  onClick={() => onTryToClose(false)}
+                  onClick={() => onCloseDrawer()}
                 >
                   <Icon size={16} name="close" />
                 </Button>
@@ -129,7 +90,7 @@ export const EditTransactionDrawer: React.FC<Props> = ({
                 <Flex column gap={8} full justifyBetween>
                   <TransactionForm
                     onClose={(isForceClose) =>
-                      onTryToClose(isForceClose as boolean)
+                      onCloseDrawer(isForceClose as boolean)
                     }
                     mode={mode}
                     data={mode === "edit" ? data : (undefined as never)}
@@ -179,26 +140,12 @@ export const EditTransactionDrawer: React.FC<Props> = ({
           </Modal.Container>
         </Modal.Wrapper>
       </Modal>
-      <Modal isOpened={isOpenedConfirmModal} onClose={onCloseConfirmModal}>
-        <Modal.Wrapper>
-          <Modal.Container>
-            <Modal.Top>
-              <Modal.Title>Confirm</Modal.Title>
-              <Modal.Subtitle>
-                Do you really want to close drawer
-              </Modal.Subtitle>
-            </Modal.Top>
-            <Flex gap={16}>
-              <Button onClick={onConfirmClose} theme="outline">
-                Yes
-              </Button>
-              <Button onClick={onCloseConfirmModal} theme="primary">
-                No
-              </Button>
-            </Flex>
-          </Modal.Container>
-        </Modal.Wrapper>
-      </Modal>
     </>
   );
 };
+
+export const EditTransactionDrawer =
+  withClosingComfirmation<Components.TransactionDrawer.Props>({
+    title: "Confirm",
+    subtitle: "Do you really want to close drawer?",
+  })(TransactionDrawer);

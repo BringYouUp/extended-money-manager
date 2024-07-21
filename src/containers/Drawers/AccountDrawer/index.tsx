@@ -233,14 +233,14 @@ export const AccountDrawer: React.FC<Props> = ({
                 Do you really want to delete account?
               </Modal.Subtitle>
             </Modal.Top>
-            <Flex gap={16}>
+            <Modal.Actions>
               <Button onClick={onUpdatedeleteStatus(true)} theme="outline">
                 Yes
               </Button>
               <Button onClick={onCloseConfirmDeleteModal} theme="primary">
                 No
               </Button>
-            </Flex>
+            </Modal.Actions>
           </Modal.Container>
         </Modal.Wrapper>
       </Modal>

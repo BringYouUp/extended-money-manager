@@ -29,26 +29,16 @@ import { getActualFirestoreFormatDate } from "@utils";
 import { useMemo } from "react";
 import { PLATFORM_CURRENCIES_LIST } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
-
-const RADIO_GROUP_DATA = [
-  {
-    label: "Yes",
-    value: "yes",
-  },
-  {
-    label: "No",
-    value: "no",
-  },
-];
+import { RADIO_GROUP_DATA } from "./consts";
 
 type Edit = {
   mode: "edit";
-  data: Store.Account;
+  initialValues: Store.Account;
 };
 
 type Create = {
   mode: "create";
-  data?: unknown;
+  initialValues?: unknown;
 };
 
 type Props = {
@@ -56,7 +46,12 @@ type Props = {
   setValues: (values: Components.Form.Account) => void;
 } & (Create | Edit);
 
-export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
+export const AccountForm = ({
+  initialValues,
+  mode,
+  onClose,
+  setValues,
+}: Props) => {
   const dispatch = useAppDispatch();
 
   const categories = useAppSelector(
@@ -79,10 +74,10 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
     formRef,
   } = useForm<Components.Form.Account>(
     {
-      "account-color": mode === "edit" ? data.color : "",
-      "account-amount": mode === "edit" ? data.amount : 0,
-      "account-name": mode === "edit" ? data.name : "",
-      "account-currency": mode === "edit" ? data.currency : "$",
+      "account-color": mode === "edit" ? initialValues.color : "",
+      "account-amount": mode === "edit" ? initialValues.amount : 0,
+      "account-name": mode === "edit" ? initialValues.name : "",
+      "account-currency": mode === "edit" ? initialValues.currency : "$",
       "is-create-transaction-after-change-account": "yes",
       "transaction-category-id": "",
     },
@@ -93,7 +88,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
         notValidateFields:
           mode === "edit" &&
           values["is-create-transaction-after-change-account"] === "yes" &&
-          +values["account-amount"] !== data.amount
+          +values["account-amount"] !== initialValues.amount
             ? []
             : ["transaction-category-id"],
       }),
@@ -116,10 +111,12 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
             description: "",
             categoryId,
             accountId,
-            amount: Math.abs(data.amount - +values["account-amount"]),
+            amount: Math.abs(initialValues.amount - +values["account-amount"]),
             date: getActualFirestoreFormatDate() as unknown as string,
             type:
-              data.amount < +values["account-amount"] ? "income" : "withdraw",
+              initialValues.amount < +values["account-amount"]
+                ? "income"
+                : "withdraw",
             toAccountId: "",
             deleted: false,
           },
@@ -168,7 +165,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
             currency: values[
               "account-currency"
             ] as Shared.Currencies.CurrencySymbols,
-            id: data.id,
+            id: initialValues.id,
             deleted: false,
           },
           uid,
@@ -178,7 +175,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           if (
             mode === "edit" &&
             values["is-create-transaction-after-change-account"] === "yes" &&
-            +values["account-amount"] !== data.amount
+            +values["account-amount"] !== initialValues.amount
           ) {
             onCreateAdditionalTransaction({
               accountId: res.meta.arg.account.id,
@@ -277,7 +274,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           error={errors["account-color"]}
         >
           <ColorPicker
-            value={mode === "edit" ? data.color : ""}
+            value={mode === "edit" ? initialValues.color : ""}
             id="account-color"
             name="account-color"
           />
@@ -285,7 +282,8 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
 
         <Form.Item
           visible={
-            mode === "edit" && +getValue("account-amount") !== data.amount
+            mode === "edit" &&
+            +getValue("account-amount") !== initialValues.amount
           }
           label="Create transaction?"
           error={errors["is-create-transaction-after-change-account"]}
@@ -302,7 +300,7 @@ export const AccountForm = ({ data, mode, onClose, setValues }: Props) => {
           visible={
             mode === "edit" &&
             getValue("is-create-transaction-after-change-account") === "yes" &&
-            +getValue("account-amount") !== data.amount
+            +getValue("account-amount") !== initialValues.amount
           }
           error={errors["transaction-category-id"]}
           htmlFor="transaction-category-id"

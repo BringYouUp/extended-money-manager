@@ -7,6 +7,7 @@ export const useForm = <Fields extends Hooks.UseForm.UseFormFields>(
 ) => {
   const [errors, setErrors] = useState<Hooks.UseForm.Errors<Fields>>({});
   const validatorsRef = useRef<Hooks.UseForm.Validators<Fields>>({});
+  const isInitialSet = useRef<boolean>(false);
   const formRef = useRef<HTMLFormElement & Hooks.UseForm.FormFields<Fields>>(
     null
   );
@@ -91,7 +92,9 @@ export const useForm = <Fields extends Hooks.UseForm.UseFormFields>(
     e: React.ChangeEvent<HTMLFormElement & Hooks.UseForm.FormFields<Fields>>
   ) => {
     if (typeof options?.updateOnChange === "function") {
-      options?.updateOnChange(e, getValues());
+      if (!isInitialSet.current) {
+        options?.updateOnChange(e, getValues());
+      }
     }
 
     if (Object.keys(errors).length) {
@@ -183,6 +186,7 @@ export const useForm = <Fields extends Hooks.UseForm.UseFormFields>(
 
   useEffect(() => {
     if (formRef.current) {
+      isInitialSet.current = true;
       Object.keys(fields).forEach((key) => {
         if (formRef.current?.[key]) {
           setValue(
@@ -193,6 +197,7 @@ export const useForm = <Fields extends Hooks.UseForm.UseFormFields>(
           console.error("EFFECT. Every field must be registered !!!");
         }
       });
+      isInitialSet.current = false;
     }
   }, []);
 
