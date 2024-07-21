@@ -1,30 +1,8 @@
 import { cn } from "@utils";
-import { ReactNode } from "react";
 
 import styles from "./index.module.css";
 
-enum Themes {
-  primary = "primary",
-  outline = "outline",
-  option = "option",
-  transparent = "transparent",
-}
-
-interface Props extends React.HTMLAttributes<HTMLButtonElement> {
-  disabled?: boolean;
-  rounded?: boolean;
-  centered?: boolean;
-  active?: boolean;
-  theme: keyof typeof Themes;
-  type?: "button" | "reset" | "submit" | undefined;
-  _role?: "warning" | "success" | "error";
-  width?: string;
-  className?: string;
-  style?: React.CSSProperties;
-  children?: ReactNode;
-}
-
-export const Button: React.FC<Props> = ({
+export const Button: React.FC<Components.Button.Props> = ({
   disabled,
   rounded,
   _role,
@@ -57,7 +35,7 @@ export const Button: React.FC<Props> = ({
           [styles.active]: active,
           [styles.centered]: centered,
         },
-        className,
+        className
       )}
       disabled={disabled}
       type={type}

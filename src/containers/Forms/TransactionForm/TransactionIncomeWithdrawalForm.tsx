@@ -36,7 +36,6 @@ type Props = Components.Form.TransactionProps & {
   transactionType: Exclude<Store.TransactionType, "transfer">;
   isFormChanged: React.MutableRefObject<boolean>;
 };
-
 export const TransactionIncomeWithdrawalForm: React.FC<Props> = ({
   data,
   initialValues,

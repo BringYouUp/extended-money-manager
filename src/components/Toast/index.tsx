@@ -1,7 +1,4 @@
-import { Button, Container, Flex, Icon, Text } from "@components";
-import { cn } from "@utils";
-
-import styles from "./index.module.css";
+import Components from "./components";
 
 type Props = {
   data: Store.Toast;
@@ -11,60 +8,30 @@ type Props = {
   onClose: () => void;
 };
 
-const ICONS_NAME_MAP = {
-  success: "check",
-  error: "close",
-  warning: "warning",
-};
-
-const ICONS_FILL_MAP = {
-  error: "var(--text-color-error)",
-  success: "var(--text-color-success)",
-  warning: "var(--text-color-warning)",
-};
-
-export const Toast = ({ style, className, data, onClose }: Props) => {
+export function Toast({ style, className, data, onClose }: Props) {
   return (
-    <Flex
-      style={style}
-      className={cn(
-        styles.toast,
-        {
-          [styles[data.type]]: data.type,
-        },
-        className,
-      )}
-      gap={8}
-    >
-      <Container width="16px">
-        <Flex full center>
-          <Icon
-            size={16}
-            name={ICONS_NAME_MAP[data.type]}
-            fill={ICONS_FILL_MAP[data.type]}
-          />
-        </Flex>
-      </Container>
-      <Flex w100 column gap={4}>
-        <Flex alignStart gap={8} justifyBetween>
-          <Text uppercase as="h4" weight={500}>
-            {data.title}
-          </Text>
-          <Button
-            className={styles.close}
-            theme="transparent"
-            rounded
-            onClick={onClose}
-          >
-            <Icon size={16} name="close" />
-          </Button>
-        </Flex>
+    <Toast.Wrapper type={data.type} className={className} style={style}>
+      <Toast.Left>
+        <Toast.Icon type={data.type} />
+      </Toast.Left>
+      <Toast.Center>
+        <Toast.Title>{data.title}</Toast.Title>
         {data.description && (
-          <Text className={styles.description} size={12} secondary as="span">
-            {data.description}
-          </Text>
+          <Toast.Description>{data.description}</Toast.Description>
         )}
-      </Flex>
-    </Flex>
+      </Toast.Center>
+      <Toast.Right>
+        <Toast.Close onClose={onClose} />
+      </Toast.Right>
+    </Toast.Wrapper>
   );
-};
+}
+
+Toast.Wrapper = Components.Wrapper;
+Toast.Icon = Components.Icon;
+Toast.Left = Components.Left;
+Toast.Right = Components.Right;
+Toast.Close = Components.Close;
+Toast.Center = Components.Center;
+Toast.Title = Components.Title;
+Toast.Description = Components.Description;

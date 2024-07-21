@@ -14,6 +14,7 @@
       "@components": ["src/components"],
       "@consts": ["src/consts"],
       "@containers": ["src/containers"],
+      "@hocs/*": ["src/hocs/*"],
       "@hooks": ["src/hooks"],
       "@pages": ["src/pages"],
       "@selectors": ["src/store/slices/selectors"],

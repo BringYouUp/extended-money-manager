@@ -58,3 +58,4 @@ Modal.Container = Components.ModalContainer;
 Modal.Top = Components.ModalTop;
 Modal.Title = Components.ModalTitle;
 Modal.Subtitle = Components.ModalSubtitle;
+Modal.Actions = Components.ModalActions;

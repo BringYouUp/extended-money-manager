@@ -31,7 +31,6 @@ type Props = Components.Form.TransactionProps & {
   isFormChanged: React.MutableRefObject<boolean>;
   onClose: (...args: unknown[]) => void;
 };
-
 export const TransactionTransferForm: React.FC<Props> = ({
   data,
   initialValues,
@@ -75,10 +74,10 @@ export const TransactionTransferForm: React.FC<Props> = ({
       updateOnChange: updateOnChangeCheckForAmountInput,
       beforeSubmit: ({ values }) => {
         const fromAccount = accounts.find(
-          (account) => account.id === values["transaction-account-id"],
+          (account) => account.id === values["transaction-account-id"]
         );
         const toAccount = accounts.find(
-          (account) => account.id === values["transaction-to-account-id"],
+          (account) => account.id === values["transaction-to-account-id"]
         );
         return {
           notValidateFields:
@@ -87,7 +86,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               : ["transaction-to-amount"],
         };
       },
-    },
+    }
   );
 
   const fromToAccount = useMemo(() => {
@@ -97,21 +96,21 @@ export const TransactionTransferForm: React.FC<Props> = ({
         fromAccount = data.accountId
           ? accounts.find((account) => account.id === data.accountId)
           : accounts.find(
-              (account) => account.id === getValue("transaction-account-id"),
+              (account) => account.id === getValue("transaction-account-id")
             );
         break;
       case "create":
         fromAccount = initialValues?.accountId
           ? accounts.find((account) => account.id === initialValues?.accountId)
           : accounts.find(
-              (account) => account.id === getValue("transaction-account-id"),
+              (account) => account.id === getValue("transaction-account-id")
             );
         break;
     }
     return [
       fromAccount,
       accounts.find(
-        (account) => account.id === getValue("transaction-to-account-id"),
+        (account) => account.id === getValue("transaction-to-account-id")
       ) || null,
     ];
   }, [
@@ -127,7 +126,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
     >,
     values: {
       [K in keyof Components.Form.TransactionTransfer]: Components.Form.TransactionTransfer[K];
-    },
+    }
   ): void {
     if (e.target.nodeName !== "FORM" && isFormChanged !== null) {
       isFormChanged.current = true;
@@ -163,7 +162,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
             accountId: values["transaction-account-id"],
             amount: +values["transaction-amount"],
             date: getActualFirestoreFormatDate(
-              values["transaction-date"],
+              values["transaction-date"]
             ) as unknown as string,
             type: "transfer",
             toAccountId: values["transaction-to-account-id"],
@@ -172,7 +171,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               +values["transaction-to-amount"] || +values["transaction-amount"],
           },
           uid,
-        }),
+        })
       )
         .then(() => {
           onClose(true);
@@ -198,7 +197,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
               +values["transaction-to-amount"] || +values["transaction-amount"],
           },
           uid,
-        }),
+        })
       )
         .then(() => {
           onClose(true);
@@ -257,7 +256,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
             name="transaction-account-id"
             error={Boolean(errors["transaction-account-id"])}
             items={appropriateAccounts.filter(
-              (item) => item.id !== getValue("transaction-to-account-id"),
+              (item) => item.id !== getValue("transaction-to-account-id")
             )}
             parseItem={(item) => {
               if (item.deleted) {
@@ -299,7 +298,7 @@ export const TransactionTransferForm: React.FC<Props> = ({
             name="transaction-to-account-id"
             error={Boolean(errors["transaction-to-account-id"])}
             items={appropriateAccounts.filter(
-              (item) => item.id !== getValue("transaction-account-id"),
+              (item) => item.id !== getValue("transaction-account-id")
             )}
             parseItem={(item) => {
               if (item.deleted) {

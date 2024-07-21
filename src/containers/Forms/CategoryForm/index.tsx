@@ -24,7 +24,6 @@ import {
 } from "@hooks";
 import { PLATFORM_CURRENCIES_LIST } from "src/consts/store";
 import { useStoreErrorObserver } from "src/hooks/useStoreErrorObserver";
-
 type Props = (
   | {
       mode: "edit";
