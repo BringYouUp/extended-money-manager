@@ -7,12 +7,13 @@ import {
   Icon,
   Offset,
   Scrollable,
-  Text,
 } from "@components";
 import { PATHS } from "@consts";
 import { useAppDispatch, useAppSelector, useOpen } from "@hooks";
 import { useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+import Components from "./components";
 
 const SIDEBAR_PATHS_TITLES_MAP = {
   [PATHS.ROOT]: "home",
@@ -40,7 +41,7 @@ const SIDEBAR_PATHS = [
   // PATHS.SETTINGS,
 ];
 
-export const Sidebar: React.FC = () => {
+export function Sidebar() {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector((state) => state.user.user);
@@ -67,32 +68,27 @@ export const Sidebar: React.FC = () => {
                 <Button onClick={onOpen} theme="transparent" rounded>
                   <Icon size={24} name="browse" />
                 </Button>
-                {SIDEBAR_PATHS.map((path) => {
-                  return (
-                    <NavLink key={path} to={path}>
-                      <Button
-                        active={location.pathname === path}
-                        theme="transparent"
-                        rounded
-                      >
-                        <Icon size={24} name={SIDEBAR_PATHS_ICONS_MAP[path]} />
-                      </Button>
-                    </NavLink>
-                  );
-                })}
-                <Button
-                  style={{ marginTop: "auto" }}
-                  theme="transparent"
-                  rounded
+                {SIDEBAR_PATHS.map((path) => (
+                  <Sidebar.Link key={path} path={path}>
+                    <Sidebar.Button
+                      rounded={true}
+                      active={location.pathname === path}
+                    >
+                      <Sidebar.Icon name={SIDEBAR_PATHS_ICONS_MAP[path]} />
+                    </Sidebar.Button>
+                  </Sidebar.Link>
+                ))}
+                <Sidebar.Button
                   onClick={onLogout}
+                  rounded={true}
+                  style={{ marginTop: "auto" }}
                 >
-                  <Icon
-                    size={24}
+                  <Sidebar.Icon
                     name={
                       SIDEBAR_PATHS_ICONS_MAP[`${PATHS.AUTH}${PATHS.LOGIN}`]
                     }
                   />
-                </Button>
+                </Sidebar.Button>
               </Flex>
             </Offset>
           </Scrollable>
@@ -110,42 +106,30 @@ export const Sidebar: React.FC = () => {
                       Hi, {user.displayName}
                     </Drawer.Title>
                   </Flex>
-                  {SIDEBAR_PATHS.map((path) => {
-                    return (
-                      <NavLink key={path} to={path}>
-                        <Button
-                          centered={false}
-                          style={{ width: "100%" }}
-                          active={location.pathname === path}
-                          theme="transparent"
-                        >
-                          <Icon
-                            size={24}
-                            name={SIDEBAR_PATHS_ICONS_MAP[path]}
-                          />
-                          <Text uppercase>
-                            {SIDEBAR_PATHS_TITLES_MAP[path]}
-                          </Text>
-                        </Button>
-                      </NavLink>
-                    );
-                  })}
-                  <Button
-                    centered={false}
-                    style={{ width: "100%", marginTop: "auto" }}
-                    theme="transparent"
+                  {SIDEBAR_PATHS.map((path) => (
+                    <Sidebar.Link key={path} path={path}>
+                      <Sidebar.Button active={location.pathname === path}>
+                        <Sidebar.Icon name={SIDEBAR_PATHS_ICONS_MAP[path]} />
+                        <Sidebar.Label>
+                          {SIDEBAR_PATHS_TITLES_MAP[path]}
+                        </Sidebar.Label>
+                      </Sidebar.Button>
+                    </Sidebar.Link>
+                  ))}
+
+                  <Sidebar.Button
                     onClick={onLogout}
+                    style={{ marginTop: "auto" }}
                   >
-                    <Icon
-                      size={24}
+                    <Sidebar.Icon
                       name={
                         SIDEBAR_PATHS_ICONS_MAP[`${PATHS.AUTH}${PATHS.LOGIN}`]
                       }
                     />
-                    <Text uppercase>
+                    <Sidebar.Label>
                       {SIDEBAR_PATHS_TITLES_MAP[`${PATHS.AUTH}${PATHS.LOGIN}`]}
-                    </Text>
-                  </Button>
+                    </Sidebar.Label>
+                  </Sidebar.Button>
                 </Flex>
               </Drawer.Content>
             </Scrollable>
@@ -154,4 +138,9 @@ export const Sidebar: React.FC = () => {
       </Drawer>
     </>
   );
-};
+}
+
+Sidebar.Link = Components.Link;
+Sidebar.Button = Components.Button;
+Sidebar.Label = Components.Label;
+Sidebar.Icon = Components.Icon;
