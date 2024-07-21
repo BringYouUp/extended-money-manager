@@ -75,4 +75,70 @@ declare namespace Components {
       children?: never;
     }
   }
+  namespace Button {
+    interface Props extends React.HTMLAttributes<HTMLButtonElement> {
+      disabled?: boolean;
+      rounded?: boolean;
+      centered?: boolean;
+      active?: boolean;
+      theme: "primary" | "outline" | "option" | "transparent";
+      type?: "button" | "reset" | "submit" | undefined;
+      _role?: "warning" | "success" | "error";
+      width?: string;
+      className?: string;
+      style?: React.CSSProperties;
+      children?: ReactNode;
+    }
+  }
+
+  namespace AccountDrawer {
+    type Edit = {
+      mode: "edit";
+      data: Store.Account;
+    };
+
+    type Create = {
+      mode: "create";
+      data?: never;
+    };
+
+    type Props = {
+      is: boolean;
+      onClose: () => void;
+    } & (Edit | Create);
+  }
+
+  namespace CategoryDrawer {
+    type Props = {
+      is: boolean;
+      onClose: () => void;
+    } & (
+      | {
+          mode: "edit";
+          data: Store.Category;
+        }
+      | {
+          mode: "create";
+          data?: never;
+        }
+    );
+  }
+
+  namespace TransactionDrawer {
+    type Props = {
+      is: boolean;
+      onClose: () => void;
+    } & (
+      | {
+          mode: "edit";
+          data: Store.Transaction;
+          initialValues?: never;
+        }
+      | {
+          mode: "create";
+          data?: never;
+          initialValues?: Partial<Store.Transaction>;
+        }
+    );
+  }
 }
