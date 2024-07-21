@@ -52,6 +52,7 @@ export default defineConfig({
       "@components": path.resolve(__dirname, "./src/components"),
       "@containers": path.resolve(__dirname, "./src/containers"),
       "@hooks": path.resolve(__dirname, "./src/hooks"),
+      "@hocs": path.resolve(__dirname, "./src/hocs"),
       "@pages": path.resolve(__dirname, "./src/pages"),
       "@selectors": path.resolve(__dirname, "./src/store/slices/selectors"),
       "@shared": path.resolve(__dirname, "./src/shared"),
