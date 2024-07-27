@@ -1,6 +1,15 @@
-import { PATHS } from "@consts";
+import { PATHS } from "@consts/paths";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+
+/**
+ * Custom hook for handling navigation related to authentication.
+ * Uses React's hooks for navigation.
+ * - Navigates to the platform's root path.
+ * - Navigates from the platform to the authentication login path.
+ *
+ * @returns An object containing functions to navigate to the platform and from the platform.
+ */
 
 export const useAuthNavigating = () => {
   const navigate = useNavigate();

@@ -1,22 +1,28 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+
+import {
+  EmailAuthProvider,
+  User,
+  UserCredential,
+  createUserWithEmailAndPassword,
+  getAuth,
+  reauthenticateWithCredential,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updatePassword,
+} from "firebase/auth";
+import { getDoc, setDoc } from "firebase/firestore";
+
+import { AppDispatch } from "@store";
+import { getRef, getStoreErrorFormat, getStoreUserFormat } from "@utils/store";
 import {
   accountsSetAccounts,
   categoriesSetCategories,
   platformSetPlatform,
   transactionsSetTransactions,
-} from "@async-actions";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getRef, getStoreErrorFormat, getStoreUserFormat } from "@utils";
-import {
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-  User,
-  UserCredential,
-} from "firebase/auth";
-import { getDoc, setDoc } from "firebase/firestore";
-
+} from ".";
 import { auth, githubProvider, googleProvider } from "../../../config/firebase";
 
 export const userSetUser = createAsyncThunk<
@@ -58,7 +64,7 @@ export const userSetUser = createAsyncThunk<
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const userSignUpWithEmailAndPassword = createAsyncThunk<
@@ -81,8 +87,52 @@ export const userSignUpWithEmailAndPassword = createAsyncThunk<
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
+
+export const userChangePassword =
+  ({
+    oldPassword,
+    newPassword,
+  }: {
+    oldPassword: string;
+    newPassword: string;
+  }) =>
+  (dispatch: AppDispatch) => {
+    return new Promise((resolve, reject) => {
+      console.log(`→ dispatch`, dispatch);
+
+      const auth = getAuth();
+      console.log(
+        `→ auth.currentUser.providerData`,
+        auth.currentUser?.providerData
+      );
+
+      let credential;
+
+      switch (auth.currentUser?.providerData[0].providerId) {
+        case "google.com":
+          credential = EmailAuthProvider.credential(
+            auth.currentUser!.email!,
+            oldPassword
+          );
+          break;
+        case "password":
+          credential = EmailAuthProvider.credential(
+            auth.currentUser!.email!,
+            oldPassword
+          );
+          break;
+      }
+
+      console.log(`→ credential`, credential);
+
+      reauthenticateWithCredential(auth.currentUser!, credential!)
+        .then(() => updatePassword(auth.currentUser!, newPassword))
+        .then(resolve)
+        .catch(reject);
+    });
+  };
 
 export const userSignInWithEmailAndPassword = createAsyncThunk<
   unknown,
@@ -102,9 +152,10 @@ export const userSignInWithEmailAndPassword = createAsyncThunk<
           dispatch(transactionsSetTransactions(authData.user.uid));
           resolve(fulfillWithValue(authData));
         })
-        .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
+        .catch((err) => reject(rejectWithValue(err)));
+      // .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const userLogOut = createAsyncThunk<unknown, void>(
@@ -115,7 +166,7 @@ export const userLogOut = createAsyncThunk<unknown, void>(
         .then((data) => resolve(fulfillWithValue(data)))
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const signInWithProvider = createAsyncThunk<
@@ -132,12 +183,15 @@ export const signInWithProvider = createAsyncThunk<
 
       let authData: UserCredential;
 
+      debugger;
+
       dispatch(platformSetPlatform(null))
         .then(() => signInWithPopup(auth, providers[provider]))
         .then((data) => {
+          debugger;
           authData = data;
           dispatch(
-            userSetUser({ uid: authData.user.uid, user: authData.user }),
+            userSetUser({ uid: authData.user.uid, user: authData.user })
           );
         })
         .then(() => {
@@ -148,7 +202,7 @@ export const signInWithProvider = createAsyncThunk<
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const userResetPassword = createAsyncThunk<unknown, { email: string }>(
@@ -159,7 +213,7 @@ export const userResetPassword = createAsyncThunk<unknown, { email: string }>(
         .then((data) => resolve(fulfillWithValue(data)))
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const signInAutomatically = createAsyncThunk<unknown, User>(
@@ -176,5 +230,5 @@ export const signInAutomatically = createAsyncThunk<unknown, User>(
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );

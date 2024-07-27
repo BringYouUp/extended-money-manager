@@ -1,6 +1,7 @@
-import { Flex, Offset, Scrollable, Text, Toasts } from "@components";
 import { router } from "@router";
+
 import { RouterProvider } from "react-router-dom";
+import { Flex, Offset, Scrollable, Text, Toasts } from "./ui";
 
 function App() {
   return (

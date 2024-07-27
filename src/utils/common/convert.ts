@@ -1,4 +1,4 @@
-import { PLATFORM_CURRENCIES_CODE_MAP } from "src/consts/store";
+import { PLATFORM_CURRENCIES_CODE_MAP } from "@consts/store";
 
 export const getConvertedValue = ({
   from,

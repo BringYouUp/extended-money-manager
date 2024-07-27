@@ -1,9 +1,10 @@
-import { useAppSelector, useToast } from "@hooks";
 import { RootState } from "@store";
 import { useEffect } from "react";
+import { useAppSelector } from "./useAppSelector";
+import { useToast } from "./useToast";
 
 export const useStoreErrorObserver = (
-  key: Exclude<keyof RootState, "toast">,
+  key: Exclude<keyof RootState, "toast">
 ) => {
   const error = useAppSelector((state) => state[key].error);
   const { createToast } = useToast();

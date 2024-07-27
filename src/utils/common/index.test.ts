@@ -1,5 +1,5 @@
-import { getConvertedValue } from "@utils";
 import { describe, expect, test } from "vitest";
+import { getConvertedValue } from ".";
 
 describe("getConvertedValue", () => {
   const currencies: Shared.Currencies.Currencies = {
@@ -16,7 +16,7 @@ describe("getConvertedValue", () => {
         to: "€",
         value: 12,
         currencies,
-      }),
+      })
     ).toBe("11.10");
   });
   test("to €", () => {
@@ -26,7 +26,7 @@ describe("getConvertedValue", () => {
         to: "$",
         value: 12,
         currencies,
-      }),
+      })
     ).toBe("12.98");
   });
 });

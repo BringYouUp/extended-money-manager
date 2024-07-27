@@ -1,4 +1,4 @@
-import { PLATFORM_CURRENCIES_LIST } from "src/consts/store";
+import { PLATFORM_CURRENCIES_LIST } from "@consts/store";
 
 export const required: Hooks.UseForm.Validator = (value: string = "") => {
   if (!value) {
@@ -9,7 +9,7 @@ export const required: Hooks.UseForm.Validator = (value: string = "") => {
 };
 
 export const noOnlyWhitespace: Hooks.UseForm.Validator = (
-  value: string = "",
+  value: string = ""
 ) => {
   if (/^\s+$/.test(value)) {
     return {
@@ -100,10 +100,13 @@ export const transactionType = (value: string) => {
 export const transactionCategoryId: Hooks.UseForm.Validator = (
   value: string = "",
   formNode: HTMLFormElement &
-    Hooks.UseForm.FormFields<Hooks.UseForm.UseFormFields>,
+    Hooks.UseForm.FormFields<Hooks.UseForm.UseFormFields>
 ) => {
+  debugger;
   if (formNode?.["is-create-transaction-after-change-account"]) {
-    if (formNode["is-create-transaction-after-change-account"].checked) {
+    if (
+      formNode["is-create-transaction-after-change-account"].value === "yes"
+    ) {
       return required(value, formNode);
     }
   } else {
@@ -112,12 +115,13 @@ export const transactionCategoryId: Hooks.UseForm.Validator = (
 };
 
 export const getValidatorsForField = (
-  field: keyof Hooks.UseForm.UseFormFields,
+  field: keyof Hooks.UseForm.UseFormFields
 ): Hooks.UseForm.Validator[] => {
   switch (field) {
     case "email":
       return [required, noOnlyWhitespace, email];
     case "password":
+    case "new-password":
       return [required, noOnlyWhitespace, minLength(6), maxLength(40)];
     case "account-name":
     case "category-name":

@@ -1,10 +1,19 @@
-import { Flex, Grid, Spinner, Transactions } from "@components";
-import { EditTransactionDrawer, SearchTransactionsDrawer } from "@containers";
-import { useLoading, useOpen, useSearchTransactions, useToast } from "@hooks";
-import { cn } from "@utils";
+import { Section } from "@entities/Section";
+import { Transactions } from "@entities/Transaction";
+
+import { useSearchTransactions } from "@hooks/useFilterTransactions";
+import { useLoading } from "@hooks/useLoading";
+import { useOpen } from "@hooks/useOpen";
+import { useToast } from "@hooks/useToast";
+import { Flex, Grid, Spinner } from "@ui";
+import { cn } from "@utils/styles";
+
 import { useEffect, useState } from "react";
-import { Section } from "src/components/compose/Section";
-import { TransactionsFilterBadges } from "src/pages/Transactions";
+import { TransactionsFilterBadges } from ".";
+import {
+  EditTransactionDrawer,
+  SearchTransactionsDrawer,
+} from "@features/Drawers";
 
 const Component: React.FC = () => {
   const { isLoading, startLoading, endLoading } = useLoading();
@@ -75,7 +84,7 @@ const Component: React.FC = () => {
       </Section.Container>
       {!isFilterEmpty ? (
         <Section.Container medium>
-          <Flex gap={8}>
+          <Flex wrap gap={8}>
             <TransactionsFilterBadges
               onRemove={onUpdateFilterKey}
               data={filterTransactionsParams}

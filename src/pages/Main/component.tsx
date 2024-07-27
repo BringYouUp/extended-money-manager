@@ -1,24 +1,22 @@
-import {
-  Accounts,
-  Categories,
-  Flex,
-  Grid,
-  Scrollable,
-  Transactions,
-} from "@components";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { Accounts } from "@entities/Account";
+import { Categories } from "@entities/Category";
+import { Section } from "@entities/Section";
+import { Transactions } from "@entities/Transaction";
+import { useAppSelector } from "@hooks/useAppSelector";
+import { useOpen } from "@hooks/useOpen";
+import { Flex, Grid, Scrollable } from "@ui";
+import { cn } from "@utils/styles";
+
+import { TRANSACTION_SELECTOR } from "@selectors";
+import styles from "./index.module.css";
 import {
   EditAccountDrawer,
   EditCategoryDrawer,
   EditTransactionDrawer,
-} from "@containers";
-import { useAppSelector, useOpen } from "@hooks";
-import { TRANSACTION_SELECTOR } from "@selectors";
-import { cn } from "@utils";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
-import { Section } from "src/components/compose/Section";
-import styles from "./index.module.css";
+} from "@features/Drawers";
 
 export const Component: React.FC = () => {
   const navigate = useNavigate();

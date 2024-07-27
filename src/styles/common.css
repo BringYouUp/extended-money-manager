@@ -65,3 +65,7 @@ body {
 div.none {
   display: none;
 }
+
+.pointer {
+  cursor: pointer;
+}

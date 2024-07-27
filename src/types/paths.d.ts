@@ -10,6 +10,7 @@ declare namespace Paths {
     SETTINGS,
     AUTH,
     ANY,
+    PROFILE,
   }
 
   type Item = {

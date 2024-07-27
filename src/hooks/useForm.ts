@@ -1,5 +1,21 @@
-import { getValidatorsForField } from "@utils";
+import { getValidatorsForField } from "@utils/validators";
 import { FormEvent, useEffect, useRef, useState } from "react";
+
+/**
+ * Custom hook for managing form state, validation.
+ * @template Fields - The type representing the form fields.
+ * @param {Fields} fields - The initial form fields values.
+ * @param {Hooks.UseForm.Options<Fields>} [options] - Additional options for form behavior.
+ * @returns {{
+ *    errors: Hooks.UseForm.Errors<Fields>,
+ *    formRef: React.MutableRefObject<HTMLFormElement & Hooks.UseForm.FormFields<Fields> | null>,
+ *    onChangeForm: (e: React.ChangeEvent<HTMLFormElement & Hooks.UseForm.FormFields<Fields>>) => void,
+ *    onSubmitForm: (onSuccess?: unknown, onFail?: unknown) => (e: React.FormEvent<HTMLFormElement & Hooks.UseForm.FormFields<Fields>>) => void,
+ *    getValues: () => { [K in keyof Fields]: Fields[K] },
+ *    getValue: (field: keyof Fields) => string | boolean | number | undefined,
+ *    setValue: (field: keyof Fields, value: string | boolean | number) => void
+ * }} - An object containing form-related functions and data.
+ */
 
 export const useForm = <Fields extends Hooks.UseForm.UseFormFields>(
   fields: Fields,

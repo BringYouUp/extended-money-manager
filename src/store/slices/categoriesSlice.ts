@@ -1,8 +1,8 @@
 import {
+  categoriesSetCategories,
   categoriesAddCategory,
   categoriesEditCategory,
-  categoriesSetCategories,
-} from "@async-actions";
+} from "@async-actions/categories";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: Store.CategorySelector = {
@@ -29,14 +29,14 @@ const categories = createSlice({
         (state, { payload }: PayloadAction<Store.Category[]>) => {
           state.categories = payload || [];
           state.error = initialState.error;
-        },
+        }
       )
       .addCase(
         categoriesAddCategory.fulfilled,
         (state, { payload }: PayloadAction<Store.Category>) => {
           state.categories.push(payload);
           state.error = initialState.error;
-        },
+        }
       )
       .addCase(
         categoriesEditCategory.fulfilled,
@@ -44,19 +44,17 @@ const categories = createSlice({
           state,
           {
             payload,
-          }: PayloadAction<
-            Partial<Store.Category> & Pick<Store.Category, "id">
-          >,
+          }: PayloadAction<Partial<Store.Category> & Pick<Store.Category, "id">>
         ) => {
           const index = state.categories.findIndex(
-            (category) => category.id === payload.id,
+            (category) => category.id === payload.id
           );
 
           state.categories[index] = {
             ...state.categories[index],
             ...payload,
           };
-        },
+        }
       )
       .addMatcher(
         ({ type }) =>
@@ -64,21 +62,21 @@ const categories = createSlice({
         (state, { type }) => {
           state.error = initialState.error;
           state.status = type;
-        },
+        }
       )
       .addMatcher(
         ({ type }) =>
           type.startsWith("categories/") && type.endsWith("fulfilled"),
         (state) => {
           state.status = null;
-        },
+        }
       )
       .addMatcher(
         ({ type }) =>
           type.startsWith("categories/") && type.endsWith("rejected"),
         (state, { payload }: PayloadAction<Store.Error>) => {
           state.error = payload;
-        },
+        }
       );
   },
 });

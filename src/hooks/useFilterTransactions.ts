@@ -1,6 +1,7 @@
-import { transactionsGetFilteredTransactions } from "@async-actions";
-import { useAppDispatch, useUID } from "@hooks";
+import { transactionsGetFilteredTransactions } from "@async-actions/transactions";
 import { useMemo, useState } from "react";
+import { useAppDispatch } from "./useAppDispatch";
+import { useUID } from "./useUID";
 
 const INITIAL_STATE: Hooks.UseFilterTransactions.FilterModel = {
   "transaction-types": [],
@@ -9,14 +10,21 @@ const INITIAL_STATE: Hooks.UseFilterTransactions.FilterModel = {
   mode: "OR",
 };
 
+/**
+ * Custom hook for managing filtered transactions.
+ *
+ * @param initialState - Initial state for the filter model.
+ * @returns Object containing filter parameters, functions to update filter keys, filter transactions, check if filter is empty, and reset filter.
+ */
+
 export const useSearchTransactions = (
-  initialState?: Hooks.UseFilterTransactions.FilterModel,
+  initialState?: Hooks.UseFilterTransactions.FilterModel
 ) => {
   const uid = useUID();
   const dispatch = useAppDispatch();
 
   const [filterTransactionsParams, setFilterTransactionsParams] = useState(
-    initialState || INITIAL_STATE,
+    initialState || INITIAL_STATE
   );
 
   const onUpdateFilter = (newData: Hooks.UseFilterTransactions.FilterModel) => {
@@ -25,7 +33,7 @@ export const useSearchTransactions = (
 
   const onUpdateFilterKey: Hooks.UseFilterTransactions.UpdateFilter = (
     key,
-    item,
+    item
   ) => {
     switch (key) {
       case "categories":
@@ -62,7 +70,7 @@ export const useSearchTransactions = (
         transactionsGetFilteredTransactions({
           uid,
           filter: filterTransactionsParams,
-        }),
+        })
       )
         .then((data) => {
           if (data.meta.requestStatus === "rejected") {

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getRef, getStoreErrorFormat } from "@utils";
+import { getRef, getStoreErrorFormat } from "@utils/store";
+
 import { addDoc, getDocs, setDoc } from "firebase/firestore";
 
 export const categoriesSetCategories = createAsyncThunk<
@@ -28,7 +29,7 @@ export const categoriesSetCategories = createAsyncThunk<
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const categoriesAddCategory = createAsyncThunk<
@@ -46,12 +47,12 @@ export const categoriesAddCategory = createAsyncThunk<
             fulfillWithValue({
               ...category,
               id: data.id,
-            } as Store.Category),
+            } as Store.Category)
           );
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const categoriesEditCategory = createAsyncThunk<
@@ -70,5 +71,5 @@ export const categoriesEditCategory = createAsyncThunk<
         .then(() => resolve(fulfillWithValue(category)))
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );

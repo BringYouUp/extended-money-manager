@@ -1,13 +1,15 @@
-import { PATHS } from "@consts";
-import { Root, UnAuthRoot } from "@containers";
-import {
-  AccountsPage,
-  CategoriesPage,
-  LoginPage,
-  MainPage,
-  SignUpPage,
-  TransactionsPage,
-} from "@pages";
+import { PATHS } from "@consts/paths";
+import { Root } from "@entities/Root";
+import { UnAuthRoot } from "@entities/UnAuthRoot";
+
+import { AccountsPage } from "@pages/Accounts";
+import { CategoriesPage } from "@pages/Categories";
+import { LoginPage } from "@pages/Login";
+import { MainPage } from "@pages/Main";
+import { ProfilePage } from "@pages/Profile";
+import { SignUpPage } from "@pages/SignUp";
+import { TransactionsPage } from "@pages/Transactions";
+
 import { Navigate, createBrowserRouter } from "react-router-dom";
 
 export const routes = [
@@ -44,6 +46,10 @@ export const routes = [
       {
         path: PATHS.TRANSACTIONS,
         element: <TransactionsPage />,
+      },
+      {
+        path: PATHS.PROFILE,
+        element: <ProfilePage />,
       },
       {
         path: PATHS.ANY,
