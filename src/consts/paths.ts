@@ -45,6 +45,11 @@ export const PATHS_LIST: Paths.Item[] = [
     title: "",
   },
   {
+    path: "/profile",
+    name: "PROFILE",
+    title: "",
+  },
+  {
     path: "*",
     name: "ANY",
     title: "",

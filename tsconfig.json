@@ -10,21 +10,22 @@
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
-      "@async-actions": ["src/store/asyncActions"],
-      "@components": ["src/components"],
-      "@consts": ["src/consts"],
-      "@containers": ["src/containers"],
+      "@async-actions/*": ["src/store/asyncActions/*"],
+      "@consts/*": ["src/consts/*"],
+      "@features/*": ["src/features/*"],
+      "@entities/*": ["src/entities/*"],
       "@hocs/*": ["src/hocs/*"],
-      "@hooks": ["src/hooks"],
-      "@pages": ["src/pages"],
+      "@hooks/*": ["src/hooks/*"],
+      "@pages/*": ["src/pages/*"],
+      "@providers/*": ["src/providers/*"],
       "@selectors": ["src/store/slices/selectors"],
-      "@shared": ["src/shared"],
+      "@shared/*": ["src/shared/*"],
       "@slices": ["src/store/slices"],
       "@store": ["src/store"],
-      "@style": ["src/style"],
+      "@style/*": ["src/style/*"],
       "@router": ["src/router"],
-      "@utils": ["src/utils"],
-      "@providers": ["src/providers"]
+      "@utils/*": ["src/utils/*"],
+      "@ui": ["src/ui"]
     },
 
     /* Bundler mode */

@@ -1,8 +1,8 @@
 import {
+  transactionsSetTransactions,
   transactionsAddTransaction,
   transactionsEditTransaction,
-  transactionsSetTransactions,
-} from "@async-actions";
+} from "@async-actions/transactions";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: Store.TransactionSelector = {
@@ -29,14 +29,14 @@ const transactions = createSlice({
         (state, { payload }: PayloadAction<Store.Transaction[]>) => {
           state.transactions = payload || [];
           state.error = initialState.error;
-        },
+        }
       )
       .addCase(
         transactionsAddTransaction.fulfilled,
         (state, { payload }: PayloadAction<Store.Transaction>) => {
           state.transactions.push(payload);
           state.error = initialState.error;
-        },
+        }
       )
       .addCase(
         transactionsEditTransaction.fulfilled,
@@ -46,17 +46,17 @@ const transactions = createSlice({
             payload,
           }: PayloadAction<
             Partial<Store.Transaction> & Pick<Store.Transaction, "id">
-          >,
+          >
         ) => {
           const index = state.transactions.findIndex(
-            (transaction) => transaction.id === payload.id,
+            (transaction) => transaction.id === payload.id
           );
 
           state.transactions[index] = {
             ...state.transactions[index],
             ...payload,
           };
-        },
+        }
       )
       .addMatcher(
         ({ type }) =>
@@ -64,21 +64,21 @@ const transactions = createSlice({
         (state, { type }) => {
           state.error = initialState.error;
           state.status = type;
-        },
+        }
       )
       .addMatcher(
         ({ type }) =>
           type.startsWith("transactions/") && type.endsWith("fulfilled"),
         (state) => {
           state.status = null;
-        },
+        }
       )
       .addMatcher(
         ({ type }) =>
           type.startsWith("transactions/") && type.endsWith("rejected"),
         (state, { payload }: PayloadAction<Store.Error>) => {
           state.error = payload;
-        },
+        }
       );
   },
 });

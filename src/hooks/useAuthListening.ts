@@ -1,10 +1,4 @@
-import { signInAutomatically } from "@async-actions";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useFirebase,
-  useLoading,
-} from "@hooks";
+import { signInAutomatically } from "@async-actions/user";
 import {
   ACCOUNTS_SLICE,
   CATEGORIES_SLICE,
@@ -15,6 +9,17 @@ import {
 } from "@slices";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
+import { useAppDispatch } from "./useAppDispatch";
+import { useAppSelector } from "./useAppSelector";
+import { useFirebase } from "./useFirebase";
+import { useLoading } from "./useLoading";
+
+/**
+ * Custom hook for listening to authentication changes.
+ * Handles automatic sign-in, loading state, and user data updates.
+ * Uses Firebase authentication and internal organization slices for state management.
+ * @returns {boolean} Indicates if the hook is currently loading.
+ */
 
 export const useAuthListening = () => {
   const dispatch = useAppDispatch();

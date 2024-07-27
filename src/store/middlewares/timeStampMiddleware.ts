@@ -1,7 +1,6 @@
 // @ts-nocheck
-
 import { Action, Dispatch, Middleware, UnknownAction } from "@reduxjs/toolkit";
-import { getActualFirestoreFormatDate } from "@utils";
+import { getActualFirestoreFormatDate } from "@utils/store";
 
 const dic = {
   "accounts/accountsEditAccount/pending": "account",

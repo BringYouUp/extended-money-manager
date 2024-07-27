@@ -3,6 +3,7 @@ declare namespace Hooks {
     type FieldsKeys =
       | "email"
       | "password"
+      | "new-password"
       | "account-name"
       | "account-amount"
       | "account-color"
@@ -37,7 +38,7 @@ declare namespace Hooks {
 
     type OptionsUpdateOnChange<Fields extends UseFormFields> = (
       e: React.ChangeEvent<HTMLFormElement & FormFields<Fields>>,
-      values: { [K in keyof Fields]: Fields[K] },
+      values: { [K in keyof Fields]: Fields[K] }
     ) => void;
 
     type OptionsBeforeSubmit<Fields extends UseFormFields> = (arg: {
@@ -52,7 +53,7 @@ declare namespace Hooks {
 
     type Validator = (
       value: string,
-      formNode: HTMLFormElement & FormFields<UseFormFields>,
+      formNode: HTMLFormElement & FormFields<UseFormFields>
     ) => undefined | { error: string };
 
     type Validators<Fields extends UseFormFields> = {

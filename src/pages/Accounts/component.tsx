@@ -1,4 +1,4 @@
-import { Offset } from "@components";
+import { Offset } from "@ui";
 
 export const Component: React.FC = () => {
   return <Offset padding={[24]}>Accounts</Offset>;

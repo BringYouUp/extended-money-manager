@@ -1,7 +1,7 @@
 import {
   platformSetPlatform,
   platformSetUpdatePlatformCurrency,
-} from "@async-actions";
+} from "@async-actions/platform";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState: Store.PlatformSelector = {

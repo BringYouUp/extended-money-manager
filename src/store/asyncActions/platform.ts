@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { currency } from "@shared/utils";
 import {
   getActualFirestoreFormatDate,
   getRef,
   getStoreErrorFormat,
   toSerializeActualFirestoreFormatDate,
-} from "@utils";
+} from "@utils/store";
 import { getDocs, setDoc } from "firebase/firestore";
-import { currency } from "src/shared/utils";
 
 export const platformSetUpdatePlatformCurrency = createAsyncThunk<
   Shared.Currencies.Currencies,
@@ -31,12 +31,12 @@ export const platformSetUpdatePlatformCurrency = createAsyncThunk<
         .catch((err) => {
           console.error(
             "ERROR dispatching platformSetUpdatePlatformCurrency",
-            err,
+            err
           );
           reject(rejectWithValue(getStoreErrorFormat(err)));
         });
     });
-  },
+  }
 );
 
 export const platformSetPlatform = createAsyncThunk<Store.Platform, null>(
@@ -58,7 +58,7 @@ export const platformSetPlatform = createAsyncThunk<Store.Platform, null>(
                   data.split("T")[0].match(/\d*$/g)?.[0] || "";
 
                 toSerializeActualFirestoreFormatDate<Shared.Currencies.Currencies>(
-                  docData as Shared.Currencies.Currencies,
+                  docData as Shared.Currencies.Currencies
                 );
                 const isNeedUpdateCurrency =
                   getDay(docData.updatedAt) !==
@@ -92,5 +92,5 @@ export const platformSetPlatform = createAsyncThunk<Store.Platform, null>(
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );

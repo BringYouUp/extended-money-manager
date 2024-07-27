@@ -60,6 +60,11 @@ declare namespace Components {
       AND: string;
       OR: string;
     };
+
+    type ChangePassword = {
+      password: string;
+      "new-password": string;
+    };
   }
   namespace Input {
     interface Props extends React.HTMLAttributes<HTMLInputElement> {
@@ -73,6 +78,7 @@ declare namespace Components {
       style?: React.CSSProperties;
       className?: string;
       children?: never;
+      RightIcon?: ReactNode;
     }
   }
   namespace Button {

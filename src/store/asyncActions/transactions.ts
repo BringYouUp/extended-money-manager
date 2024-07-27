@@ -1,7 +1,12 @@
-import { accountsEditAccount } from "@async-actions";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { generateTransactionsQuery, getRef, getStoreErrorFormat } from "@utils";
+
 import { addDoc, getDoc, getDocs, query, setDoc } from "firebase/firestore";
+import { accountsEditAccount } from ".";
+import {
+  getRef,
+  generateTransactionsQuery,
+  getStoreErrorFormat,
+} from "@utils/store";
 
 export const transactionsGetFilteredTransactions = createAsyncThunk<
   Store.Transaction[],
@@ -32,7 +37,7 @@ export const transactionsGetFilteredTransactions = createAsyncThunk<
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const transactionsSetTransactions = createAsyncThunk<
@@ -61,7 +66,7 @@ export const transactionsSetTransactions = createAsyncThunk<
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const transactionsAddTransaction = createAsyncThunk<
@@ -75,7 +80,7 @@ export const transactionsAddTransaction = createAsyncThunk<
   "transactions/transactionsAddTransaction",
   (
     { transaction, uid, withoutModyfingAccount },
-    { rejectWithValue, fulfillWithValue, dispatch },
+    { rejectWithValue, fulfillWithValue, dispatch }
   ) => {
     return new Promise((resolve, reject) => {
       const docTransactionsRef = getRef.transactions(uid);
@@ -92,7 +97,7 @@ export const transactionsAddTransaction = createAsyncThunk<
               accountData.amount -= transaction.amount;
               const docToAccountRef = getRef.account(
                 uid,
-                transaction.toAccountId,
+                transaction.toAccountId
               );
 
               return getDoc(docToAccountRef);
@@ -119,7 +124,7 @@ export const transactionsAddTransaction = createAsyncThunk<
                   id: transaction.accountId,
                 },
                 uid,
-              }),
+              })
             );
           }
           if (snap) {
@@ -133,7 +138,7 @@ export const transactionsAddTransaction = createAsyncThunk<
                   id: transaction.toAccountId,
                 },
                 uid,
-              }),
+              })
             );
           }
           return addDoc(docTransactionsRef, transaction);
@@ -143,12 +148,12 @@ export const transactionsAddTransaction = createAsyncThunk<
             fulfillWithValue({
               ...transaction,
               id: data.id,
-            } as Store.Transaction),
+            } as Store.Transaction)
           );
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const transactionsEditTransaction = createAsyncThunk<
@@ -187,7 +192,7 @@ export const transactionsEditTransaction = createAsyncThunk<
               }
               const docToAccountRef = getRef.account(
                 uid,
-                transaction.toAccountId,
+                transaction.toAccountId
               );
               return getDoc(docToAccountRef);
             }
@@ -225,7 +230,7 @@ export const transactionsEditTransaction = createAsyncThunk<
                 id: transaction.accountId,
               },
               uid,
-            }),
+            })
           );
           if (snap) {
             toAccountData = snap.data() as Store.Account;
@@ -246,7 +251,7 @@ export const transactionsEditTransaction = createAsyncThunk<
                   id: transaction.toAccountId,
                 },
                 uid,
-              }),
+              })
             );
           }
           return setDoc(transactionRef, transaction, { merge: true });
@@ -254,5 +259,5 @@ export const transactionsEditTransaction = createAsyncThunk<
         .then(() => resolve(fulfillWithValue(transaction)))
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );

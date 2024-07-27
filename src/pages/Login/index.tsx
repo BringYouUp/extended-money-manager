@@ -1,14 +1,9 @@
-import {
-  Container,
-  Flex,
-  Offset,
-  Scrollable,
-  Spinner,
-  Text,
-} from "@components";
-import { LoginForm } from "@containers";
-import { useAppSelector, useAuthListening, useAuthNavigating } from "@hooks";
+import { useAppSelector } from "@hooks/useAppSelector";
+import { useAuthListening } from "@hooks/useAuthListening";
+import { useAuthNavigating } from "@hooks/useAuthNavigating";
+import { Container, Flex, Offset, Scrollable, Spinner, Text } from "@ui";
 
+import { LoginForm } from "@features/Forms";
 import styles from "./index.module.css";
 
 export const LoginPage: React.FC = () => {

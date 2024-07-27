@@ -7,9 +7,10 @@ import { useCallback, useEffect, useRef } from "react";
  * @param delay The delay in milliseconds before invoking the callback after the last call.
  * @returns A debounced version of the callback function.
  */
+
 export const useDebounce = (
   callback: (...args: unknown[]) => void,
-  delay: number,
+  delay: number
 ) => {
   if (delay < 0) {
     throw new Error("Delay must be non negative value");
@@ -26,7 +27,7 @@ export const useDebounce = (
         callback(...args);
       }, delay);
     },
-    [callback, delay],
+    [callback, delay]
   );
 
   useEffect(() => {

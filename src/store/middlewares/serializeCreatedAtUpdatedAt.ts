@@ -1,8 +1,9 @@
-//@ts-nocheck
+// @ts-nocheck
 
-import { Action, Dispatch, Middleware, UnknownAction } from "@reduxjs/toolkit";
-import { toSerializeActualFirestoreFormatDate } from "@utils";
+import { Middleware, UnknownAction } from "@reduxjs/toolkit";
+
 import { AppDispatch, RootState } from "@store";
+import { toSerializeActualFirestoreFormatDate } from "@utils/store";
 
 export const serializeCreatedAtUpdatedAt: Middleware<
   unknown,
@@ -14,17 +15,17 @@ export const serializeCreatedAtUpdatedAt: Middleware<
       switch (action.type) {
         case "accounts/accountsSetAccounts/fulfilled":
           action.payload.forEach(
-            toSerializeActualFirestoreFormatDate<Store.Account>,
+            toSerializeActualFirestoreFormatDate<Store.Account>
           );
           break;
         case "categories/categoriesSetCategories/fulfilled":
           action.payload.forEach(
-            toSerializeActualFirestoreFormatDate<Store.Category>,
+            toSerializeActualFirestoreFormatDate<Store.Category>
           );
           break;
         case "transactions/transactionsSetTransactions/fulfilled":
           action.payload.forEach(
-            toSerializeActualFirestoreFormatDate<Store.Transaction>,
+            toSerializeActualFirestoreFormatDate<Store.Transaction>
           );
           break;
         case "accounts/accountsAddAccount/fulfilled":
@@ -38,17 +39,17 @@ export const serializeCreatedAtUpdatedAt: Middleware<
         case "transactions/transactionsAddTransaction/fulfilled":
         case "transactions/transactionsEditTransaction/fulfilled":
           toSerializeActualFirestoreFormatDate<Store.Transaction>(
-            action.payload,
+            action.payload
           );
           break;
         case "platform/platformSetUpdatePlatformCurrency/fulfilled":
           toSerializeActualFirestoreFormatDate<Shared.Currencies.Currencies>(
-            action.payload,
+            action.payload
           );
           break;
         case "transactions/transactionsGetFilteredTransactions/fulfilled":
           action.payload.forEach(
-            toSerializeActualFirestoreFormatDate<Store.Transaction>,
+            toSerializeActualFirestoreFormatDate<Store.Transaction>
           );
           break;
       }

@@ -1,5 +1,5 @@
-import { userLogOut, userSetUser } from "@async-actions";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { userLogOut, userSetUser } from "@async-actions/user";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {
@@ -30,7 +30,7 @@ const userSlice = createSlice({
         userSetUser.fulfilled,
         (state, { payload }: PayloadAction<Store.User>) => {
           state.user = payload;
-        },
+        }
       )
       .addCase(userLogOut.fulfilled, (state) => {
         state.user = initialState.user;
@@ -39,13 +39,13 @@ const userSlice = createSlice({
         ({ type }) => type.startsWith("user/") && type.endsWith("pending"),
         (state) => {
           state.error = initialState.error;
-        },
+        }
       )
       .addMatcher(
         ({ type }) => type.startsWith("user/") && type.endsWith("rejected"),
         (state, { payload }: PayloadAction<Store.Error>) => {
           state.error = payload;
-        },
+        }
       );
   },
 });

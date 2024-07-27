@@ -1,5 +1,6 @@
-import { Button, Modal } from "@components";
-import { useOpen } from "@hooks";
+import { Modal } from "@entities/Modal";
+import { useOpen } from "@hooks/useOpen";
+import { Button } from "@ui";
 
 export function withClosingComfirmation<
   T extends {

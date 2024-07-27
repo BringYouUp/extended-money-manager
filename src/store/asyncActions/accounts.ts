@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getRef, getStoreErrorFormat } from "@utils";
+import { getRef, getStoreErrorFormat } from "@utils/store";
+
 import { addDoc, getDocs, setDoc } from "firebase/firestore";
 
 export const accountsSetAccounts = createAsyncThunk<Store.Account[], string>(
@@ -25,7 +26,7 @@ export const accountsSetAccounts = createAsyncThunk<Store.Account[], string>(
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const accountsAddAccount = createAsyncThunk<
@@ -43,12 +44,12 @@ export const accountsAddAccount = createAsyncThunk<
             fulfillWithValue({
               ...account,
               id: data.id,
-            } as Store.Account),
+            } as Store.Account)
           );
         })
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );
 
 export const accountsEditAccount = createAsyncThunk<
@@ -59,10 +60,9 @@ export const accountsEditAccount = createAsyncThunk<
   ({ account, uid }, { rejectWithValue, fulfillWithValue }) => {
     return new Promise((resolve, reject) => {
       const docRef = getRef.accountsEdit(uid, account.id);
-
       setDoc(docRef, account, { merge: true })
         .then(() => resolve(fulfillWithValue(account)))
         .catch((err) => reject(rejectWithValue(getStoreErrorFormat(err))));
     });
-  },
+  }
 );

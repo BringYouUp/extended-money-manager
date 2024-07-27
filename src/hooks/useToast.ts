@@ -1,7 +1,15 @@
-import { useAppDispatch } from "@hooks";
 import { TOAST_SLICE } from "@slices";
-import { uid } from "@utils";
+
+import { uid } from "@utils/common";
 import { useCallback } from "react";
+import { useAppDispatch } from "./useAppDispatch";
+
+/**
+ * Custom hook for managing toast notifications.
+ * Uses the provided title, type, and optional description to create a toast notification.
+ * The toast is added to the store and removed after 3 seconds.
+ * @returns An object with a function 'createToast' to generate toast notifications.
+ */
 
 export const useToast = () => {
   const dispatch = useAppDispatch();
