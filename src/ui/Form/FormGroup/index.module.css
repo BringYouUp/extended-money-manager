@@ -1,15 +1,15 @@
 .formGroup {
-  padding: 4px;
-  border-radius: var(--border-radius-default);
-  border: 1px solid var(--primary-color-10);
-  /* height: var(--input-height); */
-  transition: border var(--transition-quick);
+	padding: 4px;
+	border-radius: var(--border-radius-default);
+	border: 1px solid var(--primary-color-10);
+	/* height: var(--input-height); */
+	transition: border var(--transition-quick);
 }
 
 .formGroup:hover {
-  border: 1px solid var(--primary-color-20);
+	border: 1px solid var(--primary-color-20);
 }
 
 .formGroup.error {
-  border: 1px solid var(--text-color-error);
+	border: 1px solid var(--text-color-error);
 }

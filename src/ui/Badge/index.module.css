@@ -1,69 +1,69 @@
 .badge {
-  --badge-height: 30px;
-  --badge-color-final: hsl(
-    var(--badge-color),
-    calc(var(--default-saturation-for-background) + 10%),
-    calc(var(--default-lightness-for-background) + 10%)
-  );
-  box-shadow: var(--box-shadow-soft);
-  user-select: none;
-  cursor: pointer;
-  position: relative;
-  height: 30px;
-  padding: 6px 8px;
-  color: var(--badge-color-final);
-  border: 1px solid var(--badge-color-final);
-  transition:
-    color var(--transition-quick),
-    border-color var(--transition-quick);
-  z-index: 1;
-  overflow: hidden;
-  max-width: 100%;
+	--badge-height: 30px;
+	--badge-color-final: hsl(
+		var(--badge-color),
+		calc(var(--default-saturation-for-background) + 10%),
+		calc(var(--default-lightness-for-background) + 10%)
+	);
+	box-shadow: var(--box-shadow-soft);
+	user-select: none;
+	cursor: pointer;
+	position: relative;
+	height: 30px;
+	padding: 6px 8px;
+	color: var(--badge-color-final);
+	border: 1px solid var(--badge-color-final);
+	transition:
+		color var(--transition-quick),
+		border-color var(--transition-quick);
+	z-index: 1;
+	overflow: hidden;
+	max-width: 100%;
 }
 
 .badge:hover {
-  transform: translate(0.25px, 1px);
+	transform: translate(0.25px, 1px);
 }
 
 .badge:active {
-  transform: translate(0.5px, 3px);
+	transform: translate(0.5px, 3px);
 }
 
 .badge.transaction-type {
-  border-radius: var(--badge-height);
+	border-radius: var(--badge-height);
 }
 
 .badge-category,
 .badge-account {
-  border-radius: var(--border-radius-x3);
+	border-radius: var(--border-radius-x3);
 }
 
 .badge.active {
-  color: var(--text-color-white-90);
-  z-index: 1;
+	color: var(--text-color-white-90);
+	z-index: 1;
 }
 
 .badge.active:before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(
-    67.5deg,
-    rgba(255, 255, 255, 0.35),
-    rgba(255, 255, 255, 0.1)
-  );
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: linear-gradient(
+		67.5deg,
+		rgba(255, 255, 255, 0.35),
+		rgba(255, 255, 255, 0.1)
+	);
 }
 
 .badge.active::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--badge-color-final);
-  z-index: -1;
-  overflow: hidden;
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: var(--badge-color-final);
+	z-index: -1;
+	overflow: hidden;
 }
 
 .badge.black {
-  --badge-color-final: black;
+	--badge-color-final: black;
 }

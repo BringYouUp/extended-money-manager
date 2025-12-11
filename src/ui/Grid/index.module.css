@@ -1,61 +1,61 @@
 .grid {
-  display: grid;
+	display: grid;
 }
 
 .gridGap {
-  gap: var(--grid-gap);
+	gap: var(--grid-gap);
 }
 
 .gridCenter {
-  align-content: center;
-  justify-content: center;
+	align-content: center;
+	justify-content: center;
 }
 
 .gridAlignCenter {
-  align-content: center;
+	align-content: center;
 }
 
 .gridJustifyCenter {
-  justify-content: center;
+	justify-content: center;
 }
 
 .gridTemplateAreas {
-  grid-template-areas: var(--grid-template-areas);
+	grid-template-areas: var(--grid-template-areas);
 }
 
 .gridTemplateRows {
-  grid-template-rows: var(--grid-template-rows);
+	grid-template-rows: var(--grid-template-rows);
 }
 
 .gridTemplateColumns {
-  grid-template-columns: var(--grid-template-columns);
+	grid-template-columns: var(--grid-template-columns);
 }
 
 .gridArea {
-  grid-area: var(--grid-area);
+	grid-area: var(--grid-area);
 }
 
 .gridAutoflow {
-  grid-auto-flow: var(--grid-autoflow);
+	grid-auto-flow: var(--grid-autoflow);
 }
 
 .gridItem-gap {
-  gap: var(--grid-item-gap, 0);
+	gap: var(--grid-item-gap, 0);
 }
 
 .gridItemCenterSelf {
-  align-self: center;
-  justify-self: center;
+	align-self: center;
+	justify-self: center;
 }
 
 .gridItemAlignSelf {
-  align-self: center;
+	align-self: center;
 }
 
 .gridItemJustifySelf {
-  justify-self: center;
+	justify-self: center;
 }
 
 .gridItemFrea {
-  grid-area: var(--grid-item-area);
+	grid-area: var(--grid-item-area);
 }

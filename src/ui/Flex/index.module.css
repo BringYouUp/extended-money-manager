@@ -1,52 +1,52 @@
 .flex {
-  display: flex;
+	display: flex;
 }
 
 .column {
-  flex-direction: column;
+	flex-direction: column;
 }
 
 .center {
-  align-items: center;
-  justify-content: center;
+	align-items: center;
+	justify-content: center;
 }
 
 .gap {
-  gap: var(--flex-gap, 0px);
+	gap: var(--flex-gap, 0px);
 }
 
 .justifyBetween {
-  justify-content: space-between;
+	justify-content: space-between;
 }
 
 .alignCenter {
-  align-items: center;
+	align-items: center;
 }
 
 .justifyFlexEnd {
-  justify-content: flex-end;
+	justify-content: flex-end;
 }
 
 .alignFlexEnd {
-  align-items: flex-end;
+	align-items: flex-end;
 }
 
 .wrap {
-  flex-wrap: wrap;
+	flex-wrap: wrap;
 }
 
 .flex1 {
-  flex: 1;
+	flex: 1;
 }
 
 .justifyCenter {
-  justify-content: center;
+	justify-content: center;
 }
 
 .columnReverse {
-  flex-direction: column-reverse;
+	flex-direction: column-reverse;
 }
 
 .alignStart {
-  align-items: flex-start;
+	align-items: flex-start;
 }

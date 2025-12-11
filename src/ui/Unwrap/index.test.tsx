@@ -5,16 +5,16 @@ import { Unwrap } from "./index";
 import styles from "./index.module.css";
 
 describe("Unwrap component", () => {
-  it("Check common case", () => {
-    act(() => {
-      render(<Unwrap data-testid="unwrap" negativeOffset="34px" visible />);
-    });
+	it("Check common case", () => {
+		act(() => {
+			render(<Unwrap data-testid="unwrap" negativeOffset="34px" visible />);
+		});
 
-    const component: HTMLDivElement = screen.getByTestId("unwrap");
+		const component: HTMLDivElement = screen.getByTestId("unwrap");
 
-    expect(component.style.getPropertyValue("--unwrap-negative-offset")).toBe(
-      "34px",
-    );
-    expect(component).toHaveClass(styles.visible);
-  });
+		expect(component.style.getPropertyValue("--unwrap-negative-offset")).toBe(
+			"34px",
+		);
+		expect(component).toHaveClass(styles.visible);
+	});
 });

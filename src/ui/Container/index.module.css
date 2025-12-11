@@ -2,13 +2,13 @@
 }
 
 .width {
-  width: var(--container-width, none);
+	width: var(--container-width, none);
 }
 
 .height {
-  height: var(--container-height, none);
+	height: var(--container-height, none);
 }
 
 .background {
-  background: var(--container-background);
+	background: var(--container-background);
 }

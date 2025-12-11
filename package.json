@@ -1,49 +1,47 @@
 {
-  "name": "money-manager",
-  "private": true,
-  "version": "0.1.4",
-  "type": "module",
-  "scripts": {
-    "start": "vite",
-    "build": "vitest run && tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "test": "vitest",
-    "analyze": "vite-bundle-visualizer"
-  },
-  "dependencies": {
-    "@reduxjs/toolkit": "^2.2.1",
-    "autoprefixer": "^10.4.19",
-    "firebase": "^10.8.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-redux": "^9.1.0",
-    "react-router-dom": "^6.22.3",
-    "react-transition-group": "^4.4.5"
-  },
-  "devDependencies": {
-    "@testing-library/dom": "^10.1.0",
-    "@testing-library/jest-dom": "^6.4.5",
-    "@testing-library/react": "^15.0.7",
-    "@types/react": "^18.2.56",
-    "@types/react-dom": "^18.2.19",
-    "@types/react-transition-group": "^4.4.10",
-    "@types/redux-mock-store": "^1.0.6",
-    "@typescript-eslint/eslint-plugin": "^7.0.2",
-    "@typescript-eslint/parser": "^7.0.2",
-    "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.56.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
-    "jsdom": "^24.0.0",
-    "typescript": "^5.2.2",
-    "vite": "^5.1.4",
-    "vite-bundle-visualizer": "^1.2.1",
-    "vite-plugin-svg-spriter": "1.0.0",
-    "vitest": "^1.6.0"
-  },
-  "browserslist": [
-    "> 1%",
-    "not dead"
-  ]
+	"name": "money-manager",
+	"private": true,
+	"version": "0.1.4",
+	"type": "module",
+	"scripts": {
+		"start": "next start",
+		"dev": "next dev",
+		"build": "next build",
+		"lint": "biome check .",
+		"lint:fix": "biome check ./ --write",
+		"format": "biome format ./ --write",
+		"test": "vitest"
+	},
+	"dependencies": {
+		"@reduxjs/toolkit": "^2.2.1",
+		"firebase": "^10.8.1",
+		"next": "^16.0.8",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-redux": "^9.1.0",
+		"react-router-dom": "^6.22.3",
+		"react-transition-group": "^4.4.5"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.8",
+		"@testing-library/dom": "^10.1.0",
+		"@testing-library/jest-dom": "^6.4.5",
+		"@testing-library/react": "^15.0.7",
+		"@types/react": "^18.2.56",
+		"@types/react-dom": "^18.2.19",
+		"@types/react-transition-group": "^4.4.10",
+		"@types/redux-mock-store": "^1.0.6",
+		"@typescript-eslint/eslint-plugin": "^7.0.2",
+		"@typescript-eslint/parser": "^7.0.2",
+		"eslint": "^8.56.0",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"eslint-plugin-react-refresh": "^0.4.5",
+		"jsdom": "^24.0.0",
+		"typescript": "^5.2.2",
+		"vitest": "^1.6.0"
+	},
+	"browserslist": [
+		"> 1%",
+		"not dead"
+	]
 }

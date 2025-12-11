@@ -5,22 +5,22 @@ import { Flex } from "./index";
 import styles from "./index.module.css";
 
 describe("Flex component", () => {
-  it("Check gap", () => {
-    act(() => {
-      render(<Flex gap={4} data-testid="flex" />);
-    });
+	it("Check gap", () => {
+		act(() => {
+			render(<Flex gap={4} data-testid="flex" />);
+		});
 
-    const component = screen.getByTestId("flex");
-    expect(component).toHaveClass(styles.gap);
-  });
+		const component = screen.getByTestId("flex");
+		expect(component).toHaveClass(styles.gap);
+	});
 
-  it("Check zero gap", () => {
-    act(() => {
-      render(<Flex gap={0} data-testid="flex" />);
-    });
-    const component = screen.getByTestId("flex");
+	it("Check zero gap", () => {
+		act(() => {
+			render(<Flex gap={0} data-testid="flex" />);
+		});
+		const component = screen.getByTestId("flex");
 
-    expect(component).not.toHaveClass(styles.gap);
-    expect(component.style.getPropertyValue("--flex-gap")).toBe("");
-  });
+		expect(component).not.toHaveClass(styles.gap);
+		expect(component.style.getPropertyValue("--flex-gap")).toBe("");
+	});
 });

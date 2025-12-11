@@ -1,13 +1,13 @@
 :root {
-  font-family: var(--font-family);
-  color-scheme: light dark;
-  color: var(--text-color);
-  /* background-color: #242424; */
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  letter-spacing: 0.3px;
+	font-family: var(--font-family);
+	color-scheme: light dark;
+	color: var(--text-color);
+	/* background-color: #242424; */
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	letter-spacing: 0.3px;
 }
 
 html,
@@ -79,17 +79,17 @@ time,
 mark,
 audio,
 video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font-size: 100%;
-  vertical-align: baseline;
-  background: transparent;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
 }
 
 body {
-  line-height: 1;
+	line-height: 1;
 }
 
 article,
@@ -103,105 +103,105 @@ hgroup,
 menu,
 nav,
 section {
-  display: block;
+	display: block;
 }
 
 nav ul {
-  list-style: none;
+	list-style: none;
 }
 
 blockquote,
 q {
-  quotes: none;
+	quotes: none;
 }
 
 blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
-  content: none;
+	content: "";
+	content: none;
 }
 
 a {
-  margin: 0;
-  padding: 0;
-  font-size: 100%;
-  vertical-align: baseline;
-  background: transparent;
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
 }
 
 /* change colours to suit your needs */
 ins {
-  background-color: #ff9;
-  color: #000;
-  text-decoration: none;
+	background-color: #ff9;
+	color: #000;
+	text-decoration: none;
 }
 
 /* change colours to suit your needs */
 mark {
-  background-color: #ff9;
-  color: #000;
-  font-style: italic;
-  font-weight: bold;
+	background-color: #ff9;
+	color: #000;
+	font-style: italic;
+	font-weight: bold;
 }
 
 del {
-  text-decoration: line-through;
+	text-decoration: line-through;
 }
 
 abbr[title],
 dfn[title] {
-  border-bottom: 1px dotted;
-  cursor: help;
+	border-bottom: 1px dotted;
+	cursor: help;
 }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 /* change border colour to suit your needs */
 hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #cccccc;
-  margin: 1em 0;
-  padding: 0;
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #cccccc;
+	margin: 1em 0;
+	padding: 0;
 }
 
 input,
 select {
-  vertical-align: middle;
+	vertical-align: middle;
 }
 
 *,
 *:after,
 *:before {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 hr {
-  margin: 0;
+	margin: 0;
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--border-radius-default);
+	width: 8px;
+	height: 8px;
+	border-radius: var(--border-radius-default);
 }
 
 ::-webkit-scrollbar-track {
-  border-radius: var(--border-radius-default);
-  visibility: hidden;
+	border-radius: var(--border-radius-default);
+	visibility: hidden;
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: var(--border-radius-default);
-  background-color: var(--hoverScrollBarBackgroundColor, red);
+	border-radius: var(--border-radius-default);
+	background-color: var(--hoverScrollBarBackgroundColor, red);
 }
 
 ::-webkit-scrollbar-corner {
-  background-color: rgba(0, 0, 0, 0);
+	background-color: rgba(0, 0, 0, 0);
 }

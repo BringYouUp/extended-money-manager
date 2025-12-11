@@ -5,17 +5,17 @@ import { Scrollable } from "./index";
 import styles from "./index.module.css";
 
 describe("Input component", () => {
-  it("Check common case", () => {
-    act(() => {
-      render(
-        <Scrollable overlay stableGutter data-testid="scrollable">
-          <span>TEST</span>
-        </Scrollable>,
-      );
-    });
+	it("Check common case", () => {
+		act(() => {
+			render(
+				<Scrollable overlay stableGutter data-testid="scrollable">
+					<span>TEST</span>
+				</Scrollable>,
+			);
+		});
 
-    const component: HTMLDivElement = screen.getByTestId("scrollable");
-    expect(component).toHaveClass(styles.stableGutter);
-    expect(component).toHaveClass(styles.overlay);
-  });
+		const component: HTMLDivElement = screen.getByTestId("scrollable");
+		expect(component).toHaveClass(styles.stableGutter);
+		expect(component).toHaveClass(styles.overlay);
+	});
 });

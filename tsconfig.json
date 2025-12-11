@@ -1,47 +1,63 @@
 {
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "allowJs": true,
-    "types": ["./src/types/index.d.ts", "@testing-library/jest-dom"],
-    "baseUrl": ".",
-    "paths": {
-      "@assets/*": ["src/assets/*"],
-      "@async-actions/*": ["src/store/asyncActions/*"],
-      "@consts/*": ["src/consts/*"],
-      "@features/*": ["src/features/*"],
-      "@entities/*": ["src/entities/*"],
-      "@hocs/*": ["src/hocs/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@pages/*": ["src/pages/*"],
-      "@providers/*": ["src/providers/*"],
-      "@selectors": ["src/store/slices/selectors"],
-      "@shared/*": ["src/shared/*"],
-      "@slices": ["src/store/slices"],
-      "@store": ["src/store"],
-      "@style/*": ["src/style/*"],
-      "@router": ["src/router"],
-      "@utils/*": ["src/utils/*"],
-      "@ui": ["src/ui"]
-    },
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+	"compilerOptions": {
+		"target": "ES2020",
+		"useDefineForClassFields": true,
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"baseUrl": ".",
+		"paths": {
+			"@assets/*": ["src/assets/*"],
+			"@async-actions/*": ["src/store/asyncActions/*"],
+			"@config/*": ["src/config/*"],
+			"@consts/*": ["src/consts/*"],
+			"@features/*": ["src/features/*"],
+			"@entities/*": ["src/entities/*"],
+			"@hocs/*": ["src/hocs/*"],
+			"@hooks/*": ["src/hooks/*"],
+			"@pages/*": ["src/_pages/*"],
+			"@layouts/*": ["src/layouts/*"],
+			"@providers/*": ["src/providers/*"],
+			"@selectors": ["src/store/slices/selectors"],
+			"@shared/*": ["src/shared/*"],
+			"@slices": ["src/store/slices"],
+			"@store": ["src/store"],
+			"@style/*": ["src/style/*"],
+			"@router": ["src/router"],
+			"@utils/*": ["src/utils/*"],
+			"@widgets/*": ["src/widgets/*"],
+			"@ui": ["src/ui"]
+		},
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"jsx": "react-jsx",
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"allowJs": true,
+		"forceConsistentCasingInFileNames": true,
+		"incremental": true,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		]
+	},
+	"include": [
+		"./src",
+		"./dist/types/**/*.ts",
+		"./next-env.d.ts",
+		"build/types/**/*.ts",
+		"build/dev/types/**/*.ts",
+		".next/types/**/*.ts",
+		".next/dev/types/**/*.ts",
+		"dist/types/**/*.ts",
+		"dist/dev/types/**/*.ts"
+	],
+	"exclude": ["./node_modules"]
 }

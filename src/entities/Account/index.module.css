@@ -1,67 +1,67 @@
 .account {
-  scroll-snap-align: start;
-  box-shadow: var(--box-shadow-default);
-  border-radius: var(--border-radius-x3);
-  min-height: 84px;
-  min-width: 240px;
-  width: 240px;
-  height: 84px;
-  overflow: hidden;
-  user-select: none;
-  cursor: pointer;
-  transition: transform var(--transition-default);
+	scroll-snap-align: start;
+	box-shadow: var(--box-shadow-default);
+	border-radius: var(--border-radius-x3);
+	min-height: 84px;
+	min-width: 240px;
+	width: 240px;
+	height: 84px;
+	overflow: hidden;
+	user-select: none;
+	cursor: pointer;
+	transition: transform var(--transition-default);
 }
 
 .account:hover {
-  transform: translate(0.25px, 1px);
+	transform: translate(0.25px, 1px);
 }
 
 .account:active {
-  transform: translate(0.5px, 3px);
+	transform: translate(0.5px, 3px);
 }
 
 .account.empty .container::before {
-  background: black;
+	background: black;
 }
 
 .account.selected {
-  opacity: 0.5;
+	opacity: 0.5;
 }
 
 .account.deleted {
-  opacity: 0.15;
-  filter: saturate(0);
+	opacity: 0.15;
+	filter: saturate(0);
 }
 
 .account.selected:hover {
-  transform: revert;
+	transform: revert;
 }
 
 .account.selected:active {
-  pointer-events: none;
-  transform: revert;
+	pointer-events: none;
+	transform: revert;
 }
 
 .container {
-  position: relative;
-  height: 100%;
-  background: linear-gradient(
-    67.5deg,
-    rgba(255, 255, 255, 0.5),
-    rgba(255, 255, 255, 0.1)
-  );
+	position: relative;
+	height: 100%;
+	background: linear-gradient(
+		67.5deg,
+		rgba(255, 255, 255, 0.5),
+		rgba(255, 255, 255, 0.1)
+	);
 }
 
 .container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: hsl(
-    var(--account-color),
-    var(--default-saturation-for-background),
-    var(--default-lightness-for-background)
-  );
-  z-index: -1;
-  border: 1px solid var(--primary-color-50);
-  border-radius: var(--border-radius-x3);
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: hsl(
+		var(--account-color),
+		var(--default-saturation-for-background),
+		var(--default-lightness-for-background)
+	);
+	z-index: -1;
+	border: 1px solid var(--primary-color-50);
+	border-radius: var(--border-radius-x3);
 }

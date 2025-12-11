@@ -1,74 +1,77 @@
-import { MouseEvent, ReactNode } from "react";
-import { createPortal } from "react-dom";
-
-import { Flex, Transitioned } from "@ui";
+import { Flex } from "@ui";
 import { cn } from "@utils/styles";
-
+import { MouseEvent, ReactNode, useRef } from "react";
+import { createPortal } from "react-dom";
+import { Transition } from "react-transition-group";
 import Components from "./components";
 import styles from "./index.module.css";
-import { TransitionedPropsClasses } from "src/ui/Transitioned";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  side: "left" | "right";
-  isOpened: boolean;
-  onClose: (e: MouseEvent<HTMLDivElement>) => void;
-  children?: ReactNode;
+	side: "left" | "right";
+	isOpened: boolean;
+	onClose: (e: MouseEvent<HTMLDivElement>) => void;
+	children?: ReactNode;
 }
 
 const Wrap: React.FC<Props> = ({
-  side,
-  isOpened,
-  onClose,
-  children,
-  ...rest
+	side,
+	isOpened,
+	onClose,
+	children,
+	...rest
 }) => {
-  const onCloseInner = (e: MouseEvent<HTMLDivElement>) => {
-    if (e.currentTarget === e.target) {
-      typeof onClose === "function" && onClose(e);
-    }
-  };
+	const nodeRef = useRef(null);
+	const wrapperRef = useRef(null);
 
-  const defineStyles = {
-    left: {
-      default: cn(styles.drawer, styles.left),
-      enter: styles.drawerEnter,
-      exit: styles.drawerExit,
-    },
-    right: {
-      default: cn(styles.drawer, styles.right),
-      enter: styles.drawerEnter,
-      exit: styles.drawerExit,
-    },
-  };
+	const onCloseInner = (e: MouseEvent<HTMLDivElement>) => {
+		if (e.currentTarget === e.target) {
+			typeof onClose === "function" && onClose(e);
+		}
+	};
 
-  return (
-    <>
-      <Transitioned
-        _is={isOpened}
-        classes={{
-          default: styles.drawerWrapper,
-          enter: styles.drawerWrapperEnter,
-          exit: styles.drawerWrapperExit,
-        }}
-      >
-        <Flex full onClick={onCloseInner}></Flex>
-      </Transitioned>
-      <Transitioned
-        _is={isOpened}
-        classes={defineStyles[side] as TransitionedPropsClasses}
-        {...rest}
-      >
-        <Flex full onClick={onCloseInner}>
-          {children}
-        </Flex>
-      </Transitioned>
-    </>
-  );
+	return (
+		<>
+			<Transition in={isOpened} nodeRef={wrapperRef} mountOnEnter timeout={0}>
+				{(state) => (
+					<Flex
+						ref={wrapperRef}
+						full
+						onClick={onCloseInner}
+						className={cn(styles.drawerWrapper, {
+							[styles.drawerWrapperEntering]: state === "entering",
+							[styles.drawerWrapperEntered]: state === "entered",
+							[styles.drawerWrapperExiting]: state === "exiting",
+							[styles.drawerWrapperExited]: state === "exited",
+						})}
+					/>
+				)}
+			</Transition>
+
+			<Transition in={isOpened} nodeRef={nodeRef} timeout={0} mountOnEnter>
+				{(state) => (
+					<Flex
+						ref={nodeRef}
+						full
+						onClick={onCloseInner}
+						className={cn(styles.drawer, styles[side], {
+							[styles.drawerEntering]: state === "entering",
+							[styles.drawerEntered]: state === "entered",
+							[styles.drawerExiting]: state === "exiting",
+							[styles.drawerExited]: state === "exited",
+						})}
+						{...rest}
+					>
+						{children}
+					</Flex>
+				)}
+			</Transition>
+		</>
+	);
 };
 
 export function Drawer(props: Props) {
-  const el = document.getElementById("layers") as HTMLElement;
-  return createPortal(<Wrap {...props} />, el);
+	const el = document.getElementById("layers") as HTMLElement;
+	return createPortal(<Wrap {...props} />, el);
 }
 
 Drawer.Container = Components.DrawerContainer;
