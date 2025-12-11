@@ -1,32 +1,52 @@
 .modalWrapper {
-  position: fixed;
-  inset: 0;
-  opacity: 0;
-  background-color: rgba(18, 18, 18, 0.5);
-  transition: opacity var(--transition-default);
+	position: fixed;
+	inset: 0;
+	opacity: 0;
+	background-color: rgba(18, 18, 18, 0.5);
+	transition: opacity var(--transition-default);
+	pointer-events: none;
 }
 
-.modalWrapperEnter {
-  opacity: 1;
+.modalWrapperEntering {
+	opacity: 0;
 }
 
-.modalWrapperExit {
-  opacity: 0;
+.modalWrapperEntered {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.modalWrapperExiting {
+	opacity: 1;
+}
+
+.modalWrapperExited {
+	opacity: 0;
 }
 
 .modal {
-  transition: opacity var(--transition-default);
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  opacity: 0;
-  inset: 0;
+	transition: opacity var(--transition-default);
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	opacity: 0;
+	inset: 0;
+	pointer-events: none;
 }
 
-.modalEnter {
-  opacity: 1;
+.modalEntering {
+	opacity: 0;
 }
 
-.modalExit {
-  opacity: 0;
+.modalEntered {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.modalExiting {
+	opacity: 1;
+}
+
+.modalExited {
+	opacity: 0;
 }

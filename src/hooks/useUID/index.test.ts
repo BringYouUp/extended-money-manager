@@ -1,5 +1,6 @@
 // import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+
 // import { useUID } from '.'
 // import configureStore from 'redux-mock-store';
 // import { Provider } from 'react-redux';
@@ -23,18 +24,18 @@ import { describe, expect, it } from "vitest";
 // };
 
 describe("useUID", () => {
-  it("default check", () => {
-    // const state: RootState = {
-    //   user: {
-    //     user: {
-    //       uid: '12345',
-    //     },
-    //   },
-    // };
-    // mockUseAppSelector((selector) => selector(state));
+	it("default check", () => {
+		// const state: RootState = {
+		//   user: {
+		//     user: {
+		//       uid: '12345',
+		//     },
+		//   },
+		// };
+		// mockUseAppSelector((selector) => selector(state));
 
-    // const { result } = renderHook(() => useUID());
+		// const { result } = renderHook(() => useUID());
 
-    expect(true).toBe(true);
-  });
+		expect(true).toBe(true);
+	});
 });

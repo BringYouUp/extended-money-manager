@@ -1,138 +1,138 @@
 .button {
-  border: none;
-  padding: 4px 10px;
-  font-size: inherit;
-  width: 100%;
-  border-radius: var(--border-radius-default);
-  cursor: pointer;
-  height: var(--button-height);
-  max-height: var(--button-height);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: var(--transition-default) background-color;
-  z-index: 0;
+	border: none;
+	padding: 4px 10px;
+	font-size: inherit;
+	width: 100%;
+	border-radius: var(--border-radius-default);
+	cursor: pointer;
+	height: var(--button-height);
+	max-height: var(--button-height);
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	transition: var(--transition-default) background-color;
+	z-index: 0;
 }
 
 .button.centered {
-  justify-content: center;
-  align-items: center;
+	justify-content: center;
+	align-items: center;
 }
 
 .width {
-  width: var(--button-width, none);
+	width: var(--button-width, none);
 }
 
 .primary {
-  background-color: var(--primary-color-90);
-  border: 1px solid var(--primary-color-90);
-  color: var(--text-color-white-80);
+	background-color: var(--primary-color-90);
+	border: 1px solid var(--primary-color-90);
+	color: var(--text-color-white-80);
 }
 
 .primary:hover {
-  background-color: var(--primary-color-80);
+	background-color: var(--primary-color-80);
 }
 
 .primary:active {
-  background-color: var(--primary-color-70);
+	background-color: var(--primary-color-70);
 }
 
 .outline,
 .option {
-  background-color: transparent;
-  color: var(--text-color-80);
+	background-color: transparent;
+	color: var(--text-color-80);
 }
 
 .outline {
-  border: 1px solid var(--primary-color-30);
+	border: 1px solid var(--primary-color-30);
 }
 
 .option {
-  height: 36px;
+	height: 36px;
 }
 
 .outline:hover,
 .option:hover {
-  background-color: var(--primary-color-10);
+	background-color: var(--primary-color-10);
 }
 
 .outline:active,
 .option:active {
-  background-color: var(--primary-color-20);
+	background-color: var(--primary-color-20);
 }
 
 .active.option {
-  background-color: var(--primary-color-10);
-  border: 1px solid var(--primary-color-20);
+	background-color: var(--primary-color-10);
+	border: 1px solid var(--primary-color-20);
 }
 
 .success,
 .warning,
 .error {
-  position: relative;
-  z-index: 0;
+	position: relative;
+	z-index: 0;
 }
 
 .success:after,
 .error:after,
 .warning:after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  opacity: 0.2;
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	opacity: 0.2;
 }
 
 .warning:after {
-  background-color: var(--text-color-warning);
+	background-color: var(--text-color-warning);
 }
 
 .error:after {
-  background-color: var(--text-color-error);
+	background-color: var(--text-color-error);
 }
 
 .success:after {
-  background-color: var(--text-color-success);
+	background-color: var(--text-color-success);
 }
 
 .button.transparent {
-  display: inline-flex;
-  position: relative;
-  color: var(--text-color-80);
-  background: none;
-  padding: 0;
-  width: revert;
-  min-width: revert;
-  max-height: revert;
+	display: inline-flex;
+	position: relative;
+	color: var(--text-color-80);
+	background: none;
+	padding: 0;
+	width: revert;
+	min-width: revert;
+	max-height: revert;
 }
 
 .transparent::before {
-  content: "";
-  position: absolute;
-  inset: -6px;
-  border-radius: var(--border-radius-default);
-  transition: var(--transition-default) background-color;
+	content: "";
+	position: absolute;
+	inset: -6px;
+	border-radius: var(--border-radius-default);
+	transition: var(--transition-default) background-color;
 }
 
 .transparent:hover::before {
-  background-color: transparent;
-  background-color: var(--primary-color-10);
+	background-color: transparent;
+	background-color: var(--primary-color-10);
 }
 
 .transparent:active::before {
-  background-color: var(--primary-color-20);
+	background-color: var(--primary-color-20);
 }
 
 .transparent.active::before {
-  background-color: var(--primary-color-10);
-  border: 1px solid var(--primary-color-20);
+	background-color: var(--primary-color-10);
+	border: 1px solid var(--primary-color-20);
 }
 
 .transparent.rounded {
-  aspect-ratio: 1;
-  height: fit-content;
+	aspect-ratio: 1;
+	height: fit-content;
 }
 
 .transparent.rounded::before {
-  border-radius: 50%;
+	border-radius: 50%;
 }

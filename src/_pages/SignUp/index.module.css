@@ -1,0 +1,4 @@
+.container {
+	box-shadow: var(--box-shadow-default);
+	border-radius: var(--border-radius-default);
+}

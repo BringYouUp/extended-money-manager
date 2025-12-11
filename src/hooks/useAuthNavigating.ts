@@ -1,6 +1,6 @@
 import { PATHS } from "@consts/paths";
+import { useNavigate } from "@hooks/useNavigate";
 import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 
 /**
  * Custom hook for handling navigation related to authentication.
@@ -12,15 +12,15 @@ import { useNavigate } from "react-router-dom";
  */
 
 export const useAuthNavigating = () => {
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const navigateToPlatform = useCallback(() => {
-    navigate(PATHS.ROOT);
-  }, [navigate]);
+	const navigateToPlatform = useCallback(() => {
+		navigate(PATHS.ROOT);
+	}, [navigate]);
 
-  const navigateFromPlatform = useCallback(() => {
-    navigate(`${PATHS.AUTH}${PATHS.LOGIN}`);
-  }, [navigate]);
+	const navigateFromPlatform = useCallback(() => {
+		navigate(`${PATHS.AUTH}${PATHS.LOGIN}`);
+	}, [navigate]);
 
-  return { navigateToPlatform, navigateFromPlatform };
+	return { navigateToPlatform, navigateFromPlatform };
 };

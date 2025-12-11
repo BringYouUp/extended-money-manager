@@ -9,33 +9,33 @@ import { useCallback, useEffect, useRef } from "react";
  */
 
 export const useDebounce = (
-  callback: (...args: unknown[]) => void,
-  delay: number
+	callback: (...args: unknown[]) => void,
+	delay: number,
 ) => {
-  if (delay < 0) {
-    throw new Error("Delay must be non negative value");
-  }
+	if (delay < 0) {
+		throw new Error("Delay must be non negative value");
+	}
 
-  const timer: React.MutableRefObject<null | ReturnType<typeof setTimeout>> =
-    useRef<null | ReturnType<typeof setTimeout>>(null);
+	const timer: React.MutableRefObject<null | ReturnType<typeof setTimeout>> =
+		useRef<null | ReturnType<typeof setTimeout>>(null);
 
-  const debouncedCallback = useCallback(
-    (...args: unknown[]) => {
-      timer.current && clearTimeout(timer.current);
+	const debouncedCallback = useCallback(
+		(...args: unknown[]) => {
+			timer.current && clearTimeout(timer.current);
 
-      timer.current = setTimeout(() => {
-        callback(...args);
-      }, delay);
-    },
-    [callback, delay]
-  );
+			timer.current = setTimeout(() => {
+				callback(...args);
+			}, delay);
+		},
+		[callback, delay],
+	);
 
-  useEffect(() => {
-    return () => {
-      if (timer.current) {
-        clearTimeout(timer.current);
-      }
-    };
-  }, []);
-  return debouncedCallback;
+	useEffect(() => {
+		return () => {
+			if (timer.current) {
+				clearTimeout(timer.current);
+			}
+		};
+	}, []);
+	return debouncedCallback;
 };

@@ -1,85 +1,85 @@
 .category {
-  --category-border-radius: 36px;
-  box-shadow: var(--box-shadow-soft);
-  border-radius: var(--category-border-radius, 18px);
-  overflow: hidden;
-  user-select: none;
-  cursor: pointer;
-  transition: transform var(--transition-default);
-  width: fit-content;
-  max-width: 100%;
-  min-width: var(--category-min-width, 75px);
-  height: 36px;
+	--category-border-radius: 36px;
+	box-shadow: var(--box-shadow-soft);
+	border-radius: var(--category-border-radius, 18px);
+	overflow: hidden;
+	user-select: none;
+	cursor: pointer;
+	transition: transform var(--transition-default);
+	width: fit-content;
+	max-width: 100%;
+	min-width: var(--category-min-width, 75px);
+	height: 36px;
 }
 
 .category:hover {
-  transform: translate(0.25px, 1px);
+	transform: translate(0.25px, 1px);
 }
 
 .category:active {
-  transform: translate(0.5px, 3px);
+	transform: translate(0.5px, 3px);
 }
 
 .category.empty .container::before {
-  background: black;
+	background: black;
 }
 
 .category.selected {
-  opacity: 0.5;
+	opacity: 0.5;
 }
 
 .category.deleted {
-  opacity: 0.15;
-  filter: saturate(0);
+	opacity: 0.15;
+	filter: saturate(0);
 }
 
 .container {
-  position: relative;
-  min-width: inherit;
-  height: 100%;
-  background: linear-gradient(
-    67.5deg,
-    rgba(255, 255, 255, 0.4),
-    rgba(255, 255, 255, 0.1)
-  );
-  padding: 6px 14px;
-  max-width: 100%;
-  width: inherit;
+	position: relative;
+	min-width: inherit;
+	height: 100%;
+	background: linear-gradient(
+		67.5deg,
+		rgba(255, 255, 255, 0.4),
+		rgba(255, 255, 255, 0.1)
+	);
+	padding: 6px 14px;
+	max-width: 100%;
+	width: inherit;
 }
 
 .container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: hsl(
-    var(--category-color),
-    var(--default-saturation-for-background),
-    var(--default-lightness-for-background)
-  );
-  z-index: -1;
-  border: 1.5px solid var(--primary-color-50);
-  border-radius: var(--category-border-radius);
-  line-height: 24px;
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: hsl(
+		var(--category-color),
+		var(--default-saturation-for-background),
+		var(--default-lightness-for-background)
+	);
+	z-index: -1;
+	border: 1.5px solid var(--primary-color-50);
+	border-radius: var(--category-border-radius);
+	line-height: 24px;
 }
 
 .withdraw {
-  --category-border-color: 0;
+	--category-border-color: 0;
 }
 .income {
-  --category-border-color: 130;
+	--category-border-color: 130;
 }
 
 .withdraw .container::before,
 .income .container::before {
-  border: 1.5px solid
-    hsl(
-      var(--category-border-color),
-      calc(var(--default-saturation-for-background) + 0%),
-      calc(var(--default-lightness-for-background) + 0%)
-    );
+	border: 1.5px solid
+		hsl(
+			var(--category-border-color),
+			calc(var(--default-saturation-for-background) + 0%),
+			calc(var(--default-lightness-for-background) + 0%)
+		);
 }
 
 .label {
-  line-height: 24px;
-  max-width: 200px;
+	line-height: 24px;
+	max-width: 200px;
 }

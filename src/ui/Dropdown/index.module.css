@@ -1,43 +1,64 @@
 .dropdownWrapper {
-  position: fixed;
-  inset: 0;
-  opacity: 0;
+	position: fixed;
+	inset: 0;
+	opacity: 0;
+	transition: opacity var(--transition-default);
+	pointer-events: none;
 }
 
-.dropdownWrapperEnter {
-  transition: opacity var(--transition-default);
-  opacity: 1;
+.dropdownWrapperEntering {
+	opacity: 0;
 }
-.dropdownWrapperExit {
-  opacity: 0;
+
+.dropdownWrapperEntered {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.dropdownWrapperExiting {
+	opacity: 1;
+}
+
+.dropdownWrapperExited {
+	opacity: 0;
 }
 
 .dropdown {
-  --dropdown-border-radius: var(--border-radius-default);
-  width: min-content;
-  transition: opacity var(--transition-default);
-  position: fixed;
-  opacity: 0;
-  top: 0px;
-  left: 0px;
-  box-shadow: var(--box-shadow-soft);
-  background-color: var(--background-color);
-  border-radius: var(--dropdown-border-radius);
-  overflow: hidden;
-  border: 1px solid var(--primary-color-20);
+	--dropdown-border-radius: var(--border-radius-default);
+	width: min-content;
+	transition: opacity var(--transition-default);
+	position: fixed;
+	opacity: 0;
+	top: 0px;
+	left: 0px;
+	box-shadow: var(--box-shadow-soft);
+	background-color: var(--background-color);
+	border-radius: var(--dropdown-border-radius);
+	overflow: hidden;
+	border: 1px solid var(--primary-color-20);
+	pointer-events: none;
 }
 
-.dropdownEnter {
-  opacity: 1;
+.dropdownEntering {
+	opacity: 0;
 }
 
-.dropdownExit {
-  opacity: 0;
+.dropdownEntered {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.dropdownExiting {
+	opacity: 1;
+}
+
+.dropdownExited {
+	opacity: 0;
 }
 
 .dropdownInner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  /* border-radius: var(--dropdown-border-radius); */
+	position: relative;
+	width: 100%;
+	height: 100%;
+	/* border-radius: var(--dropdown-border-radius); */
 }

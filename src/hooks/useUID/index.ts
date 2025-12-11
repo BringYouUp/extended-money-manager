@@ -8,7 +8,7 @@ import { useAppSelector } from "@hooks/useAppSelector";
  */
 
 export const useUID = () => {
-  const uid = useAppSelector((state) => state.user.user.uid);
+	const uid = useAppSelector((state) => state.user.user.uid);
 
-  return uid;
+	return uid;
 };

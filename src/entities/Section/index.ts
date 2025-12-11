@@ -1,5 +1,6 @@
 import Components from "./components";
 
+// biome-ignore lint/suspicious/noEmptyBlockStatements: <_>
 export function Section() {}
 
 Section.Container = Components.Container;

@@ -5,29 +5,29 @@ import styles from "../Button/index.module.css";
 import { SelectOption } from "./SelectOption";
 
 const data = [
-  {
-    id: 1,
-  },
-  {
-    id: 2,
-  },
+	{
+		id: 1,
+	},
+	{
+		id: 2,
+	},
 ];
 
 describe("SelectOption component", () => {
-  it("Check common case", () => {
-    act(() => {
-      render(
-        <SelectOption
-          key="test"
-          selected={true}
-          parseItem={(z) => <div>{z.id}</div>}
-          data={data[0]}
-          data-testid="select-option"
-        />,
-      );
-    });
+	it("Check common case", () => {
+		act(() => {
+			render(
+				<SelectOption
+					key="test"
+					selected={true}
+					parseItem={(z) => <div>{z.id}</div>}
+					data={data[0]}
+					data-testid="select-option"
+				/>,
+			);
+		});
 
-    const component = screen.getByTestId("select-option");
-    expect(component.classList.contains(styles.active)).toBe(true);
-  });
+		const component = screen.getByTestId("select-option");
+		expect(component.classList.contains(styles.active)).toBe(true);
+	});
 });

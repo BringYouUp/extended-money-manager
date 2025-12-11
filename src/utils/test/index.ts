@@ -1,1 +1,1 @@
-export const isTestEnviroment = () => import.meta.env.MODE === "test";
+export const isTestEnviroment = () => process.env.MODE === "test";

@@ -2,9 +2,9 @@
 }
 
 .padding {
-  padding: var(--offset-padding, none);
+	padding: var(--offset-padding, none);
 }
 
 .margin {
-  margin: var(--offset-margin, none);
+	margin: var(--offset-margin, none);
 }

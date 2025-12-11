@@ -1,50 +1,50 @@
 .scrollable::-webkit-scrollbar {
-  width: var(--scrollbar-size);
-  height: var(--scrollbar-size);
+	width: var(--scrollbar-size);
+	height: var(--scrollbar-size);
 }
 
 .scrollable::-webkit-scrollbar-thumb {
-  border-radius: var(--border-radius-default);
-  background-color: var(--primary-color-20);
+	border-radius: var(--border-radius-default);
+	background-color: var(--primary-color-20);
 }
 
 .scrollable.hidden {
-  overflow: hidden;
+	overflow: hidden;
 }
 
 .scrollable.scroll {
-  overflow: scroll;
+	overflow: scroll;
 }
 
 .scrollable.hiddenX {
-  overflow-x: hidden;
+	overflow-x: hidden;
 }
 
 .scrollable.auto {
-  overflow: auto;
+	overflow: auto;
 }
 
 .scrollable.overlay {
-  overflow: overlay;
+	overflow: overlay;
 }
 
 .scrollable.overlay::-webkit-scrollbar-thumb {
-  visibility: hidden;
+	visibility: hidden;
 }
 
 .scrollable.overlay:hover::-webkit-scrollbar-thumb {
-  visibility: visible;
+	visibility: visible;
 }
 
 .scrollable.stableGutter {
-  scrollbar-gutter: stable;
+	scrollbar-gutter: stable;
 }
 
 .scrollable.none {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }
 
 .scrollable.none::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
