@@ -1,0 +1,15 @@
+services:
+  emm-web:
+    container_name: emm-web
+    hostname: emm-web
+    build:
+      context: .
+      dockerfile: ./Dockerfile.local
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+    env_file:
+      - .env.local
