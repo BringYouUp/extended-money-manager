@@ -15,7 +15,7 @@ export default function Layout({
 					bottom: "0",
 					boxShadow: "var(--box-shadow-default)",
 					background: "var(--soft-background-color)",
-					zIndex: "1",
+					zIndex: "3",
 				}}
 			>
 				<Flex column gap={2} justifyCenter>
